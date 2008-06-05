@@ -49,7 +49,7 @@ namespace NPlot.Windows
 	/// Unfortunately it's not possible to derive from both Control and NPlot.PlotSurface2D.
 	/// </remarks>
 	[ ToolboxBitmapAttribute(typeof(NPlot.Windows.PlotSurface2D),"PlotSurface2D.ico") ]
-	public class PlotSurface2D : System.Windows.Forms.Control, IPlotSurface2D, ISurface
+	public class PlotSurface2D : System.Windows.Forms.Control, IPlotSurface2D
 	{
 
         private System.Windows.Forms.ToolTip coordinates_;
@@ -131,7 +131,7 @@ namespace NPlot.Windows
         {
             lastKeyEventArgs_ = e;
         }
-        KeyEventArgs lastKeyEventArgs_ = null;
+        protected KeyEventArgs lastKeyEventArgs_ = null;
 
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace NPlot.Windows
 		/// <param name="pe">the PaintEventArgs</param>
 		protected override void OnPaint( PaintEventArgs pe )
 		{
-			DoPaint( pe, this.Width, this.Height );
+			DoPaint( pe );
 			base.OnPaint(pe);
 		}
 
@@ -162,13 +162,16 @@ namespace NPlot.Windows
 		/// <param name="pe">the PaintEventArgs from paint event.</param>
 		/// <param name="width">width of the control</param>
 		/// <param name="height">height of the control</param>
-		public void DoPaint( PaintEventArgs pe, int width, int height )
+		public void DoPaint( PaintEventArgs pe )
 		{
+            int width = this.Width;
+            int height = this.Height;
+
             this.PreRefresh(this);
 
             foreach (Interactions.Interaction i in interactions_)
             {
-                i.DoPaint(pe,width,height);
+                i.DoPaint(pe, this, lastKeyEventArgs_);
             }
 
             /*
@@ -751,7 +754,10 @@ namespace NPlot.Windows
 			bool dirty = false;
             foreach (Interactions.Interaction i in interactions_)
             {
-				dirty |= i.DoMouseDown(e,this);
+                bool interactionOccured = i.DoMouseDown(e, this, lastKeyEventArgs_);
+                dirty |= interactionOccured;
+                if (interactionOccured)
+                    this.InteractionOccured(i);
             }
 			if (dirty)
 			{
@@ -782,7 +788,10 @@ namespace NPlot.Windows
 			bool dirty = false;
             foreach (Interactions.Interaction i in interactions_)
             {
-				dirty |= i.DoMouseWheel(e, this);
+                bool interactionOccured = i.DoMouseWheel(e, this, lastKeyEventArgs_);
+                dirty |= interactionOccured;
+                if (interactionOccured)
+                    this.InteractionOccured(i);
             }
 			if (dirty)
 			{
@@ -797,12 +806,15 @@ namespace NPlot.Windows
 		/// </summary>
 		/// <param name="e">The mouse event args from the window we are drawing to.</param>
 		/// <param name="ctr">The control that the mouse event happened in.</param>
-		public void DoMouseMove( MouseEventArgs e, System.Windows.Forms.Control ctr )
+		public void DoMouseMove( MouseEventArgs e )
 		{
 			bool dirty = false;
             foreach (Interactions.Interaction i in interactions_)
             {
-				dirty |= i.DoMouseMove(e, ctr, lastKeyEventArgs_);
+                bool interactionOccured = i.DoMouseMove(e, this, lastKeyEventArgs_);
+                dirty |= interactionOccured;
+                if (interactionOccured)
+                    this.InteractionOccured(i);
             }
 			if (dirty)
 			{
@@ -853,7 +865,7 @@ namespace NPlot.Windows
 		/// <param name="e">The event arguments.</param>
 		protected override void OnMouseMove(MouseEventArgs e)
 		{
-			DoMouseMove( e, this );
+			DoMouseMove( e );
 			base.OnMouseMove( e );
 		}
 		
@@ -865,8 +877,7 @@ namespace NPlot.Windows
 		/// <param name="e">The event arguments.</param>
 		protected override void OnMouseLeave(EventArgs e)        
 		{
-
-			DoMouseLeave( e, this );
+			DoMouseLeave( e );
 			base.OnMouseLeave(e);
 		}
 	
@@ -876,12 +887,15 @@ namespace NPlot.Windows
 		/// </summary>
 		/// <param name="e"></param>
 		/// <param name="ctr"></param>
-		public void DoMouseLeave(EventArgs e, System.Windows.Forms.Control ctr) 
+		public void DoMouseLeave(EventArgs e) 
 		{
 			bool dirty = false;
 			foreach (Interactions.Interaction i in interactions_)            
 			{
-				dirty = i.DoMouseLeave(e, this) || dirty;
+                bool interactionOccured = i.DoMouseLeave(e, this, lastKeyEventArgs_);
+                dirty |= interactionOccured;
+                if (interactionOccured)
+                    this.InteractionOccured(i);
 			}
             if (dirty)
             {
@@ -920,14 +934,17 @@ namespace NPlot.Windows
 		/// </summary>
 		/// <param name="e">The mouse event args from the window we are drawing to.</param>
 		/// <param name="ctr">The control that the mouse event happened in.</param>
-		public void DoMouseUp( MouseEventArgs e, System.Windows.Forms.Control ctr )
+		public void DoMouseUp( MouseEventArgs e )
 		{
 			bool dirty = false;
 
 			ArrayList local_interactions = (ArrayList)interactions_.Clone();
 			foreach (Interactions.Interaction i in local_interactions)
             {
-				dirty |= i.DoMouseUp(e,ctr);
+                bool interactionOccured = i.DoMouseUp(e, this, lastKeyEventArgs_);
+                dirty |= interactionOccured;
+                if (interactionOccured)
+                    this.InteractionOccured(i);
             }
 			if (dirty)
 			{
@@ -940,7 +957,7 @@ namespace NPlot.Windows
                 selectedObjects_ = ps_.HitTest(here);
                 if (rightMenu_ != null)
                 {
-                    rightMenu_.Menu.Show(ctr, here);
+                    rightMenu_.Menu.Show(this, here);
                 }
             }
         }
@@ -952,7 +969,7 @@ namespace NPlot.Windows
 		/// <param name="e">The event arguments.</param>
 		protected override void OnMouseUp( MouseEventArgs e )
 		{
-			DoMouseUp(e, this);
+			DoMouseUp(e);
 			base.OnMouseUp(e);
 		}
 
@@ -1225,16 +1242,18 @@ namespace NPlot.Windows
                 /// </summary>
                 /// <param name="e">event args</param>
                 /// <param name="ctr">reference to the control</param>
+                /// <param name="lastKeyEventArgs"></param>
                 /// <returns>true if plot surface needs refreshing.</returns>
-                public virtual bool DoMouseDown(MouseEventArgs e, System.Windows.Forms.Control ctr) { return false; }
+                public virtual bool DoMouseDown(MouseEventArgs e, System.Windows.Forms.Control ctr, KeyEventArgs lastKeyEventArgs) { return false; }
                 
                 /// <summary>
                 /// Handler for this interaction if a mouse up event is received.
                 /// </summary>
 				/// <param name="e">event args</param>
-				/// <param name="ctr">reference to the control</param>
+                /// <param name="ctr">reference to the control</param>
+                /// <param name="lastKeyEventArgs"></param>
 				/// <returns>true if plot surface needs refreshing.</returns>
-                public virtual bool DoMouseUp(MouseEventArgs e, System.Windows.Forms.Control ctr) { return false; }
+                public virtual bool DoMouseUp(MouseEventArgs e, System.Windows.Forms.Control ctr, KeyEventArgs lastKeyEventArgs) { return false; }
                 
                 /// <summary>
                 /// Handler for this interaction if a mouse move event is received.
@@ -1249,25 +1268,27 @@ namespace NPlot.Windows
                 /// Handler for this interaction if a mouse move event is received.
                 /// </summary>
 				/// <param name="e">event args</param>
-				/// <param name="ctr">reference to the control</param>
+                /// <param name="ctr">reference to the control</param>
+                /// <param name="lastKeyEventArgs"></param>
 				/// <returns>true if plot surface needs refreshing.</returns>
-                public virtual bool DoMouseWheel(MouseEventArgs e, System.Windows.Forms.Control ctr) { return false; }
+                public virtual bool DoMouseWheel(MouseEventArgs e, System.Windows.Forms.Control ctr, KeyEventArgs lastKeyEventArgs) { return false; }
                 
 				/// <summary>
 				/// Handler for this interaction if a mouse Leave event is received.
 				/// </summary>
 				/// <param name="e">event args</param>
-				/// <param name="ctr">reference to the control</param>
+                /// <param name="ctr">reference to the control</param>
+                /// <param name="lastKeyEventArgs"></param>
 				/// <returns>true if the plot surface needs refreshing.</returns>
-				public virtual bool DoMouseLeave(EventArgs e, System.Windows.Forms.Control ctr) { return false; }
+				public virtual bool DoMouseLeave(EventArgs e, System.Windows.Forms.Control ctr, KeyEventArgs lastKeyEventArgs) { return false; }
 
                 /// <summary>
                 /// Handler for this interaction if a paint event is received.
                 /// </summary>
                 /// <param name="pe">paint event args</param>
-                /// <param name="width"></param>
-                /// <param name="height"></param>
-                public virtual void DoPaint(PaintEventArgs pe, int width, int height) { }
+                /// <param name="ctr">reference to the control</param>
+                /// <param name="lastKeyEventArgs"></param>
+                public virtual void DoPaint(PaintEventArgs pe, System.Windows.Forms.Control ctr, KeyEventArgs lastKeyEventArgs) { }
             }
 
 
@@ -1284,7 +1305,7 @@ namespace NPlot.Windows
                 /// </summary>
                 /// <param name="e"></param>
                 /// <param name="ctr"></param>
-                public override bool DoMouseDown(MouseEventArgs e, Control ctr)
+                public override bool DoMouseDown(MouseEventArgs e, Control ctr, KeyEventArgs lastKeyEventArgs)
                 {
                     // keep track of the start point and flag that select initiated.
                     selectionInitiated_ = true;
@@ -1329,7 +1350,7 @@ namespace NPlot.Windows
                 /// </summary>
                 /// <param name="e"></param>
                 /// <param name="ctr"></param>
-                public override bool DoMouseUp(MouseEventArgs e, Control ctr)
+                public override bool DoMouseUp(MouseEventArgs e, Control ctr, KeyEventArgs lastKeyEventArgs)
                 {
                     NPlot.PlotSurface2D ps = ((Windows.PlotSurface2D)ctr).Inner;
 
@@ -1385,8 +1406,6 @@ namespace NPlot.Windows
                             startPoint_ = unset_;
                             endPoint_ = unset_;
 
-                            ((Windows.PlotSurface2D)ctr).InteractionOccured(this);
-
 							return true;
                         }
 					}  
@@ -1402,7 +1421,7 @@ namespace NPlot.Windows
                 /// <param name="end">a corner of the rectangle diagonally opposite the first.</param>
                 /// <param name="ctr">The control to draw to - this may not be us, if we have
                 /// been contained by a PlotSurface.</param>
-                private void DrawRubberBand(Point start, Point end, System.Windows.Forms.Control ctr)
+                private void DrawRubberBand(Point start, Point end, Control ctr)
                 {
                     NPlot.PlotSurface2D ps = ((Windows.PlotSurface2D)ctr).Inner;
 
@@ -1489,7 +1508,7 @@ namespace NPlot.Windows
                 /// <param name="pe"></param>
                 /// <param name="width"></param>
                 /// <param name="height"></param>
-                public override void DoPaint(PaintEventArgs pe, int width, int height)
+                public override void DoPaint(PaintEventArgs pe, Control ctrl, KeyEventArgs lastKeyEventArgs)
                 {
                     barPos_ = -1;
                 }
@@ -1501,7 +1520,7 @@ namespace NPlot.Windows
                 /// <param name="e"></param>
                 /// <param name="ctr"></param>
                 /// <param name="lastKeyEventArgs"></param>
-				public override bool DoMouseMove(MouseEventArgs e, System.Windows.Forms.Control ctr, KeyEventArgs lastKeyEventArgs)
+				public override bool DoMouseMove(MouseEventArgs e, Control ctr, KeyEventArgs lastKeyEventArgs)
 				{
 					NPlot.PlotSurface2D ps = ((Windows.PlotSurface2D)ctr).Inner;
 
@@ -1570,7 +1589,7 @@ namespace NPlot.Windows
 				/// <param name="e"></param>
 				/// <param name="ctr"></param>
 				/// <returns></returns>
-				public override bool DoMouseLeave(EventArgs e, System.Windows.Forms.Control ctr)
+                public override bool DoMouseLeave(EventArgs e, Control ctr, KeyEventArgs lastKeyEventArgs)
 				{
 					if (barPos_ != -1)             
 					{
@@ -1628,7 +1647,7 @@ namespace NPlot.Windows
                 /// <param name="pe"></param>
                 /// <param name="width"></param>
                 /// <param name="height"></param>
-                public override void DoPaint(PaintEventArgs pe, int width, int height)
+                public override void DoPaint(PaintEventArgs pe, Control ctr, KeyEventArgs lastKeyEventArgs)
                 {
                     barPos_ = -1;
                 }
@@ -1640,7 +1659,7 @@ namespace NPlot.Windows
                 /// <param name="e"></param>
                 /// <param name="ctr"></param>
                 /// <param name="lastKeyEventArgs"></param>
-                public override bool DoMouseMove(MouseEventArgs e, System.Windows.Forms.Control ctr, KeyEventArgs lastKeyEventArgs)
+                public override bool DoMouseMove(MouseEventArgs e, Control ctr, KeyEventArgs lastKeyEventArgs)
                 {
                     NPlot.PlotSurface2D ps = ((Windows.PlotSurface2D)ctr).Inner;
 
@@ -1711,7 +1730,7 @@ namespace NPlot.Windows
 				/// <param name="e">event args</param>
 				/// <param name="ctr"></param>
 				/// <returns></returns>
-				public override bool DoMouseLeave(EventArgs e, System.Windows.Forms.Control ctr)	                 
+				public override bool DoMouseLeave(EventArgs e, Control ctr, KeyEventArgs lastKeyEventArgs)
 				{
 					if (barPos_ != -1)       
 					{
@@ -1745,7 +1764,7 @@ namespace NPlot.Windows
                 /// </summary>
                 /// <param name="e"></param>
                 /// <param name="ctr"></param>
-                public override bool DoMouseDown(MouseEventArgs e, Control ctr)
+                public override bool DoMouseDown(MouseEventArgs e, Control ctr, KeyEventArgs lastKeyEventArgs)
                 {
                     NPlot.PlotSurface2D ps = ((Windows.PlotSurface2D)ctr).Inner;
 
@@ -1815,8 +1834,6 @@ namespace NPlot.Windows
 						
 						lastPoint_ = new Point(e.X, e.Y);
 
-						((Windows.PlotSurface2D)ctr).InteractionOccured(this);
-
 						return true;
 					}
                     
@@ -1829,7 +1846,7 @@ namespace NPlot.Windows
                 /// </summary>
                 /// <param name="e"></param>
                 /// <param name="ctr"></param>
-                public override bool DoMouseUp(MouseEventArgs e, Control ctr)
+                public override bool DoMouseUp(MouseEventArgs e, Control ctr, KeyEventArgs lastKeyEventArgs)
                 {
                     if ((e.Button == MouseButtons.Left) && dragInitiated_)
                     {
@@ -1857,7 +1874,7 @@ namespace NPlot.Windows
                 /// </summary>
                 /// <param name="e"></param>
                 /// <param name="ctr"></param>
-                public override bool DoMouseDown(MouseEventArgs e, Control ctr)
+                public override bool DoMouseDown(MouseEventArgs e, Control ctr, KeyEventArgs lastKeyEventArgs)
                 {
                     NPlot.PlotSurface2D ps = ((Windows.PlotSurface2D)ctr).Inner;
 
@@ -1925,8 +1942,6 @@ namespace NPlot.Windows
 
 						lastPoint_ = new Point(e.X, e.Y);
 
-						((Windows.PlotSurface2D)ctr).InteractionOccured(this);
-
 						return true;
 					}
 				
@@ -1939,7 +1954,7 @@ namespace NPlot.Windows
                 /// </summary>
                 /// <param name="e"></param>
                 /// <param name="ctr"></param>
-                public override bool DoMouseUp(MouseEventArgs e, Control ctr)
+                public override bool DoMouseUp(MouseEventArgs e, Control ctr, KeyEventArgs lastKeyEventArgs)
                 {
                     if ((e.Button == MouseButtons.Left) && dragInitiated_)
                     {
@@ -2027,7 +2042,7 @@ namespace NPlot.Windows
 				/// </summary>
 				/// <param name="e">the mouse event args</param>
 				/// <param name="ctr">the plot surface this event applies to</param>
-                public override bool DoMouseDown(MouseEventArgs e, Control ctr )
+                public override bool DoMouseDown(MouseEventArgs e, Control ctr, KeyEventArgs lastKeyEventArgs)
                 {
                     NPlot.PlotSurface2D ps = ((Windows.PlotSurface2D)ctr).Inner;
 
@@ -2097,7 +2112,7 @@ namespace NPlot.Windows
                 /// </summary>
                 /// <param name="e">the mouse event args</param>
                 /// <param name="ctr">the plot surface this event applies to</param>
-                public override bool DoMouseUp(MouseEventArgs e, Control ctr)
+                public override bool DoMouseUp(MouseEventArgs e, Control ctr, KeyEventArgs lastKeyEventArgs)
                 {
                     NPlot.PlotSurface2D ps = ((Windows.PlotSurface2D)ctr).Inner;
 
@@ -2178,8 +2193,6 @@ namespace NPlot.Windows
 							ps.XAxis2.WorldMin = xAxis2Min;
 						}
 
-                        ((Windows.PlotSurface2D)ctr).InteractionOccured(this);
-
                         return true;
                     }
 
@@ -2187,7 +2200,7 @@ namespace NPlot.Windows
                 }
 
 
-                private void DrawHorizontalSelection(Point start, Point end, System.Windows.Forms.Control ctr)
+                private void DrawHorizontalSelection(Point start, Point end, Control ctr)
                 {
                     NPlot.PlotSurface2D ps = ((Windows.PlotSurface2D)ctr).Inner;
 
@@ -2237,7 +2250,7 @@ namespace NPlot.Windows
                 /// </summary>
                 /// <param name="e"></param>
                 /// <param name="ctr"></param>
-                public override bool DoMouseDown(MouseEventArgs e, Control ctr)
+                public override bool DoMouseDown(MouseEventArgs e, Control ctr, KeyEventArgs lastKeyEventArgs)
                 {
                     // if the mouse is inside the plot area [the tick marks are here and part of the 
                     // axis], then don't invoke drag. 
@@ -2353,9 +2366,7 @@ namespace NPlot.Windows
 							double newWorldMax = axis_.PhysicalToWorld(physicalWorldMax, pMin, pMax, false);
 							axis_.WorldMin = newWorldMin;
 							axis_.WorldMax = newWorldMax;
-							
-							((Windows.PlotSurface2D)ctr).InteractionOccured(this);
-							
+						
 							return true;
 						}
                     }
@@ -2369,7 +2380,7 @@ namespace NPlot.Windows
                 /// </summary>
                 /// <param name="e"></param>
                 /// <param name="ctr"></param>
-                public override bool DoMouseUp(MouseEventArgs e, Control ctr)
+                public override bool DoMouseUp(MouseEventArgs e, Control ctr, KeyEventArgs lastKeyEventArgs)
                 {
                     if (doing_)
                     {
@@ -2417,7 +2428,7 @@ namespace NPlot.Windows
                 /// </summary>
                 /// <param name="e"></param>
                 /// <param name="ctr"></param>
-                public override bool DoMouseUp(MouseEventArgs e, Control ctr)
+                public override bool DoMouseUp(MouseEventArgs e, Control ctr, KeyEventArgs lastKeyEventArgs)
                 {
                     //mouseDown_ = false;
 					return false;
@@ -2429,7 +2440,7 @@ namespace NPlot.Windows
                 /// </summary>
                 /// <param name="e"></param>
                 /// <param name="ctr"></param>
-                public override bool DoMouseDown(MouseEventArgs e, Control ctr)
+                public override bool DoMouseDown(MouseEventArgs e, Control ctr, KeyEventArgs lastKeyEventArgs)
                 {
                     //NPlot.PlotSurface2D ps = ((Windows.PlotSurface2D)ctr).Inner;
 
@@ -2449,14 +2460,14 @@ namespace NPlot.Windows
                 /// </summary>
                 /// <param name="e"></param>
                 /// <param name="ctr"></param>
-				public override bool DoMouseWheel(MouseEventArgs e, Control ctr)
+                public override bool DoMouseWheel(MouseEventArgs e, Control ctr, KeyEventArgs lastKeyEventArgs)
 				{
 					NPlot.PlotSurface2D ps = ((Windows.PlotSurface2D)ctr).Inner;
 
 					((Windows.PlotSurface2D)ctr).CacheAxes();
 
 #if API_1_1
-                    float delta = (float)e.Delta / (float)e.Delta;
+                    float delta = 1.0f;
 #else
 					float delta = (float)e.Delta / (float)SystemInformation.MouseWheelScrollDelta;
 #endif
@@ -2491,9 +2502,7 @@ namespace NPlot.Windows
 					double newWorldMax = axis.PhysicalToWorld(physicalWorldMax, pMin, pMax, false);
 					axis.WorldMin = newWorldMin;
 					axis.WorldMax = newWorldMax;
-					
-					((Windows.PlotSurface2D)ctr).InteractionOccured(this);
-				
+		
 					return true;
                 }
 
