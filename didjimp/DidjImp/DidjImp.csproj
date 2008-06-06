@@ -75,6 +75,62 @@
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
     <Compile Include="ImpedanceCalculator.cs" />
+    <Compile Include="nplot\src\AdapterUtils.cs" />
+    <Compile Include="nplot\src\ArrowItem.cs" />
+    <Compile Include="nplot\src\AxesConstraint.cs" />
+    <Compile Include="nplot\src\Axis.cs" />
+    <Compile Include="nplot\src\BarPlot.cs" />
+    <Compile Include="nplot\src\BasePlot.cs" />
+    <Compile Include="nplot\src\BaseSequencePlot.cs" />
+    <Compile Include="nplot\src\Bitmap.PlotSurface2D.cs" />
+    <Compile Include="nplot\src\CandlePlot.cs" />
+    <Compile Include="nplot\src\DateTimeAxis.cs" />
+    <Compile Include="nplot\src\FilledRegion.cs" />
+    <Compile Include="nplot\src\FontScaler.cs" />
+    <Compile Include="nplot\src\Grid.cs" />
+    <Compile Include="nplot\src\HistogramPlot.cs" />
+    <Compile Include="nplot\src\HorizontalLine.cs" />
+    <Compile Include="nplot\src\IDrawable.cs" />
+    <Compile Include="nplot\src\IGradient.cs" />
+    <Compile Include="nplot\src\ImagePlot.cs" />
+    <Compile Include="nplot\src\IPlot.cs" />
+    <Compile Include="nplot\src\IPlotSurface2D.cs" />
+    <Compile Include="nplot\src\ISequencePlot.cs" />
+    <Compile Include="nplot\src\ITransform2D.cs" />
+    <Compile Include="nplot\src\LabelAxis.cs" />
+    <Compile Include="nplot\src\LabelPointPlot.cs" />
+    <Compile Include="nplot\src\Legend.cs" />
+    <Compile Include="nplot\src\LegendBase.cs" />
+    <Compile Include="nplot\src\LinearAxis.cs" />
+    <Compile Include="nplot\src\LinearGradient.cs" />
+    <Compile Include="nplot\src\LinePlot.cs" />
+    <Compile Include="nplot\src\LogAxis.cs" />
+    <Compile Include="nplot\src\Marker.cs" />
+    <Compile Include="nplot\src\MarkerItem.cs" />
+    <Compile Include="nplot\src\NPlotException.cs" />
+    <Compile Include="nplot\src\PageAlignedPhysicalAxis.cs" />
+    <Compile Include="nplot\src\PhysicalAxis.cs" />
+    <Compile Include="nplot\src\PiAxis.cs" />
+    <Compile Include="nplot\src\PiePlot.cs" />
+    <Compile Include="nplot\src\PlotSurface2D.cs" />
+    <Compile Include="nplot\src\PointD.cs" />
+    <Compile Include="nplot\src\PointPlot.cs" />
+    <Compile Include="nplot\src\RectangleBrushes.cs" />
+    <Compile Include="nplot\src\RectangleD.cs" />
+    <Compile Include="nplot\src\SequenceAdapter.cs" />
+    <Compile Include="nplot\src\StartStep.cs" />
+    <Compile Include="nplot\src\StepGradient.cs" />
+    <Compile Include="nplot\src\StepPlot.cs" />
+    <Compile Include="nplot\src\TextItem.cs" />
+    <Compile Include="nplot\src\TradingDateTimeAxis.cs" />
+    <Compile Include="nplot\src\Transform2D.cs" />
+    <Compile Include="nplot\src\Utils.cs" />
+    <Compile Include="nplot\src\VerticalLine.cs" />
+    <Compile Include="nplot\src\Web.Design.PlotSurface2D.cs" />
+    <Compile Include="nplot\src\Web.PlotSurface2D.cs" />
+    <Compile Include="nplot\src\Windows.PlotSurface2D.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Progress.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,12 +151,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Compile Include="VerticalLine.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\nplot\NPlot.csproj">
-      <Project>{E6867FF5-74EC-4464-8958-D71CB46232F3}</Project>
-      <Name>NPlot</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
@@ -126,6 +176,72 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ExampleDidgeridooDimensions.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="nplot\src\.svn\entries" />
+    <None Include="nplot\src\.svn\format" />
+    <None Include="nplot\src\.svn\text-base\AdapterUtils.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\ArrowItem.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\AssemblyInfo.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\AxesConstraint.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\Axis.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\BarPlot.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\BasePlot.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\BaseSequencePlot.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\Bitmap.PlotSurface2D.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\CandlePlot.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\DateTimeAxis.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\FilledRegion.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\FontScaler.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\Grid.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\HistogramPlot.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\HorizontalLine.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\IDrawable.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\IGradient.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\ImagePlot.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\IPlot.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\IPlotSurface2D.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\ISequencePlot.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\ITransform2D.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\LabelAxis.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\LabelPointPlot.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\Legend.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\LegendBase.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\LinearAxis.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\LinearGradient.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\LinePlot.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\LogAxis.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\Marker.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\MarkerItem.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\NPlotException.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\PageAlignedPhysicalAxis.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\PhysicalAxis.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\PiAxis.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\PiePlot.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\PlotSurface2D.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\PointD.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\PointPlot.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\RectangleBrushes.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\RectangleD.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\SequenceAdapter.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\StartStep.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\StepGradient.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\StepPlot.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\TextItem.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\TradingDateTimeAxis.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\Transform2D.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\Utils.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\VerticalLine.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\Web.Design.PlotSurface2D.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\Web.PlotSurface2D.cs.svn-base" />
+    <None Include="nplot\src\.svn\text-base\Windows.PlotSurface2D.cs.svn-base" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="nplot\src\.svn\prop-base\" />
+    <Folder Include="nplot\src\.svn\props\" />
+    <Folder Include="nplot\src\.svn\tmp\prop-base\" />
+    <Folder Include="nplot\src\.svn\tmp\props\" />
+    <Folder Include="nplot\src\.svn\tmp\text-base\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

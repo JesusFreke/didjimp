@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DidjImp", "DidjImp\DidjImp.csproj", "{5AB5BCEF-B8A1-49CB-B6AE-360DEBC47366}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPlot", "..\nplot\NPlot.csproj", "{E6867FF5-74EC-4464-8958-D71CB46232F3}"
-EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "DidjImpSetup", "DidjImpSetup\DidjImpSetup.vdproj", "{FA1FA479-7691-4267-A48D-AF7B8D140692}"
 EndProject
 Global
@@ -17,10 +15,6 @@ Global
 		{5AB5BCEF-B8A1-49CB-B6AE-360DEBC47366}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AB5BCEF-B8A1-49CB-B6AE-360DEBC47366}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5AB5BCEF-B8A1-49CB-B6AE-360DEBC47366}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E6867FF5-74EC-4464-8958-D71CB46232F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E6867FF5-74EC-4464-8958-D71CB46232F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E6867FF5-74EC-4464-8958-D71CB46232F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E6867FF5-74EC-4464-8958-D71CB46232F3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FA1FA479-7691-4267-A48D-AF7B8D140692}.Debug|Any CPU.ActiveCfg = Debug
 		{FA1FA479-7691-4267-A48D-AF7B8D140692}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
