@@ -69,24 +69,29 @@ namespace DidjImp
 				Match match = dimensionRegex.Match(line);
 				if (!match.Success)
 				{
-					ShowError("Line {0} (\"{1}\") is not in a valid format. Expecting 2 positive numbers.", lineNumber, dimensionLine);
+					ShowError("Line {0}: \"{1}\" - The line is not in a valid format. Expecting 2 positive numbers.", lineNumber, dimensionLine);
 					return;
 				}
 
 				double position;
 				if (!Double.TryParse(match.Groups[1].Captures[0].Value, out position))
 				{
-					ShowError("The first number (\"{0}\") on line {1} (\"{2}\") is not a valid number.", match.Groups[1].Captures[0].Value, lineNumber, dimensionLine);
+					ShowError("Line {0}: \"{1}\" - The position \"{2}\" is not a valid number.", lineNumber, dimensionLine, match.Groups[1].Captures[0].Value);
 					return;
 				}
 
 				double radius;
 				if (!Double.TryParse(match.Groups[2].Captures[0].Value, out radius))
 				{
-					ShowError("The second number (\"{0}\") on line {1} (\"{2}\") is not a valid number.", match.Groups[2].Captures[0].Value, lineNumber, dimensionLine);
+					ShowError("Line {0}: \"{1}\" - The radius \"{2}\" is not a valid number.", lineNumber, dimensionLine, match.Groups[2].Captures[0].Value);
 					return;
 				}
 
+				if (radius == 0)
+				{
+					ShowError("Line {0}: \"{1}\" - The radius cannot be 0", lineNumber, dimensionLine);
+					return;
+				}
 				dimensions.Add(new BoreDimension(position, radius));
 
 				lineNumber++;
@@ -99,6 +104,11 @@ namespace DidjImp
 			}
 
 			Bore bore = new Bore(dimensions, 1.0m / 500);
+			if (bore.Length == 0)
+			{
+				ShowError("The bore has a length of 0.");
+				return;				
+			}
 			bore.CalculatedFrequency += new Bore.CalculatedFrequencyDelegate(bore_CalculatedFrequency);
 
 			progressDialog = new Progress();

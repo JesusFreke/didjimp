@@ -58,7 +58,11 @@ namespace DidjImp
 			for (int i = 0; i < dimensions.Count - 1; i++)
 			{
 				if (dimensions[i + 1].Position - dimensions[i].Position > 0)
-					tempSections.Add(new BoreSection(dimensions[i].Radius, dimensions[i + 1].Radius, dimensions[i + 1].Position - dimensions[i].Position));
+				{
+					BoreSection section = new BoreSection(dimensions[i].Radius, dimensions[i + 1].Radius, dimensions[i + 1].Position - dimensions[i].Position);
+					length += section.Length;
+					tempSections.Add(section);
+				}
 			}
 
 			//use the dimensions as given - don't split up into smaller sections
@@ -161,6 +165,12 @@ namespace DidjImp
 				: base(String.Format(message, args))
 			{
 			}
+		}
+
+		private double length = 0;
+		public double Length
+		{
+			get { return length; }
 		}
 	}
 }
