@@ -30,6 +30,7 @@ namespace DidjImp
 	{
 		private int calculatedFrequencyCount;
 		private Progress progressDialog;
+		private DidjImpSettings settings = new DidjImpSettings();
 
 		[STAThread]
 		static void Main()
@@ -55,6 +56,30 @@ namespace DidjImp
 			peaks = null;
 			verticalLines.Clear();
 			currentPeak = -1;
+
+			double unitConversionFactor = 1;
+
+			switch (settings.Units)
+			{
+				case DidjImpSettings.UnitType.millimeter:
+					unitConversionFactor = .001;
+					break;
+				case DidjImpSettings.UnitType.centimeter:
+					unitConversionFactor = .01;
+					break;
+				case DidjImpSettings.UnitType.meter:
+					unitConversionFactor = 1;
+					break;
+				case DidjImpSettings.UnitType.inch:
+					unitConversionFactor = .0254;
+					break;
+				case DidjImpSettings.UnitType.foot:
+					unitConversionFactor = .3048;
+					break;
+				case DidjImpSettings.UnitType.yard:
+					unitConversionFactor = .9144;
+					break;
+			}
 
 			calculatedFrequencyCount = 0;
 			List<BoreDimension> dimensions = new List<BoreDimension>();
@@ -92,7 +117,7 @@ namespace DidjImp
 					ShowError("Line {0}: \"{1}\" - The radius cannot be 0", lineNumber, dimensionLine);
 					return;
 				}
-				dimensions.Add(new BoreDimension(position, radius));
+				dimensions.Add(new BoreDimension(position * unitConversionFactor, radius * unitConversionFactor));
 
 				lineNumber++;
 			}
@@ -447,7 +472,6 @@ namespace DidjImp
 		private void DidjImp_Load(object sender, EventArgs e)
 		{
 			plot.RightMenu = NPlot.Windows.PlotSurface2D.DefaultContextMenu;
-			/*plot.CustomToolTi = new NPlot.Windows.PlotSurface2D.CustomToolTipDelegate(CustomToolTip);*/
 		}
 
 		private string CustomToolTip(Point p)
@@ -485,6 +509,12 @@ namespace DidjImp
 		{
 			About about = new About();
 			about.ShowDialog();
+		}
+
+		private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Options options = new Options(settings);
+			DialogResult dr = options.ShowDialog();
 		}
 	}
 }
