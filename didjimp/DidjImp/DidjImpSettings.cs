@@ -15,32 +15,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Drawing;
-using NPlot;
+using System;
+using System.Configuration;
 
 namespace DidjImp
 {
-	/// <summary>
-	/// A vertical line to use to show the peak and related harmonics.
-	/// We can't use NPlot's built-in vertical line, because it is an IPlot,
-	/// and it changes the axis when added to the chart
-	/// </summary>
-	public class VerticalLine : IDrawable
+	public class DidjImpSettings : ApplicationSettingsBase
 	{
-		private double x;
-		private Pen pen;
-
-		public VerticalLine(double x, Pen pen)
+		[UserScopedSetting()]
+		[DefaultSettingValueAttribute("meter")]
+		public UnitType Units
 		{
-			this.x = x;
-			this.pen = pen;
+			get { return (UnitType)this["Units"]; }
+			set { this["Units"] = value; }
 		}
 
-		public void Draw(System.Drawing.Graphics g, PhysicalAxis xAxis, PhysicalAxis yAxis)
+		public enum UnitType
 		{
-			int physicalX = (int)xAxis.WorldToPhysical(x, false).X;
-
-			g.DrawLine(pen, new Point(physicalX, yAxis.PhysicalMin.Y), new Point(physicalX, yAxis.PhysicalMax.Y));
+			millimeter=0,
+			centimeter,
+			meter,
+			inch,
+			foot,
+			yard
 		}
 	}
 }

@@ -1,5 +1,5 @@
 ﻿/*
- * DidjImp, a Didgeridoo Impedance Calculator (www.sourceforge.net/didjimp)
+ * DidjImp, a Didgeridoo Impedance Calculator (didjimp.sourceforge.net)
  * Copyright (C) 2008 Ben Gruver (JesusFreke@JesusFreke.com)
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
