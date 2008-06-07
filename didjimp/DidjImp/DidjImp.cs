@@ -53,9 +53,7 @@ namespace DidjImp
 		private Regex dimensionRegex = new Regex(@"^\s*([0-9.]+)(?:(?:\s+)|(?:\s*,\s*))([0-9.]+)\s*(?:;.*)?$");
 		private void btnCalculate_Click(object sender, EventArgs e)
 		{
-			peaks = null;
 			verticalLines.Clear();
-			currentPeak = -1;
 
 			double unitConversionFactor = 1;
 
@@ -171,7 +169,7 @@ namespace DidjImp
 			else if (radioPhase.Checked)
 				PreparePhaseGraph();
 
-			peaks = new List<double>();
+			List<double> peaks = new List<double>();
 			for (int i = 1; i < impedanceData.Count - 1; i++)
 			{
 				if (impedanceData.Values[i].Magnitude > impedanceData.Values[i - 1].Magnitude &&
@@ -186,6 +184,54 @@ namespace DidjImp
 				progressDialog.Close();
 				plot.Refresh();
 			}));
+
+			comboPeaks.Invoke(new VoidDelegate(delegate()
+			{
+				using (Bitmap b = new Bitmap(1, 1))
+				{
+					using (Graphics g = Graphics.FromImage(b))
+					{
+						double maxWidth = 0;
+						comboPeaks.Items.Clear();
+						for (int i=0; i<peaks.Count; i++)
+						{
+							PeakComboBoxItem item = new PeakComboBoxItem(i+1, peaks[i]);
+							SizeF itemSize = g.MeasureString(item.Name, comboPeaks.Font);
+							if (itemSize.Width > maxWidth)
+								maxWidth = itemSize.Width;
+							comboPeaks.Items.Add(item);			
+						}
+						comboPeaks.Width = (int)maxWidth + 17;
+						comboPeaks.SelectedIndex = 0;
+					}
+				}
+			}));
+		}
+
+		private class PeakComboBoxItem
+		{
+			private string name;
+			public string Name
+			{
+				get { return name; }
+			}
+
+			private double frequency;
+			public double Frequency
+			{
+				get { return frequency; }
+			}
+
+			public PeakComboBoxItem(int peakNumber, double frequency)
+			{
+				this.name = String.Format("{0}: {1:0.00}Hz", peakNumber, frequency);
+				this.frequency = frequency;
+			}
+
+			public override string ToString()
+			{
+				return name;
+			}
 		}
 
 		private delegate void VoidDelegate();
@@ -380,6 +426,7 @@ namespace DidjImp
 			{
 				plot.Clear();
 				PrepareMagnitudeGraph();
+				AddHarmonicLines();
 				plot.Refresh();
 			}
 		}
@@ -390,6 +437,7 @@ namespace DidjImp
 			{
 				plot.Clear();
 				PrepareRealGraph();
+				AddHarmonicLines();
 				plot.Refresh();
 			}
 		}
@@ -400,6 +448,7 @@ namespace DidjImp
 			{
 				plot.Clear();
 				PrepareImaginaryGraph();
+				AddHarmonicLines();
 				plot.Refresh();
 			}
 		}
@@ -410,56 +459,28 @@ namespace DidjImp
 			{
 				plot.Clear();
 				PreparePhaseGraph();
+				AddHarmonicLines();
 				plot.Refresh();
 			}
 		}
 
-		private void plot_MouseEnter(object sender, EventArgs e)
+		private void AddHarmonicLines()
 		{
-			//need to do this to make the mouse wheel events happen
-			plot.Focus();
-		}
+			PeakComboBoxItem item = (PeakComboBoxItem)comboPeaks.SelectedItem;
 
-		private List<double> peaks;
-		private List<VerticalLine> verticalLines = new List<VerticalLine>();
-		private double currentPeak = -1;
-		private void plot_MouseMove(object sender, MouseEventArgs e)
-		{
-			if (peaks == null || peaks.Count == 0)
-				return;
-
-			double freq = plot.PhysicalXAxis1Cache.PhysicalToWorld(e.Location, false);
-
-			double minDist = double.MaxValue;
-			double minFreq = -1;
-			foreach (double peakFreq in peaks)
-			{
-				double dist = Math.Abs(freq - peakFreq);
-				if (dist < minDist)
-				{
-					minDist = dist;
-					minFreq = peakFreq;
-				}
-			}
-
-			if (minFreq == currentPeak)
-				return;
-
-			currentPeak = minFreq;
+			double frequency = item.Frequency;
 
 			foreach (VerticalLine line in verticalLines)
 				plot.Remove(line, false);
 
 			verticalLines.Clear();
-			plot.Refresh();
-
 
 			int mult = 1;
-			while (currentPeak * mult < 2000)
+			while (frequency * mult < 2000)
 			{
 				Pen pen = new Pen(Color.Black, 1);
 				pen.DashPattern = new float[] { 8.0F, 4.0F };
-				VerticalLine vLine = new VerticalLine(currentPeak * mult, pen);
+				VerticalLine vLine = new VerticalLine(frequency * mult, pen);
 
 				plot.Add(vLine);
 				verticalLines.Add(vLine);
@@ -469,18 +490,19 @@ namespace DidjImp
 			plot.Refresh();
 		}
 
+		private void plot_MouseEnter(object sender, EventArgs e)
+		{
+			//need to do this to make the mouse wheel events happen
+			plot.Focus();
+		}
+
+
+
 		private void DidjImp_Load(object sender, EventArgs e)
 		{
 			plot.RightMenu = NPlot.Windows.PlotSurface2D.DefaultContextMenu;
 		}
 
-		private string CustomToolTip(Point p)
-		{
-			if (this.currentPeak != -1)
-				return String.Format("Peak={0}Hz", currentPeak);
-			else
-				return null;
-		}
 
 		private void saveDimensionsToolStripMenuItem_Click(object sender, EventArgs e)
 		{
@@ -516,5 +538,26 @@ namespace DidjImp
 			Options options = new Options(settings);
 			DialogResult dr = options.ShowDialog();
 		}
+
+		private int currentPeaksComboIndex = -1;
+		private List<VerticalLine> verticalLines = new List<VerticalLine>();
+		private void comboPeaks_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (comboPeaks.SelectedIndex == currentPeaksComboIndex)
+				return;
+
+			currentPeaksComboIndex = comboPeaks.SelectedIndex;
+			AddHarmonicLines();
+		}
+
+		private void comboPeaks_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			if (comboPeaks.Text.Length == 0)
+				return;
+
+			//don't allow an entry that's not in the list
+			if (!comboPeaks.Items.Contains(comboPeaks.Text))
+				comboPeaks.SelectedIndex = currentPeaksComboIndex;
+		}		
 	}
 }
