@@ -1046,31 +1046,6 @@ namespace NPlot
 					(Rectangle)plotAreaBoundingBoxCache_ );
 			}
 
-			// draw title
-			float xt = (pXAxis2.PhysicalMax.X + pXAxis2.PhysicalMin.X)/2.0f;
-			float yt = bounds.Top + this.padding_ - titleExtraOffset;
-			Font scaledFont;
-			if (this.AutoScaleTitle)
-			{
-				scaledFont = Utils.ScaleFont( titleFont_, scale );
-			}
-			else
-			{
-				scaledFont = titleFont_;
-			}
-			g.DrawString( title_, scaledFont, this.titleBrush_,	new PointF(xt,yt), titleDrawFormat_ );
-			
-			//count number of new lines in title.
-			int nlCount = 0;
-			for (int i=0; i<title_.Length; ++i)
-			{
-				if (title_[i] == '\n')
-					nlCount += 1;
-			}
-
-			SizeF s = g.MeasureString(title_,scaledFont);
-			bbTitleCache_ = new Rectangle( (int)(xt-s.Width/2), (int)(yt), (int)(s.Width), (int)(s.Height)*(nlCount+1) );
-
 			// draw drawables..
 			System.Drawing.Drawing2D.SmoothingMode smoothSave = g.SmoothingMode;
 
@@ -1130,6 +1105,32 @@ namespace NPlot
 			{
 				legend_.Draw( g, legendPosition, this.drawables_, scale );
 			}
+
+
+			// draw title
+			float xt = (pXAxis2.PhysicalMax.X + pXAxis2.PhysicalMin.X) / 2.0f;
+			float yt = bounds.Top + this.padding_ - titleExtraOffset;
+			Font scaledFont;
+			if (this.AutoScaleTitle)
+			{
+				scaledFont = Utils.ScaleFont(titleFont_, scale);
+			}
+			else
+			{
+				scaledFont = titleFont_;
+			}
+			g.DrawString(title_, scaledFont, this.titleBrush_, new PointF(xt, yt), titleDrawFormat_);
+
+			//count number of new lines in title.
+			int nlCount = 0;
+			for (int i = 0; i < title_.Length; ++i)
+			{
+				if (title_[i] == '\n')
+					nlCount += 1;
+			}
+
+			SizeF s = g.MeasureString(title_, scaledFont);
+			bbTitleCache_ = new Rectangle((int)(xt - s.Width / 2), (int)(yt), (int)(s.Width), (int)(s.Height) * (nlCount + 1));
 
 			// cache the physical axes we used on this draw;
 			this.pXAxis1Cache_ = pXAxis1;
