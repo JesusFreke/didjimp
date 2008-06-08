@@ -445,6 +445,14 @@ namespace NPlot.Bitmap
 			ps_.AddAxesConstraint( c );
 		}
 
+		/// <summary>
+		/// Remove an axis constraint from the plot surface
+		/// </summary>
+		/// <param name="constraint">The constraint to remove.</param>
+		public void RemoveAxesConstraint(AxesConstraint c)
+		{
+			ps_.RemoveAxesConstraint(c);
+		}
 
 		/// <summary>
 		/// Whether or not the title will be scaled according to size of the plot 

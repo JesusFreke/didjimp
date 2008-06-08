@@ -1024,6 +1024,14 @@ namespace NPlot.Windows
 			ps_.AddAxesConstraint( c );
 		}
 
+		/// <summary>
+		/// Remove an axis constraint from the plot surface
+		/// </summary>
+		/// <param name="constraint">The constraint to remove.</param>
+		public void RemoveAxesConstraint(AxesConstraint c)
+		{
+			ps_.RemoveAxesConstraint( c );
+		}
 
 		/// <summary>
 		/// Print the chart as currently shown by the control
