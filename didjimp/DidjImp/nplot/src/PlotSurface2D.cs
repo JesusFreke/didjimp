@@ -1197,6 +1197,14 @@ namespace NPlot
 			this.axesConstraints_.Add( constraint );
 		}
 
+		/// <summary>
+		/// Remove an axis constraint from the plot surface
+		/// </summary>
+		/// <param name="constraint">The constraint to remove.</param>
+		public void RemoveAxesConstraint( AxesConstraint constraint )
+		{
+			this.axesConstraints_.Remove( constraint );
+		}
 
 		/// <summary>
 		/// Whether or not the title will be scaled according to size of the plot surface.
