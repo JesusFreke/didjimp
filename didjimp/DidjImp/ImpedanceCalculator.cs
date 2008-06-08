@@ -20,21 +20,31 @@ using System.Collections.Generic;
 
 namespace DidjImp
 {
+	/// <summary>
+	/// This class calculates the impedance and pressure waveforms for arbitrary circular
+	/// bores, using lossy conical and cylindrical transmission line elements
+	/// 
+	/// References:
+	/// [1] Mapes-Riordan, D. (1993). Horn modeling with conical and cylindrical transmission-line elements.
+	///	J. Audio Eng. Soc., 41(6):471-484.
+	/// </summary>
 	public class ImpedanceCalculator
 	{
 		public const double speedSound = 347.23;
 		public const double airDensity = 1.1769;
 		public const double airViscocity = 1.846E-5;
 
-
 		/// <summary>
-		/// Encapsulates calculations that are dependant on frequency
+		/// Encapsulates various intermediate calculations that are dependant only on frequency,
+		/// so we only have to calculate them once per frequency
 		/// </summary>
-		private class FrequencyCalculations
+		public class FrequencyCalculations
 		{
+			public double frequency;
 			public double angularFrequency;
-			//these are partial components used in calculating the corresponding value, that
-			//are only dependant on frequency;
+			
+			//these are intermediate calculations used to calculate the corresponding
+			//value.
 			public double frictionLossT1;
 			public double gammaT1;
 			public double gammaT2;
@@ -47,6 +57,7 @@ namespace DidjImp
 			/// <param name="frequency">The frequency in Hz</param>
 			public FrequencyCalculations(double frequency)
 			{
+				this.frequency = frequency;
 				angularFrequency = frequency * 2 * Math.PI;
 
 				frictionLossT1 = Math.Sqrt(angularFrequency * airDensity / airViscocity);
@@ -72,12 +83,12 @@ namespace DidjImp
 			return new Complex((airDensity * speedSound) / boreSection.SphericalArea + temp, -1 * temp);
 		}
 
-		private static ComplexMatrix TransmissionMatrix(FrequencyCalculations freq, BoreSection boreSection)
+		public static ComplexMatrix TransmissionMatrix(FrequencyCalculations freq, BoreSection boreSection)
 		{
 			Complex gamma = Gamma(freq, boreSection);
 			Complex C, D, characteristicImpedance;
 
-			ComplexMathUtils.CoshSinh(gamma * boreSection.SphericalDistance, out C, out D);
+			ComplexMathUtils.CoshSinh(gamma * boreSection.SphericalLength, out C, out D);
 			characteristicImpedance = CharacteristicImpedance(freq, boreSection);
 
 			ComplexMatrix transmissionMatrix = new ComplexMatrix();
@@ -108,7 +119,7 @@ namespace DidjImp
 							outputinput - gammaXi2Inv
 						) +
 						(
-							C * gamma * boreSection.SphericalDistance * gammaXi2Inv
+							C * gamma * boreSection.SphericalLength * gammaXi2Inv
 						)
 				);
 
@@ -129,13 +140,34 @@ namespace DidjImp
 			foreach (BoreSection boreSection in boreSections)
 				cascadeMatrix = cascadeMatrix * TransmissionMatrix(freqCalc, boreSection);
 
-
 			Complex terminatingImpedance = TerminatingImpedance(freqCalc, boreSections[boreSections.Count - 1]);
 
 			Complex inputPressure = terminatingImpedance * cascadeMatrix[0, 0] + cascadeMatrix[0, 1];
 			Complex inputFlow = terminatingImpedance * cascadeMatrix[1, 0] + cascadeMatrix[1, 1];
 
 			return ((inputPressure / inputFlow));
+		}
+
+		public static SortedList<double, Complex> CalculatePressure(double frequency, List<BoreSection> boreSections, Complex boreInputImpedance)
+		{
+			SortedList<double, Complex> pressures = new SortedList<double, Complex>();
+			ImpedanceCalculator.FrequencyCalculations fc = new ImpedanceCalculator.FrequencyCalculations(frequency);
+			
+			ComplexMatrix cascadeMatrix = ComplexMatrix.IdentityMatrix();
+			pressures[0] = boreInputImpedance;
+
+			decimal position = 0;
+			foreach (BoreSection boreSection in boreSections)
+			{
+				position += (decimal)boreSection.Length;
+				cascadeMatrix = cascadeMatrix * TransmissionMatrix(fc, boreSection);
+
+				ComplexMatrix inverseMatrix = cascadeMatrix.Inverse;
+				Complex pressure = (boreInputImpedance * inverseMatrix[0, 0]) + inverseMatrix[0, 1];
+				pressures[(double)position] = pressure;
+			}
+
+			return pressures;
 		}
 
 		private static Complex TerminatingImpedance(FrequencyCalculations freq, BoreSection lastSection)

@@ -26,33 +26,35 @@ using NPlot;
 
 namespace DidjImp
 {
-	public partial class DidjImp : Form
+	public partial class DidjImpApp : Form
 	{
 		private int calculatedFrequencyCount;
 		private Progress progressDialog;
 		private DidjImpSettings settings = new DidjImpSettings();
+		private Bore bore = null;
 
 		[STAThread]
 		static void Main()
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new DidjImp());
+			Application.Run(new DidjImpApp());
 		}
 
-		public DidjImp()
+		public DidjImpApp()
 		{
 			InitializeComponent();
 		}
 
 		private void ShowError(string message, params object[] values)
 		{
-			MessageBox.Show(String.Format(message, values));
+			MessageBox.Show(this, String.Format(message, values));
 		}
 
 		private Regex dimensionRegex = new Regex(@"^\s*([0-9.]+)(?:(?:\s+)|(?:\s*,\s*))([0-9.]+)\s*(?:;.*)?$");
 		private void btnCalculate_Click(object sender, EventArgs e)
 		{
+			tabControl1.Enabled = true;
 			verticalLines.Clear();
 
 			double unitConversionFactor = 1;
@@ -82,6 +84,7 @@ namespace DidjImp
 			calculatedFrequencyCount = 0;
 			List<BoreDimension> dimensions = new List<BoreDimension>();
 			int lineNumber = 0;
+			double previousPosition = 0;
 			foreach (string dimensionLine in txtDimensions.Text.Replace('\r', '\n').Replace("\n\n", "\n").Split('\n'))
 			{
 				string line = dimensionLine.Trim();
@@ -102,6 +105,13 @@ namespace DidjImp
 					ShowError("Line {0}: \"{1}\" - The position \"{2}\" is not a valid number.", lineNumber, dimensionLine, match.Groups[1].Captures[0].Value);
 					return;
 				}
+
+				if (position < previousPosition)
+				{
+					ShowError("Line {0}: \"{1}\" - The position \"{2}\" must be greater than or equal to the previous position \"{3}\"", lineNumber, dimensionLine, position, previousPosition);
+					return;
+				}
+				previousPosition = position;
 
 				double radius;
 				if (!Double.TryParse(match.Groups[2].Captures[0].Value, out radius))
@@ -126,7 +136,7 @@ namespace DidjImp
 				return;
 			}
 
-			Bore bore = new Bore(dimensions, 1.0m / 500);
+			bore = new Bore(dimensions, 1.0m / 500);
 			if (bore.Length == 0)
 			{
 				ShowError("The bore has a length of 0.");
@@ -135,11 +145,11 @@ namespace DidjImp
 			bore.CalculatedFrequency += new Bore.CalculatedFrequencyDelegate(bore_CalculatedFrequency);
 
 			progressDialog = new Progress();
-
 			Thread thread = new Thread(() =>
 			{
-				SortedList<double, Complex> impedanceData = bore.CalculateImpedance(1, 2000, 1, .001);
+				SortedList<double, Complex> impedanceData = bore.CalculateInputImpedance(1, 2000, 1, .001);
 				SetImpedanceData(impedanceData);
+				SetBoreData(dimensions);
 			});
 
 			thread.Start();
@@ -156,18 +166,9 @@ namespace DidjImp
 		private SortedList<double, Complex> impedanceData;
 		private void SetImpedanceData(SortedList<double, Complex> impedanceData)
 		{
-			plot.Clear();
+			impedancePlot.Clear();
 
 			this.impedanceData = impedanceData;
-
-			if (radioMagnitude.Checked)
-				PrepareMagnitudeGraph();
-			else if (radioReal.Checked)
-				PrepareRealGraph();
-			else if (radioImaginary.Checked)
-				PrepareImaginaryGraph();
-			else if (radioPhase.Checked)
-				PreparePhaseGraph();
 
 			List<double> peaks = new List<double>();
 			for (int i = 1; i < impedanceData.Count - 1; i++)
@@ -179,36 +180,41 @@ namespace DidjImp
 				}
 			}
 
-			plot.Invoke(new VoidDelegate(delegate()
+			this.Invoke(new VoidDelegate(delegate()
 			{
 				progressDialog.Close();
-				plot.Refresh();
-			}));
+				UpdateImpedanceGraph();
 
-			comboPeaks.Invoke(new VoidDelegate(delegate()
-			{
 				using (Bitmap b = new Bitmap(1, 1))
 				{
 					using (Graphics g = Graphics.FromImage(b))
 					{
 						double maxWidth = 0;
-						comboPeaks.Items.Clear();
-						for (int i=0; i<peaks.Count; i++)
+						comboHarmonics.Items.Clear();
+						for (int i = 0; i < peaks.Count; i++)
 						{
-							PeakComboBoxItem item = new PeakComboBoxItem(i+1, peaks[i]);
-							SizeF itemSize = g.MeasureString(item.Name, comboPeaks.Font);
+							comboHarmonicsItem item = new comboHarmonicsItem(i + 1, peaks[i]);
+							SizeF itemSize = g.MeasureString(item.Name, comboHarmonics.Font);
 							if (itemSize.Width > maxWidth)
 								maxWidth = itemSize.Width;
-							comboPeaks.Items.Add(item);			
+							comboHarmonics.Items.Add(item);
 						}
-						comboPeaks.Width = (int)maxWidth + 17;
-						comboPeaks.SelectedIndex = 0;
+						comboHarmonics.Width = (int)maxWidth + 17;
+						comboHarmonics.SelectedIndex = 0;
 					}
 				}
+
+				SelectFrequencyDropDown selectFrequencyDropDown = new SelectFrequencyDropDown(comboWaveformSelect, peaks);
+				selectFrequencyDropDown.SelectFirstResonance();
+				comboWaveformSelect.DropDownControl = selectFrequencyDropDown;
 			}));
+
+			
+
+			
 		}
 
-		private class PeakComboBoxItem
+		private class comboHarmonicsItem
 		{
 			private string name;
 			public string Name
@@ -222,7 +228,7 @@ namespace DidjImp
 				get { return frequency; }
 			}
 
-			public PeakComboBoxItem(int peakNumber, double frequency)
+			public comboHarmonicsItem(int peakNumber, double frequency)
 			{
 				this.name = String.Format("{0}: {1:0.00}Hz", peakNumber, frequency);
 				this.frequency = frequency;
@@ -273,13 +279,13 @@ namespace DidjImp
 
 		private void PrepareMagnitudeGraph()
 		{
-			plot.ShowCoordinates = true;
-			plot.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+			impedancePlot.ShowCoordinates = true;
+			impedancePlot.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
 			Grid grid = new Grid();
 			grid.VerticalGridType = Grid.GridType.Coarse;
 			grid.HorizontalGridType = Grid.GridType.Fine;
-			plot.Add(grid);
+			impedancePlot.Add(grid);
 
 			List<double> values = new List<double>();
 			foreach (Complex c in impedanceData.Values)
@@ -287,7 +293,7 @@ namespace DidjImp
 			List<double> frequencies = new List<double>(impedanceData.Keys);
 
 			LinePlot linePlot = new LinePlot(values, frequencies);
-			plot.Add(linePlot);
+			impedancePlot.Add(linePlot);
 
 			LogAxis verticalAxis = new LogAxis();
 			verticalAxis.Label = "Impedance Magnitude";
@@ -295,29 +301,29 @@ namespace DidjImp
 			verticalAxis.WorldMin = Min(values) / 5;
 			verticalAxis.WorldMax = Max(values) * 5;
 			verticalAxis.NumberFormat = "{0:0e0}";
-			plot.YAxis1 = verticalAxis;
+			impedancePlot.YAxis1 = verticalAxis;
 
-			Axis horizontalAxis = plot.XAxis1;
+			Axis horizontalAxis = impedancePlot.XAxis1;
 			horizontalAxis.Label = "Frequency";
-			horizontalAxis.LabelFont = new Font(plot.XAxis1.LabelFont, FontStyle.Bold);
+			horizontalAxis.LabelFont = new Font(impedancePlot.XAxis1.LabelFont, FontStyle.Bold);
 			horizontalAxis.WorldMin = Min(frequencies);
 			horizontalAxis.WorldMax = Max(frequencies);
 
-			plot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.HorizontalDrag());
-			plot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.VerticalDrag());
-			plot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.AxisDrag(true));
-			plot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.MouseWheelZoom());
+			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.HorizontalDrag());
+			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.VerticalDrag());
+			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.AxisDrag(true));
+			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.MouseWheelZoom());
 		}
 
 		private void PrepareRealGraph()
 		{
-			plot.ShowCoordinates = true;
-			plot.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+			impedancePlot.ShowCoordinates = true;
+			impedancePlot.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
 			Grid grid = new Grid();
 			grid.VerticalGridType = Grid.GridType.Coarse;
 			grid.HorizontalGridType = Grid.GridType.Fine;
-			plot.Add(grid);
+			impedancePlot.Add(grid);
 
 			List<double> values = new List<double>();
 			foreach (Complex c in impedanceData.Values)
@@ -325,7 +331,7 @@ namespace DidjImp
 			List<double> frequencies = new List<double>(impedanceData.Keys);
 
 			LinePlot linePlot = new LinePlot(values, frequencies);
-			plot.Add(linePlot);
+			impedancePlot.Add(linePlot);
 
 			LogAxis verticalAxis = new LogAxis();
 			verticalAxis.Label = "Real Impedance";
@@ -333,65 +339,65 @@ namespace DidjImp
 			verticalAxis.WorldMin = Min(values) / 5;
 			verticalAxis.WorldMax = Max(values) * 5;
 			verticalAxis.NumberFormat = "{0:0e0}";
-			plot.YAxis1 = verticalAxis;
+			impedancePlot.YAxis1 = verticalAxis;
 
-			Axis horizontalAxis = plot.XAxis1;
+			Axis horizontalAxis = impedancePlot.XAxis1;
 			horizontalAxis.Label = "Frequency";
-			horizontalAxis.LabelFont = new Font(plot.XAxis1.LabelFont, FontStyle.Bold);
+			horizontalAxis.LabelFont = new Font(impedancePlot.XAxis1.LabelFont, FontStyle.Bold);
 			horizontalAxis.WorldMin = Min(frequencies);
 			horizontalAxis.WorldMax = Max(frequencies);
 
-			plot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.HorizontalDrag());
-			plot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.VerticalDrag());
-			plot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.AxisDrag(true));
-			plot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.MouseWheelZoom());
+			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.HorizontalDrag());
+			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.VerticalDrag());
+			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.AxisDrag(true));
+			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.MouseWheelZoom());
 		}
 
 		private void PrepareImaginaryGraph()
 		{
-			plot.ShowCoordinates = true;
-			plot.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+			impedancePlot.ShowCoordinates = true;
+			impedancePlot.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
 			Grid grid = new Grid();
 			grid.VerticalGridType = Grid.GridType.Coarse;
 			grid.HorizontalGridType = Grid.GridType.Fine;
-			plot.Add(grid);
+			impedancePlot.Add(grid);
 			List<double> values = new List<double>();
 			foreach (Complex c in impedanceData.Values)
 				values.Add(c.Imaginary);
 			List<double> frequencies = new List<double>(impedanceData.Keys);
 
 			LinePlot linePlot = new LinePlot(values, frequencies);
-			plot.Add(linePlot);
+			impedancePlot.Add(linePlot);
 
-			Axis verticalAxis = plot.YAxis1;
+			Axis verticalAxis = impedancePlot.YAxis1;
 			verticalAxis.Label = "Imaginary Impedance";
 			verticalAxis.LabelFont = new Font(verticalAxis.LabelFont, FontStyle.Bold);
 			verticalAxis.WorldMin = Min(values) * 1.3;
 			verticalAxis.WorldMax = Max(values) * 1.3;
 			verticalAxis.NumberFormat = "{0:0e0}";
 
-			Axis horizontalAxis = plot.XAxis1;
+			Axis horizontalAxis = impedancePlot.XAxis1;
 			horizontalAxis.Label = "Frequency";
-			horizontalAxis.LabelFont = new Font(plot.XAxis1.LabelFont, FontStyle.Bold);
+			horizontalAxis.LabelFont = new Font(impedancePlot.XAxis1.LabelFont, FontStyle.Bold);
 			horizontalAxis.WorldMin = Min(frequencies);
 			horizontalAxis.WorldMax = Max(frequencies);
 
-			plot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.HorizontalDrag());
-			plot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.VerticalDrag());
-			plot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.AxisDrag(true));
-			plot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.MouseWheelZoom());
+			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.HorizontalDrag());
+			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.VerticalDrag());
+			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.AxisDrag(true));
+			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.MouseWheelZoom());
 		}
 
 		private void PreparePhaseGraph()
 		{
-			plot.ShowCoordinates = true;
-			plot.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+			impedancePlot.ShowCoordinates = true;
+			impedancePlot.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
 			Grid grid = new Grid();
 			grid.VerticalGridType = Grid.GridType.Coarse;
 			grid.HorizontalGridType = Grid.GridType.Fine;
-			plot.Add(grid);
+			impedancePlot.Add(grid);
 
 			List<double> values = new List<double>();
 			foreach (Complex c in impedanceData.Values)
@@ -399,79 +405,37 @@ namespace DidjImp
 			List<double> frequencies = new List<double>(impedanceData.Keys);
 
 			LinePlot linePlot = new LinePlot(values, frequencies);
-			plot.Add(linePlot);
+			impedancePlot.Add(linePlot);
 
-			Axis verticalAxis = plot.YAxis1;
+			Axis verticalAxis = impedancePlot.YAxis1;
 			verticalAxis.Label = "Impedance Phase";
 			verticalAxis.LabelFont = new Font(verticalAxis.LabelFont, FontStyle.Bold);
 			verticalAxis.WorldMin = Min(values) * 1.3;
 			verticalAxis.WorldMax = Max(values) * 1.3;
 			verticalAxis.NumberFormat = "{0:0e0}";
 
-			Axis horizontalAxis = plot.XAxis1;
+			Axis horizontalAxis = impedancePlot.XAxis1;
 			horizontalAxis.Label = "Frequency";
-			horizontalAxis.LabelFont = new Font(plot.XAxis1.LabelFont, FontStyle.Bold);
+			horizontalAxis.LabelFont = new Font(impedancePlot.XAxis1.LabelFont, FontStyle.Bold);
 			horizontalAxis.WorldMin = Min(frequencies);
 			horizontalAxis.WorldMax = Max(frequencies);
 
-			plot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.HorizontalDrag());
-			plot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.VerticalDrag());
-			plot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.AxisDrag(true));
-			plot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.MouseWheelZoom());
+			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.HorizontalDrag());
+			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.VerticalDrag());
+			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.AxisDrag(true));
+			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.MouseWheelZoom());
 		}
 
-		private void radioMagnitude_CheckedChanged(object sender, EventArgs e)
+		private void UpdateHarmonicLines()
 		{
-			if (radioMagnitude.Checked && impedanceData != null && impedanceData.Count > 0)
-			{
-				plot.Clear();
-				PrepareMagnitudeGraph();
-				AddHarmonicLines();
-				plot.Refresh();
-			}
-		}
-
-		private void radioReal_CheckedChanged(object sender, EventArgs e)
-		{
-			if (radioReal.Checked && impedanceData != null && impedanceData.Count > 0)
-			{
-				plot.Clear();
-				PrepareRealGraph();
-				AddHarmonicLines();
-				plot.Refresh();
-			}
-		}
-
-		private void radioImaginary_CheckedChanged(object sender, EventArgs e)
-		{
-			if (radioImaginary.Checked && impedanceData != null && impedanceData.Count > 0)
-			{
-				plot.Clear();
-				PrepareImaginaryGraph();
-				AddHarmonicLines();
-				plot.Refresh();
-			}
-		}
-
-		private void radioPhase_CheckedChanged(object sender, EventArgs e)
-		{
-			if (radioPhase.Checked && impedanceData != null && impedanceData.Count > 0)
-			{
-				plot.Clear();
-				PreparePhaseGraph();
-				AddHarmonicLines();
-				plot.Refresh();
-			}
-		}
-
-		private void AddHarmonicLines()
-		{
-			PeakComboBoxItem item = (PeakComboBoxItem)comboPeaks.SelectedItem;
+			comboHarmonicsItem item = (comboHarmonicsItem)comboHarmonics.SelectedItem;
+			if (item == null)
+				return;
 
 			double frequency = item.Frequency;
 
 			foreach (VerticalLine line in verticalLines)
-				plot.Remove(line, false);
+				impedancePlot.Remove(line, false);
 
 			verticalLines.Clear();
 
@@ -482,25 +446,27 @@ namespace DidjImp
 				pen.DashPattern = new float[] { 8.0F, 4.0F };
 				VerticalLine vLine = new VerticalLine(frequency * mult, pen);
 
-				plot.Add(vLine);
+				impedancePlot.Add(vLine);
 				verticalLines.Add(vLine);
 				mult++;
 			}
 
-			plot.Refresh();
+			impedancePlot.Refresh();
 		}
 
 		private void plot_MouseEnter(object sender, EventArgs e)
 		{
-			//need to do this to make the mouse wheel events happen
-			plot.Focus();
+			//The chart control must have focus for the mouse wheel events to happen
+			impedancePlot.Focus();
 		}
 
 
 
 		private void DidjImp_Load(object sender, EventArgs e)
 		{
-			plot.RightMenu = NPlot.Windows.PlotSurface2D.DefaultContextMenu;
+			impedancePlot.RightMenu = NPlot.Windows.PlotSurface2D.DefaultContextMenu;
+			comboWaveformSelect.AllowResizeDropDown = false;
+			comboImpedanceGraphType.SelectedIndex = 0;
 		}
 
 
@@ -539,25 +505,174 @@ namespace DidjImp
 			DialogResult dr = options.ShowDialog();
 		}
 
-		private int currentPeaksComboIndex = -1;
 		private List<VerticalLine> verticalLines = new List<VerticalLine>();
-		private void comboPeaks_SelectedIndexChanged(object sender, EventArgs e)
+		private void comboHarmonics_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (comboPeaks.SelectedIndex == currentPeaksComboIndex)
-				return;
-
-			currentPeaksComboIndex = comboPeaks.SelectedIndex;
-			AddHarmonicLines();
+			UpdateHarmonicLines();
 		}
 
-		private void comboPeaks_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+		private void comboImpedanceGraphType_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (comboPeaks.Text.Length == 0)
+			if (impedanceData == null || impedanceData.Count == 0)
 				return;
 
-			//don't allow an entry that's not in the list
-			if (!comboPeaks.Items.Contains(comboPeaks.Text))
-				comboPeaks.SelectedIndex = currentPeaksComboIndex;
-		}		
+			UpdateImpedanceGraph();
+		}
+
+		private void UpdateImpedanceGraph()
+		{
+			impedancePlot.Clear();
+			switch (comboImpedanceGraphType.Text)
+			{
+				case "Impedance Magnitude":
+					PrepareMagnitudeGraph();
+					break;
+				case "Real Impedance":
+					PrepareRealGraph();
+					break;
+				case "Imaginary Impedance":
+					PrepareImaginaryGraph();
+					break;
+				case "Impedance Phase":
+					PreparePhaseGraph();
+					break;
+			}
+
+			UpdateHarmonicLines();
+			impedancePlot.Refresh();
+		}
+
+		AxesConstraint.AspectRatio borePlotAspectRatioConstraint = null;
+		private void SetBoreData(List<BoreDimension> boreDimensions)
+		{
+			LinePlot linePlot = new LinePlot();
+			List<double> xValues = new List<double>();
+			List<double> yValues = new List<double>();
+			double maxRadius = 0;
+			double totalLength = boreDimensions[boreDimensions.Count - 1].Position;
+
+
+			for (int i=0; i<boreDimensions.Count; i++)
+			{
+				if (boreDimensions[i].Radius > maxRadius)
+					maxRadius = boreDimensions[i].Radius;
+
+				xValues.Add(boreDimensions[i].Position);
+				yValues.Add(boreDimensions[i].Radius);
+			}
+
+			for (int i = boreDimensions.Count - 1; i > -1; i--)
+			{
+				xValues.Add(boreDimensions[i].Position);
+				yValues.Add(boreDimensions[i].Radius * -1);
+			}
+
+			xValues.Add(boreDimensions[0].Position);
+			yValues.Add(boreDimensions[0].Radius);
+
+			borePlot.Clear();
+
+			borePlot.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+			Grid grid = new Grid();
+			grid.HorizontalGridType = Grid.GridType.Fine;
+			grid.VerticalGridType = Grid.GridType.None;
+			borePlot.Add(grid);
+
+			borePlotAspectRatioConstraint = new AxesConstraint.AspectRatio(1);
+			borePlot.AddAxesConstraint(borePlotAspectRatioConstraint);	
+
+			borePlot.Add(new LinePlot(yValues, xValues));
+
+			borePlot.XAxis1.WorldMax += borePlot.XAxis1.WorldLength * .01;
+			borePlot.YAxis1.WorldMax += borePlot.YAxis1.WorldLength * .2;
+
+			borePlot.XAxis2 = new LinearAxis(borePlot.XAxis1.WorldMin, borePlot.XAxis1.WorldMax);
+			borePlot.XAxis1.Hidden = true;
+			borePlot.YAxis1.Hidden = true;
+
+			this.Invoke(new VoidDelegate(delegate()
+				{
+					ResizeBorePlot();
+				}));
+		}
+
+		private bool inResizeBorePlot = false;
+		private void ResizeBorePlot()
+		{
+			if (inResizeBorePlot)
+				return;
+			if (borePlotAspectRatioConstraint == null)
+				return;
+
+			inResizeBorePlot = true;
+
+			FakeAspectRatioAxesConstraint fakeAR = new FakeAspectRatioAxesConstraint(1, false);
+			borePlot.AddAxesConstraint(fakeAR);
+			borePlot.RemoveAxesConstraint(borePlotAspectRatioConstraint);
+
+			Bitmap tempBitmap = new Bitmap(borePlot.Width, borePlot.Height);
+			Graphics g = Graphics.FromImage(tempBitmap);
+
+			borePlot.Draw(g, new Rectangle(0, borePlot.Height, borePlot.Width, borePlot.Height));
+
+			borePlot.RemoveAxesConstraint(fakeAR);
+			borePlot.AddAxesConstraint(borePlotAspectRatioConstraint);
+
+			if (fakeAR.ChangeAmount != 0)
+			{
+				borePlot.Height -= fakeAR.ChangeAmount;
+			}
+
+			inResizeBorePlot = false;
+		}
+
+		private void borePlot_Layout(object sender, LayoutEventArgs e)
+		{
+			ResizeBorePlot();
+		}
+
+		private void comboWaveformSelect_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			double frequency = -1;
+
+			if (!double.TryParse((string)comboWaveformSelect.SelectedItem, out frequency))
+				return;
+
+			SortedList<double, Complex> pressures = bore.CalculateWaveform(frequency, .002m);
+
+			List<double> xValues = new List<double>();
+			List<double> yValues = new List<double>();
+			List<double> negYValues = new List<double>();
+
+			for (int i=0; i<pressures.Count; i++)
+			{
+				xValues.Add(pressures.Keys[i]);
+				yValues.Add(pressures.Values[i].Real);
+				negYValues.Add(pressures.Values[i].Real * -1);
+			}
+
+			waveformPlot.Clear();
+			waveformPlot.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+			waveformPlot.Title = String.Format("Waveform for {0}Hz", frequency);
+			waveformPlot.TitleFont = new Font(waveformPlot.TitleFont, FontStyle.Bold);
+			
+			Grid grid = new Grid();
+			grid.HorizontalGridType = Grid.GridType.Fine;
+			grid.VerticalGridType = Grid.GridType.None;
+			waveformPlot.Add(grid);
+
+			waveformPlot.Add(new LinePlot(yValues, xValues));
+			waveformPlot.Add(new LinePlot(negYValues, xValues));
+			waveformPlot.XAxis1.Hidden = true;
+			waveformPlot.YAxis1.Hidden = true;
+			waveformPlot.XAxis1.WorldMax += waveformPlot.XAxis1.WorldLength * .01;
+
+			waveformPlot.Add(new HorizontalLine(0));
+
+			
+			waveformPlot.Refresh();
+		}
 	}
 }

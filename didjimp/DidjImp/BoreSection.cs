@@ -21,7 +21,8 @@ using System.Collections.Generic;
 namespace DidjImp
 {
 	/// <summary>
-	/// This class represents a single conical section of a bore
+	/// This class represents a single conical section of a bore. A cylindrical section
+	/// is a special case when the opening and closing radius are equal.
 	/// </summary>
 	public class BoreSection
 	{
@@ -46,7 +47,7 @@ namespace DidjImp
 		}
 
 		/// <summary>
-		/// The length of the section
+		/// The length of the section, in rectangular coordinates
 		/// </summary>
 		public double Length
 		{
@@ -64,6 +65,11 @@ namespace DidjImp
 			DoCalcs();
 		}
 
+		public BoreSection(BoreDimension openingDimension, BoreDimension closingDimension)
+			: this(openingDimension.Radius, closingDimension.Radius, closingDimension.Position - openingDimension.Position)
+		{
+		}
+
 		public bool IsCylindrical
 		{
 			get { return closingRadius == openingRadius; }
@@ -77,26 +83,26 @@ namespace DidjImp
 		/// </summary>
 		/// <param name="maxLength">The maximum length of each section</param>
 		/// <returns>A list of smaller sections</returns>
-		public static IList<BoreSection> Split(BoreSection section, decimal maxLength)
+		public static IList<BoreSection> Split(BoreSection boreSection, decimal maxSectionLength)
 		{
 			//using decimals in various places to prevent the small errors introduced
 			//when using doubles
 			List<BoreSection> sections = new List<BoreSection>();
-			decimal remainingLength = (decimal)section.length;
-			decimal slope = ((decimal)section.closingRadius - (decimal)section.openingRadius) / remainingLength;
-			decimal currentOpeningRadius = (decimal)section.openingRadius;
+			decimal remainingLength = (decimal)boreSection.length;
+			decimal slope = ((decimal)boreSection.closingRadius - (decimal)boreSection.openingRadius) / remainingLength;
+			decimal currentOpeningRadius = (decimal)boreSection.openingRadius;
 			int currentSectionNumber = 0;
 
-			while (remainingLength > maxLength)
+			while (remainingLength > maxSectionLength)
 			{
-				decimal currentClosingRadius = (decimal)section.openingRadius + (slope * maxLength * (currentSectionNumber + 1));
-				sections.Add(new BoreSection((double)currentOpeningRadius, (double)currentClosingRadius, (double)maxLength));
-				remainingLength -= maxLength;
+				decimal currentClosingRadius = (decimal)boreSection.openingRadius + (slope * maxSectionLength * (currentSectionNumber + 1));
+				sections.Add(new BoreSection((double)currentOpeningRadius, (double)currentClosingRadius, (double)maxSectionLength));
+				remainingLength -= maxSectionLength;
 				currentOpeningRadius = currentClosingRadius;
 				currentSectionNumber++;
 			}
 			if (remainingLength > 0)
-				sections.Add(new BoreSection((double)currentOpeningRadius, (double)section.closingRadius, (double)remainingLength));
+				sections.Add(new BoreSection((double)currentOpeningRadius, (double)boreSection.closingRadius, (double)remainingLength));
 			return sections.AsReadOnly();
 		}
 
@@ -106,37 +112,38 @@ namespace DidjImp
 		#region Impedance Calculations
 
 		private double inputXi;
+		/// <summary>
+		/// The distance from the apex of the cone to the input side of the truncated cone,
+		/// in spherical coordinates
+		/// </summary>
 		public double InputXi
 		{
 			get { return inputXi; }
 		}
 
 		private double outputXi;
+		/// <summary>
+		/// The distance from the apex of the cone to the output side of the truncated cone,
+		/// in spherical coordinates
+		/// </summary>
 		public double OutputXi
 		{
 			get { return outputXi; }
 		}
 
-		/*private double inputXi_Div_OutputXi;
-		public double InputXi_Div_OutputXi
-		{
-			get { return inputXi_Div_OutputXi; }
-		}
-
-		private double outputXi_Div_InputXi;
-		public double OutputXi_Div_InputXi
-		{
-			get { return outputXi_Div_InputXi; }
-		}*/
-
-
 		private double averageRadius;
+		/// <summary>
+		/// The average radius of the conical/cylindrical section
+		/// </summary>
 		public double AverageRadius
 		{
 			get { return averageRadius; }
 		}
 
 		private double sphericalAreaTimesAverageRadius;
+		/// <summary>
+		/// An intermediate value used in impedance calculations
+		/// </summary>
 		public double SphericalAreaTimesAverageRadius
 		{
 			get { return sphericalAreaTimesAverageRadius; }
@@ -144,15 +151,24 @@ namespace DidjImp
 
 
 		//the distance between the spherical "end caps" on each side of the section
-		//TODO: I'm pretty sure this is just the length.. need to verify
-		private double sphericalDistance;
-		public double SphericalDistance
+		//sqrt((LinearLength^2 + (closingRadius - openingRadius)^2)
+		private double sphericalLength;
+		/// <summary>
+		/// The spherical length of the section -- the distance between the
+		/// spherical "end caps" on each end of the truncated conical section.
+		/// In the case of a cylindrical section, this is the length of the section
+		/// </summary>
+		public double SphericalLength
 		{
-			get { return sphericalDistance; }
+			get { return sphericalLength; }
 		}
 
-		//the area of the spherical "end cap" at the opening end of the section
+		
 		private double sphericalArea;
+		/// <summary>
+		/// The area of the spherical "end cap" at the opening end of the section.
+		/// In the case of a cylindrical section, the planar area of the opening
+		/// </summary>
 		public double SphericalArea
 		{
 			get { return sphericalArea; }
@@ -168,23 +184,19 @@ namespace DidjImp
 
 				inputXi = openingRadius * temp;
 				outputXi = closingRadius * temp;
-				//inputXi_Div_OutputXi = inputXi / outputXi;
-				//outputXi_Div_InputXi = outputXi / inputXi;
 
-				sphericalDistance = outputXi - inputXi;
+				sphericalLength = outputXi - inputXi;
 				sphericalArea = Math.PI * Math.Pow(inputXi, 2) * 2 * (1 - (Math.Sqrt(1 - Math.Pow(openingRadius / inputXi, 2))));
 			}
 			else
 			{
-				sphericalDistance = this.length;
+				sphericalLength = this.length;
 				sphericalArea = Math.PI * Math.Pow(openingRadius, 2);
 			}
 
 			averageRadius = (openingRadius + closingRadius) / 2.0;
 			sphericalAreaTimesAverageRadius = sphericalArea * averageRadius;
 		}
-
-
 		#endregion
 	}
 }

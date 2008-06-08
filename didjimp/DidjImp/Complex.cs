@@ -22,7 +22,7 @@ namespace DidjImp
 	/// <summary>
 	/// This class represents a complex number
 	/// </summary>
-	public struct Complex
+	public class Complex
 	{
 		private double real;
 		private double imaginary;

@@ -25,7 +25,18 @@ namespace DidjImp
 	/// </summary>
 	public class Bore
 	{
-		private List<BoreSection> sections;
+		private List<BoreSection> boreSections;
+		private List<BoreDimension> boreDimensions;
+
+		public IList<BoreSection> BoreSections
+		{
+			get { return boreSections.AsReadOnly(); }
+		}
+
+		public IList<BoreDimension> BoreDimensions
+		{
+			get { return boreDimensions.AsReadOnly(); }
+		}
 
 		/// <summary>
 		/// Constructs a new BoreDimensions class, for the given dimensions. It is assumed the
@@ -44,42 +55,22 @@ namespace DidjImp
 		/// <param name="maxSectionLength">The maximum length of each internal section</param>
 		public Bore(List<BoreDimension> dimensions, decimal maxSectionLength)
 		{
-			if (dimensions.Count < 2)
+			this.boreDimensions = new List<BoreDimension>(dimensions);
+			if (boreDimensions.Count < 2)
 				throw new ValidationException("There was only 1 bore dimension given. There must be at least 2.");
 
-			if (dimensions[0].Position != 0)
+			if (boreDimensions[0].Position != 0)
 				throw new ValidationException("The first dimension must be at position 0.");
 
-			//sort by position
-			dimensions.Sort();
-
 			//create sections from the dimensions
-			List<BoreSection> tempSections = new List<BoreSection>();
-			for (int i = 0; i < dimensions.Count - 1; i++)
+			boreSections = new List<BoreSection>();
+			for (int i = 0; i < boreDimensions.Count - 1; i++)
 			{
-				if (dimensions[i + 1].Position - dimensions[i].Position > 0)
+				if (boreDimensions[i + 1].Position - boreDimensions[i].Position > 0)
 				{
-					BoreSection section = new BoreSection(dimensions[i].Radius, dimensions[i + 1].Radius, dimensions[i + 1].Position - dimensions[i].Position);
-					length += section.Length;
-					tempSections.Add(section);
-				}
-			}
-
-			//use the dimensions as given - don't split up into smaller sections
-			if (maxSectionLength == 0)
-				sections = tempSections;
-			//split up the bore into smaller segments for improved accuracy with lossy conical segments
-			else
-			{
-				sections = new List<BoreSection>();
-				foreach (BoreSection boreSection in tempSections)
-				{
-					//the impedance calculations are "stable" for cylindrical sections,
-					//so no need to split them up
-					if (!boreSection.IsCylindrical)
-						sections.AddRange(BoreSection.Split(boreSection, maxSectionLength));
-					else
-						sections.Add(boreSection);
+					BoreSection boreSection = new BoreSection(boreDimensions[i], boreDimensions[i + 1]);
+					length += boreSection.Length;
+					boreSections.Add(boreSection);					
 				}
 			}
 		}
@@ -95,17 +86,29 @@ namespace DidjImp
 		/// <param name="frequencyInterval">The interval between frequencies</param>
 		/// <param name="maxImpedanceChangeAtPeak">The maximum percent change of the impedance magnitude at the peak. .001 seems like a good value..</param>
 		/// <returns></returns>
-		public SortedList<double, Complex> CalculateImpedance(double minFrequency, double maxFrequency, double frequencyInterval, double maxImpedanceChangeAtPeak)
+		public SortedList<double, Complex> CalculateInputImpedance(double minFrequency, double maxFrequency, double frequencyInterval, double maxImpedanceChangeAtPeak)
 		{
-			SortedList<double, Complex> impedances = new SortedList<double, Complex>();
+			List<BoreSection> splitSections = new List<BoreSection>();
+			foreach (BoreSection boreSection in boreSections)
+			{
+				if (boreSection.IsCylindrical)
+					splitSections.Add(boreSection);
+				else
+					splitSections.AddRange(BoreSection.Split(boreSection, .002m));
+			}
 
 			for (double frequency = minFrequency; frequency < maxFrequency; frequency += frequencyInterval)
 			{
-				Complex impedance = ImpedanceCalculator.InputImpedance(this.sections, frequency);
-				impedances.Add(frequency, impedance);
+				Complex impedance;
+				if (!impedances.TryGetValue(frequency, out impedance))
+				{
+					impedance = ImpedanceCalculator.InputImpedance(splitSections, frequency);
+					impedances[frequency] = impedance;
+				}
 				CalculatedFrequency(frequency);
 			}
 
+			//TODO: use the imaginary impedance to pinpoint the peak more accurately
 			//calculate additional frequencies at the peaks, until we have
 			//sufficient resolution (as per maxPercentageChangeAtPeak)
 			List<double> additionalFrequencies = new List<double>();
@@ -138,13 +141,48 @@ namespace DidjImp
 
 				foreach (double frequency in additionalFrequencies)
 				{
-					Complex impedance = ImpedanceCalculator.InputImpedance(sections, frequency);
-					impedances.Add(frequency, impedance);
+					Complex impedance;
+					if (!impedances.TryGetValue(frequency, out impedance))
+					{
+						impedance = ImpedanceCalculator.InputImpedance(splitSections, frequency);
+						impedances[frequency] = impedance;
+					}
 					CalculatedFrequency(frequency);
 				}
 			} while (additionalFrequencies.Count > 0);
 
 			return impedances;
+		}
+
+		private SortedList<double, Complex> impedances = new SortedList<double, Complex>();
+		private Complex GetImpedance(double frequency)
+		{
+			Complex impedance = null;
+			if (!impedances.TryGetValue(frequency, out impedance))
+			{
+				List<BoreSection> splitSections = new List<BoreSection>();
+				foreach (BoreSection boreSection in boreSections)
+				{
+					if (boreSection.IsCylindrical)
+						splitSections.Add(boreSection);
+					else
+						splitSections.AddRange(BoreSection.Split(boreSection, .002m));
+				}
+
+				impedance = ImpedanceCalculator.InputImpedance(splitSections, frequency);
+				impedances[frequency] = impedance;
+			}
+			return impedance;
+		}
+
+		public SortedList<double, Complex> CalculateWaveform(double frequency, decimal maxSectionLength)
+		{
+			SortedList<double, Complex> pressures = new SortedList<double, Complex>();
+			List<BoreSection> splitSections = new List<BoreSection>();
+			foreach (BoreSection boreSection in boreSections)
+				splitSections.AddRange(BoreSection.Split(boreSection, maxSectionLength));
+
+			return ImpedanceCalculator.CalculatePressure(frequency, splitSections, GetImpedance(frequency));
 		}
 
 
