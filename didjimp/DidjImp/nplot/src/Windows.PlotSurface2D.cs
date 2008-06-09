@@ -2342,7 +2342,7 @@ namespace NPlot.Windows
 
 							PointF pMin = physicalAxis_.PhysicalMin;
 							PointF pMax = physicalAxis_.PhysicalMax;
-							double physicalWorldLength = Math.Sqrt((pMax.X - pMin.X) * (pMax.X - pMin.X) + (pMax.Y - pMin.Y) * (pMax.Y - pMin.Y));
+							double physicalWorldLength = physicalAxis_.PhysicalLength;
 
 							float prop = (float)(physicalWorldLength * dist / sensitivity_);
 							prop *= 2;
