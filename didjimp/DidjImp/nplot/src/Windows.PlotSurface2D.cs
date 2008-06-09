@@ -63,6 +63,9 @@ namespace NPlot.Windows
 		private Axis yAxis2ZoomCache_;
 
 
+		//used in context menu handling
+		private Point lastRightMouseDown_ = new Point(-1, -1);
+
         /// <summary>
 		/// Flag to display a coordinates in a tooltip.
 		/// </summary>
@@ -758,6 +761,9 @@ namespace NPlot.Windows
                 dirty |= interactionOccured;
                 if (interactionOccured)
                     this.InteractionOccured(i);
+
+				if (e.Button == MouseButtons.Right)
+					lastRightMouseDown_ = new Point(e.X, e.Y);
             }
 			if (dirty)
 			{
@@ -953,12 +959,20 @@ namespace NPlot.Windows
 
             if (e.Button == MouseButtons.Right)
             {
-                Point here = new Point(e.X, e.Y);
-                selectedObjects_ = ps_.HitTest(here);
-                if (rightMenu_ != null)
-                {
-                    rightMenu_.Menu.Show(this, here);
-                }
+				if (lastRightMouseDown_.X != -1 || lastRightMouseDown_.Y != -1)
+				{
+					if (Math.Sqrt(Math.Pow(e.X - lastRightMouseDown_.X, 2) + Math.Pow(e.Y - lastRightMouseDown_.Y, 2)) <= 2)
+					{
+
+						lastRightMouseDown_ = new Point(-1, -1);
+						Point here = new Point(e.X, e.Y);
+						selectedObjects_ = ps_.HitTest(here);
+						if (rightMenu_ != null)
+						{
+							rightMenu_.Menu.Show(this, here);
+						}
+					}
+				}
             }
         }
 
