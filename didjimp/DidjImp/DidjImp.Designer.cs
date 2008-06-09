@@ -295,6 +295,7 @@ namespace DidjImp
 			this.impedancePlot.XAxis2 = null;
 			this.impedancePlot.YAxis1 = null;
 			this.impedancePlot.YAxis2 = null;
+			this.impedancePlot.MouseEnter += new System.EventHandler(this.impedancePlot_MouseEnter);
 			// 
 			// tabPage2
 			// 

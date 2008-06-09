@@ -309,10 +309,8 @@ namespace DidjImp
 			horizontalAxis.WorldMin = Min(frequencies);
 			horizontalAxis.WorldMax = Max(frequencies);
 
-			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.HorizontalDrag());
-			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.VerticalDrag());
-			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.AxisDrag(true));
-			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.MouseWheelZoom());
+			impedancePlot.AddInteraction(new MouseDrag());
+			impedancePlot.AddInteraction(new MouseWheelZoom());
 		}
 
 		private void PrepareRealGraph()
@@ -347,10 +345,8 @@ namespace DidjImp
 			horizontalAxis.WorldMin = Min(frequencies);
 			horizontalAxis.WorldMax = Max(frequencies);
 
-			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.HorizontalDrag());
-			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.VerticalDrag());
-			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.AxisDrag(true));
-			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.MouseWheelZoom());
+			impedancePlot.AddInteraction(new MouseDrag());
+			impedancePlot.AddInteraction(new MouseWheelZoom());
 		}
 
 		private void PrepareImaginaryGraph()
@@ -383,10 +379,8 @@ namespace DidjImp
 			horizontalAxis.WorldMin = Min(frequencies);
 			horizontalAxis.WorldMax = Max(frequencies);
 
-			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.HorizontalDrag());
-			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.VerticalDrag());
-			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.AxisDrag(true));
-			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.MouseWheelZoom());
+			impedancePlot.AddInteraction(new MouseDrag());
+			impedancePlot.AddInteraction(new MouseWheelZoom());
 		}
 
 		private void PreparePhaseGraph()
@@ -420,10 +414,8 @@ namespace DidjImp
 			horizontalAxis.WorldMin = Min(frequencies);
 			horizontalAxis.WorldMax = Max(frequencies);
 
-			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.HorizontalDrag());
-			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.VerticalDrag());
-			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.AxisDrag(true));
-			impedancePlot.AddInteraction(new NPlot.Windows.PlotSurface2D.Interactions.MouseWheelZoom());
+			impedancePlot.AddInteraction(new MouseDrag());
+			impedancePlot.AddInteraction(new MouseWheelZoom());
 		}
 
 		private void UpdateHarmonicLines()
@@ -454,7 +446,7 @@ namespace DidjImp
 			impedancePlot.Refresh();
 		}
 
-		private void plot_MouseEnter(object sender, EventArgs e)
+		private void impedancePlot_MouseEnter(object sender, EventArgs e)
 		{
 			//The chart control must have focus for the mouse wheel events to happen
 			impedancePlot.Focus();

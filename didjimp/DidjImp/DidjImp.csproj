@@ -80,6 +80,8 @@
     <Compile Include="DidjImpSettings.cs" />
     <Compile Include="FakeAspectRatioAxesConstraint.cs" />
     <Compile Include="ImpedanceCalculator.cs" />
+    <Compile Include="MouseDrag.cs" />
+    <Compile Include="MouseWheelZoom.cs" />
     <Compile Include="nplot\src\AdapterUtils.cs" />
     <Compile Include="nplot\src\ArrowItem.cs" />
     <Compile Include="nplot\src\AxesConstraint.cs" />
