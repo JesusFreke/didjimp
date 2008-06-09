@@ -504,11 +504,6 @@ namespace DidjImp
 		private System.Windows.Forms.ComboBox comboImpedanceGraphType;
 		private System.Windows.Forms.TabControl tabControl1;
 		private NPlot.Windows.PlotSurface2D waveformPlot;
-
-
-
-
-
 	}
 }
 
