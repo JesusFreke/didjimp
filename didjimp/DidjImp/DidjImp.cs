@@ -61,30 +61,6 @@ namespace DidjImp
 			tabControl1.Enabled = true;
 			verticalLines.Clear();
 
-			double unitConversionFactor = 1;
-
-			switch (settings.Units)
-			{
-				case DidjImpSettings.UnitType.millimeter:
-					unitConversionFactor = .001;
-					break;
-				case DidjImpSettings.UnitType.centimeter:
-					unitConversionFactor = .01;
-					break;
-				case DidjImpSettings.UnitType.meter:
-					unitConversionFactor = 1;
-					break;
-				case DidjImpSettings.UnitType.inch:
-					unitConversionFactor = .0254;
-					break;
-				case DidjImpSettings.UnitType.foot:
-					unitConversionFactor = .3048;
-					break;
-				case DidjImpSettings.UnitType.yard:
-					unitConversionFactor = .9144;
-					break;
-			}
-
 			calculatedFrequencyCount = 0;
 			List<BoreDimension> dimensions = new List<BoreDimension>();
 			int lineNumber = 0;
@@ -129,7 +105,7 @@ namespace DidjImp
 					ShowError("Line {0}: \"{1}\" - The radius cannot be 0", lineNumber, dimensionLine);
 					return;
 				}
-				dimensions.Add(new BoreDimension(position * unitConversionFactor, radius * unitConversionFactor));
+				dimensions.Add(new BoreDimension(position * settings.UnitConversionFactor, radius * settings.UnitConversionFactor));
 
 				lineNumber++;
 			}

@@ -30,6 +30,30 @@ namespace DidjImp
 			set { this["Units"] = value; }
 		}
 
+		public double UnitConversionFactor
+		{
+			get
+			{
+				switch (this.Units)
+				{
+					case DidjImpSettings.UnitType.millimeter:
+						return .001;
+					case DidjImpSettings.UnitType.centimeter:
+						return .01;
+					case DidjImpSettings.UnitType.meter:
+						return 1;
+					case DidjImpSettings.UnitType.inch:
+						return .0254;
+					case DidjImpSettings.UnitType.foot:
+						return .3048;
+					case DidjImpSettings.UnitType.yard:
+						return .9144;
+					default:
+						return 1;
+				}
+			}
+		}
+
 		[UserScopedSetting()]
 		[DefaultSettingValueAttribute("2")]
 		public int NumberOfThreads
