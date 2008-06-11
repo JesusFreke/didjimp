@@ -15,37 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Configuration;
+using System.Windows.Forms;
 
 namespace DidjImp
 {
-	public class DidjImpSettings : ApplicationSettingsBase
+	public partial class ViewDataDialog : Form
 	{
-		[UserScopedSetting()]
-		[DefaultSettingValueAttribute("meter")]
-		public UnitType Units
+		public ViewDataDialog(string windowTitle, string data)
 		{
-			get { return (UnitType)this["Units"]; }
-			set { this["Units"] = value; }
-		}
-
-		[UserScopedSetting()]
-		[DefaultSettingValueAttribute("2")]
-		public int NumberOfThreads
-		{
-			get { return (int)this["NumberOfThreads"]; }
-			set { this["NumberOfThreads"] = value; }
-		}
-
-		public enum UnitType
-		{
-			millimeter=0,
-			centimeter,
-			meter,
-			inch,
-			foot,
-			yard
+			InitializeComponent();
+			
+			this.Text = windowTitle;
+			this.txtData.Text = data;
+			this.txtData.SelectionStart = 0;
+			this.txtData.SelectionLength = 0;
 		}
 	}
 }

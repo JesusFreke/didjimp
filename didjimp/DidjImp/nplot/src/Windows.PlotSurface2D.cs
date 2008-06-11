@@ -1127,7 +1127,7 @@ namespace NPlot.Windows
 						xAxis.WorldMax - xAxis.WorldMin,
 						yAxis.WorldMax - yAxis.WorldMin );
 
-					plot.WriteData( sb, region, true );
+					plot.WriteData( sb, region );
 				}
 			}
 
@@ -2901,9 +2901,9 @@ namespace NPlot.Windows
 			/// property and extended if desired.
 			/// </summary>
 			/// <param name="menuItems"></param>
-			public void SetMenuItems(ArrayList menuItems)
+			public void SetMenuItems(IList menuItems)
 			{
-				this.menuItems_ = menuItems;
+				this.menuItems_ = new ArrayList(menuItems);
 
 				this.rightMenu_ = new System.Windows.Forms.ContextMenu();
 			

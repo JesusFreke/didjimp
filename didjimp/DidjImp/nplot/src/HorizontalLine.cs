@@ -142,23 +142,16 @@ namespace NPlot
 
 
 		/// <summary>
-		/// Writes text data describing the horizontal line object to the supplied string builder. It is 
-		/// possible to specify that the data will be written only if the line is in the specified 
-		/// region.
+		/// Writes text data describing the horizontal line object to the supplied string builder,
+		/// if the line is in the specified region.
 		/// </summary>
 		/// <param name="sb">the StringBuilder object to write to.</param>
-		/// <param name="region">a region used if onlyInRegion is true.</param>
-		/// <param name="onlyInRegion">If true, data will be written only if the line is in the specified region.</param>
-		public void WriteData(System.Text.StringBuilder sb, RectangleD region, bool onlyInRegion)
+		/// <param name="region">Only write out data if the line is in this region.</param>
+		public void WriteData(System.Text.StringBuilder sb, RectangleD region)
 		{
 			// return if line is not in plot region and 
 			if (value_ > region.Y+region.Height || value_ < region.Y)
-			{
-				if (onlyInRegion)
-				{
-					return;
-				}
-			}
+				return;
 
 			sb.Append( "Label: " );
 			sb.Append( this.Label );
@@ -167,6 +160,18 @@ namespace NPlot
 			sb.Append( "\r\n" );
 		}
 
+		/// <summary>
+		/// Writes text data describing the horizontal line object to the supplied string builder.
+		/// </summary>
+		/// <param name="sb">the StringBuilder object to write to.</param>
+		public void WriteData(System.Text.StringBuilder sb)
+		{
+			sb.Append("Label: ");
+			sb.Append(this.Label);
+			sb.Append("\r\n");
+			sb.Append(value_.ToString());
+			sb.Append("\r\n");
+		}
 
 		/// <summary>
 		/// Draws the horizontal line plot on a GDI+ surface against the provided x and y axes.

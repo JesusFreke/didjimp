@@ -77,21 +77,35 @@ namespace NPlot
 
 
 		/// <summary>
-		/// Writes text data of the plot object to the supplied string builder. It is 
-		/// possible to specify that only data in the specified range be written.
+		/// Writes text data of the plot object to the supplied string builder, for
+		/// data in the specified region.
 		/// </summary>
 		/// <param name="sb">the StringBuilder object to write to.</param>
-		/// <param name="region">a region used if onlyInRegion is true.</param>
-		/// <param name="onlyInRegion">If true, only data enclosed in the provided region will be written.</param>
-		public void WriteData( System.Text.StringBuilder sb, RectangleD region, bool onlyInRegion )
+		/// <param name="region">only write out the data in this region</param>
+		public void WriteData( System.Text.StringBuilder sb, RectangleD region )
 		{
 			SequenceAdapter data_ = 
 				new SequenceAdapter( this.DataSource, this.DataMember, this.OrdinateData, this.AbscissaData );
 
-			sb.Append( "Label: " );
+			sb.Append("[");
 			sb.Append( this.Label );
-			sb.Append( "\r\n" );
-			data_.WriteData( sb, region, onlyInRegion );
+			sb.AppendLine( "]" );
+			data_.WriteData( sb, region );
+		}
+
+		/// <summary>
+		/// Writes text data of the plot object to the supplied string builder.
+		/// </summary>
+		/// <param name="sb">the StringBuilder object to write to.</param>
+		public void WriteData(System.Text.StringBuilder sb )
+		{
+			SequenceAdapter data_ =
+				new SequenceAdapter(this.DataSource, this.DataMember, this.OrdinateData, this.AbscissaData);
+
+			sb.Append("[");
+			sb.Append(this.Label);
+			sb.AppendLine("]");
+			data_.WriteData(sb);
 		}
 	}
 }

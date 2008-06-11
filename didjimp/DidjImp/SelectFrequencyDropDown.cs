@@ -25,7 +25,7 @@ namespace DidjImp
 	{
 		CustomComboBox.CustomComboBox parent;
 
-		public SelectFrequencyDropDown(CustomComboBox.CustomComboBox parent, List<double> resonances)
+		public SelectFrequencyDropDown(CustomComboBox.CustomComboBox parent, IList<double> resonances)
 		{
 			InitializeComponent();
 
@@ -79,13 +79,17 @@ namespace DidjImp
 			}
 		}
 
+
 		public void SelectFirstResonance()
 		{
-			ListBoxItem item = (ListBoxItem)lstResonances.Items[0];
-			parent.HideDropDown();
-			parent.Items.Clear();
-			parent.Items.Add(item.Frequency.ToString());
-			parent.SelectedIndex = 0;
+			parent.Invoke(new DidjImpApp.VoidDelegate(delegate()
+			{
+				ListBoxItem item = (ListBoxItem)lstResonances.Items[0];
+				parent.HideDropDown();
+				parent.Items.Clear();
+				parent.Items.Add(item.Frequency.ToString());
+				parent.SelectedIndex = 0;
+			}));			
 		}
 	}
 }

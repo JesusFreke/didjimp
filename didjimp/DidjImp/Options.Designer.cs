@@ -45,54 +45,37 @@ namespace DidjImp
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.Windows.Forms.Label label1;
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.radio_mm = new System.Windows.Forms.RadioButton();
-			this.radio_cm = new System.Windows.Forms.RadioButton();
 			this.radio_m = new System.Windows.Forms.RadioButton();
-			this.radio_in = new System.Windows.Forms.RadioButton();
-			this.radio_ft = new System.Windows.Forms.RadioButton();
+			this.radio_cm = new System.Windows.Forms.RadioButton();
 			this.radio_yd = new System.Windows.Forms.RadioButton();
+			this.radio_ft = new System.Windows.Forms.RadioButton();
+			this.radio_in = new System.Windows.Forms.RadioButton();
+			this.radio_mm = new System.Windows.Forms.RadioButton();
 			this.btnOK = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
+			this.numThreads = new System.Windows.Forms.NumericUpDown();
+			label1 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numThreads)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox1.Controls.Add(this.radio_m);
 			this.groupBox1.Controls.Add(this.radio_cm);
 			this.groupBox1.Controls.Add(this.radio_yd);
 			this.groupBox1.Controls.Add(this.radio_ft);
 			this.groupBox1.Controls.Add(this.radio_in);
 			this.groupBox1.Controls.Add(this.radio_mm);
-			this.groupBox1.Location = new System.Drawing.Point(13, 13);
+			this.groupBox1.Location = new System.Drawing.Point(13, 45);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(115, 91);
 			this.groupBox1.TabIndex = 0;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Units";
-			// 
-			// radio_mm
-			// 
-			this.radio_mm.AutoSize = true;
-			this.radio_mm.Location = new System.Drawing.Point(6, 19);
-			this.radio_mm.Name = "radio_mm";
-			this.radio_mm.Size = new System.Drawing.Size(41, 17);
-			this.radio_mm.TabIndex = 0;
-			this.radio_mm.TabStop = true;
-			this.radio_mm.Text = "mm";
-			this.radio_mm.UseVisualStyleBackColor = true;
-			// 
-			// radio_cm
-			// 
-			this.radio_cm.AutoSize = true;
-			this.radio_cm.Location = new System.Drawing.Point(6, 43);
-			this.radio_cm.Name = "radio_cm";
-			this.radio_cm.Size = new System.Drawing.Size(39, 17);
-			this.radio_cm.TabIndex = 1;
-			this.radio_cm.TabStop = true;
-			this.radio_cm.Text = "cm";
-			this.radio_cm.UseVisualStyleBackColor = true;
 			// 
 			// radio_m
 			// 
@@ -105,27 +88,16 @@ namespace DidjImp
 			this.radio_m.Text = "m";
 			this.radio_m.UseVisualStyleBackColor = true;
 			// 
-			// radio_in
+			// radio_cm
 			// 
-			this.radio_in.AutoSize = true;
-			this.radio_in.Location = new System.Drawing.Point(75, 19);
-			this.radio_in.Name = "radio_in";
-			this.radio_in.Size = new System.Drawing.Size(33, 17);
-			this.radio_in.TabIndex = 0;
-			this.radio_in.TabStop = true;
-			this.radio_in.Text = "in";
-			this.radio_in.UseVisualStyleBackColor = true;
-			// 
-			// radio_ft
-			// 
-			this.radio_ft.AutoSize = true;
-			this.radio_ft.Location = new System.Drawing.Point(75, 43);
-			this.radio_ft.Name = "radio_ft";
-			this.radio_ft.Size = new System.Drawing.Size(31, 17);
-			this.radio_ft.TabIndex = 0;
-			this.radio_ft.TabStop = true;
-			this.radio_ft.Text = "ft";
-			this.radio_ft.UseVisualStyleBackColor = true;
+			this.radio_cm.AutoSize = true;
+			this.radio_cm.Location = new System.Drawing.Point(6, 43);
+			this.radio_cm.Name = "radio_cm";
+			this.radio_cm.Size = new System.Drawing.Size(39, 17);
+			this.radio_cm.TabIndex = 1;
+			this.radio_cm.TabStop = true;
+			this.radio_cm.Text = "cm";
+			this.radio_cm.UseVisualStyleBackColor = true;
 			// 
 			// radio_yd
 			// 
@@ -138,10 +110,44 @@ namespace DidjImp
 			this.radio_yd.Text = "yd";
 			this.radio_yd.UseVisualStyleBackColor = true;
 			// 
+			// radio_ft
+			// 
+			this.radio_ft.AutoSize = true;
+			this.radio_ft.Location = new System.Drawing.Point(75, 43);
+			this.radio_ft.Name = "radio_ft";
+			this.radio_ft.Size = new System.Drawing.Size(31, 17);
+			this.radio_ft.TabIndex = 0;
+			this.radio_ft.TabStop = true;
+			this.radio_ft.Text = "ft";
+			this.radio_ft.UseVisualStyleBackColor = true;
+			// 
+			// radio_in
+			// 
+			this.radio_in.AutoSize = true;
+			this.radio_in.Location = new System.Drawing.Point(75, 19);
+			this.radio_in.Name = "radio_in";
+			this.radio_in.Size = new System.Drawing.Size(33, 17);
+			this.radio_in.TabIndex = 0;
+			this.radio_in.TabStop = true;
+			this.radio_in.Text = "in";
+			this.radio_in.UseVisualStyleBackColor = true;
+			// 
+			// radio_mm
+			// 
+			this.radio_mm.AutoSize = true;
+			this.radio_mm.Location = new System.Drawing.Point(6, 19);
+			this.radio_mm.Name = "radio_mm";
+			this.radio_mm.Size = new System.Drawing.Size(41, 17);
+			this.radio_mm.TabIndex = 0;
+			this.radio_mm.TabStop = true;
+			this.radio_mm.Text = "mm";
+			this.radio_mm.UseVisualStyleBackColor = true;
+			// 
 			// btnOK
 			// 
+			this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btnOK.Location = new System.Drawing.Point(145, 53);
+			this.btnOK.Location = new System.Drawing.Point(145, 85);
 			this.btnOK.Name = "btnOK";
 			this.btnOK.Size = new System.Drawing.Size(75, 23);
 			this.btnOK.TabIndex = 1;
@@ -151,13 +157,45 @@ namespace DidjImp
 			// 
 			// btnCancel
 			// 
+			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Location = new System.Drawing.Point(145, 81);
+			this.btnCancel.Location = new System.Drawing.Point(145, 113);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(75, 23);
 			this.btnCancel.TabIndex = 1;
 			this.btnCancel.Text = "Cancel";
 			this.btnCancel.UseVisualStyleBackColor = true;
+			// 
+			// label1
+			// 
+			label1.AutoSize = true;
+			label1.Location = new System.Drawing.Point(10, 9);
+			label1.Name = "label1";
+			label1.Size = new System.Drawing.Size(101, 13);
+			label1.TabIndex = 2;
+			label1.Text = "Number of Threads:";
+			// 
+			// numThreads
+			// 
+			this.numThreads.Location = new System.Drawing.Point(117, 7);
+			this.numThreads.Maximum = new decimal(new int[] {
+            16,
+            0,
+            0,
+            0});
+			this.numThreads.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.numThreads.Name = "numThreads";
+			this.numThreads.Size = new System.Drawing.Size(57, 20);
+			this.numThreads.TabIndex = 3;
+			this.numThreads.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			// 
 			// Options
 			// 
@@ -165,7 +203,9 @@ namespace DidjImp
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(229, 113);
+			this.ClientSize = new System.Drawing.Size(229, 145);
+			this.Controls.Add(this.numThreads);
+			this.Controls.Add(label1);
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnOK);
 			this.Controls.Add(this.groupBox1);
@@ -174,7 +214,9 @@ namespace DidjImp
 			this.Text = "Options";
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numThreads)).EndInit();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -189,5 +231,6 @@ namespace DidjImp
 		private System.Windows.Forms.RadioButton radio_mm;
 		private System.Windows.Forms.Button btnOK;
 		private System.Windows.Forms.Button btnCancel;
+		private System.Windows.Forms.NumericUpDown numThreads;
 	}
 }

@@ -1096,7 +1096,7 @@ namespace NPlot
 				// set the clipping region.. (necessary for zoom)
 				g.Clip = new Region((Rectangle)plotAreaBoundingBoxCache_);
 				// plot.
-				drawable.Draw( g, drawXAxis, drawYAxis );
+				drawable.Draw(g, drawXAxis, drawYAxis);
 				// reset it..
 				g.ResetClip();
 			}

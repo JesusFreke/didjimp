@@ -76,8 +76,13 @@ namespace NPlot
 		/// Write data associated with the plot as text.
 		/// </summary>
 		/// <param name="sb">the string builder to write to.</param>
-		/// <param name="region">Only write out data in this region if onlyInRegion is true.</param>
-		/// <param name="onlyInRegion">If true, only data in region is written, else all data is written.</param>
-		void WriteData( System.Text.StringBuilder sb, RectangleD region, bool onlyInRegion );
+		/// <param name="region">Only write out data in this region.</param>
+		void WriteData( System.Text.StringBuilder sb, RectangleD region );
+
+		/// <summary>
+		/// Write data associated with the plot as text.
+		/// </summary>
+		/// <param name="sb">the string builder to write to.</param>
+		void WriteData( System.Text.StringBuilder sb );
 	}
 }

@@ -291,21 +291,32 @@ namespace NPlot
 		/// Writes data out as text. 
 		/// </summary>
 		/// <param name="sb">StringBuilder to write to.</param>
-		/// <param name="region">Only write out data in this region if onlyInRegion is true.</param>
-		/// <param name="onlyInRegion">If true, only data in region is written, else all data is written.</param>
-		public void WriteData( System.Text.StringBuilder sb, RectangleD region, bool onlyInRegion )
+		/// <param name="region">Only write out data in this region. </param>
+		public void WriteData( System.Text.StringBuilder sb, RectangleD region)
 		{
 			for (int i=0; i<this.Count;	++i)
 			{
-                if (!(onlyInRegion &&
-                       (this[i].X >= region.X && this[i].X <= region.X + region.Width) &&
-                       (this[i].Y >= region.Y && this[i].Y <= region.Y + region.Height)))
+                if (!((this[i].X >= region.X && this[i].X <= region.X + region.Width) &&
+					 (this[i].Y >= region.Y && this[i].Y <= region.Y + region.Height)))
                 {
                     continue;
                 }
 
 				sb.Append( this[i].ToString() );
 				sb.Append( "\r\n" );
+			}
+		}
+
+		/// <summary>
+		/// Writes data out as text. 
+		/// </summary>
+		/// <param name="sb">StringBuilder to write to.</param>
+		public void WriteData( System.Text.StringBuilder sb )
+		{
+			for (int i = 0; i < this.Count; ++i)
+			{
+				sb.Append(this[i].ToString());
+				sb.Append("\r\n");
 			}
 		}
 	}

@@ -15,37 +15,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Configuration;
+using System.Windows.Forms;
 
 namespace DidjImp
 {
-	public class DidjImpSettings : ApplicationSettingsBase
+	public partial class ImageSizeDialog : Form
 	{
-		[UserScopedSetting()]
-		[DefaultSettingValueAttribute("meter")]
-		public UnitType Units
+		public ImageSizeDialog(int initialWidth, int initialHeight)
 		{
-			get { return (UnitType)this["Units"]; }
-			set { this["Units"] = value; }
+			InitializeComponent();
+			numWidth.Value = initialWidth;
+			numHeight.Value = initialHeight;
 		}
 
-		[UserScopedSetting()]
-		[DefaultSettingValueAttribute("2")]
-		public int NumberOfThreads
+		public int SelectedWidth
 		{
-			get { return (int)this["NumberOfThreads"]; }
-			set { this["NumberOfThreads"] = value; }
+			get { return (int)numWidth.Value; }
 		}
 
-		public enum UnitType
+		public int SelectedHeight
 		{
-			millimeter=0,
-			centimeter,
-			meter,
-			inch,
-			foot,
-			yard
+			get { return (int)numHeight.Value; }
 		}
 	}
 }

@@ -261,12 +261,19 @@ namespace NPlot
 		/// Write data associated with the plot as text.
 		/// </summary>
 		/// <param name="sb">the string builder to write to.</param>
-		/// <param name="region">Only write out data in this region if onlyInRegion is true.</param>
-		/// <param name="onlyInRegion">If true, only data in region is written, else all data is written.</param>
+		/// <param name="region">Only write out data in this region.</param>
 		/// <remarks>TODO: not implemented.</remarks>
-		public void WriteData( System.Text.StringBuilder sb, RectangleD region, bool onlyInRegion )
+		public void WriteData( System.Text.StringBuilder sb, RectangleD region )
 		{
-			sb.Append( "Write data not implemented yet for BarPlot\r\n" );
+		}
+
+		/// <summary>
+		/// Write data associated with the plot as text.
+		/// </summary>
+		/// <param name="sb">the string builder to write to.</param>
+		/// <remarks>TODO: not implemented.</remarks>
+		public void WriteData(System.Text.StringBuilder sb )
+		{
 		}
 	}
 }

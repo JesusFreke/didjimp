@@ -1,0 +1,2 @@
+﻿Add a utility to scale the whole bore length in order to achieve a target drone frequency
+Add a utility to extrapolate the bore radius at an arbitrary position - makes it easy to add in an extra dimension in the middle of a pre-existing section, without having to manually calculate the radius there

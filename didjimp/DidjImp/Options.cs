@@ -51,6 +51,11 @@ namespace DidjImp
 					radio_m.Checked = true;
 					break;
 			}
+
+			if (settings.NumberOfThreads < 1 || settings.NumberOfThreads > 16)
+				numThreads.Value = 2;
+			else
+				numThreads.Value = settings.NumberOfThreads;
 		}
 
 
@@ -68,6 +73,9 @@ namespace DidjImp
 				settings.Units = DidjImpSettings.UnitType.foot;
 			else if (radio_yd.Checked)
 				settings.Units = DidjImpSettings.UnitType.yard;
+
+			settings.NumberOfThreads = (int)numThreads.Value;
+
 			settings.Save();
 		}
 	}
