@@ -27,6 +27,19 @@ namespace DidjImp
 	/// </summary>
 	public class VerticalLine : IDrawable
 	{
+		private System.Drawing.Drawing2D.SmoothingMode smoothingMode_ = System.Drawing.Drawing2D.SmoothingMode.Default;
+		public System.Drawing.Drawing2D.SmoothingMode SmoothingMode
+		{
+			get
+			{
+				return smoothingMode_;
+			}
+			set
+			{
+				smoothingMode_ = value;
+			}
+		}
+
 		private double x;
 		private Pen pen;
 
