@@ -48,5 +48,14 @@ namespace NPlot
 		/// <param name="xAxis">The physical x-axis to draw against.</param>
 		/// <param name="yAxis">The physical y-axis to draw against.</param>
 		void Draw( Graphics g, PhysicalAxis xAxis, PhysicalAxis yAxis );
+
+		/// <summary>
+		/// Set smoothing mode for this drawable object
+		/// </summary>
+		System.Drawing.Drawing2D.SmoothingMode SmoothingMode
+		{
+			get;
+			set;
+		}
 	}
 }

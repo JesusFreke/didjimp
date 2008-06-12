@@ -43,7 +43,6 @@ namespace NPlot
 	/// </summary>
 	public class Grid : IDrawable
 	{
-
 		/// <summary>
 		/// 
 		/// </summary>
@@ -115,6 +114,7 @@ namespace NPlot
 		GridType verticalGridType_;
 
 
+
 		/// <summary>
 		/// The pen used to draw major (coarse) grid lines.
 		/// </summary>
@@ -148,6 +148,21 @@ namespace NPlot
 		}
 		private Pen minorGridPen_;
 
+		/// <summary>
+		/// Set smoothing mode for this drawable object
+		/// </summary>
+		public System.Drawing.Drawing2D.SmoothingMode SmoothingMode
+		{
+			get
+			{
+				return smoothingMode_;
+			}
+			set
+			{
+				smoothingMode_ = value;
+			}
+		}
+		private System.Drawing.Drawing2D.SmoothingMode smoothingMode_ = System.Drawing.Drawing2D.SmoothingMode.Default;
 
 		/// <summary>
 		/// Does all the work in drawing grid lines.

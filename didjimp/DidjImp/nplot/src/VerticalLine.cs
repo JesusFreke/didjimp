@@ -40,7 +40,6 @@ namespace NPlot
 	/// </summary>
 	public class VerticalLine : IPlot
 	{
-
 		/// <summary>
 		/// Constructor
 		/// </summary>
@@ -120,6 +119,21 @@ namespace NPlot
 		}
 		private bool showInLegend_ = false;
 
+		/// <summary>
+		/// Set smoothing mode for this drawable object
+		/// </summary>
+		public System.Drawing.Drawing2D.SmoothingMode SmoothingMode
+		{
+			get
+			{
+				return smoothingMode_;
+			}
+			set
+			{
+				smoothingMode_ = value;
+			}
+		}
+		private System.Drawing.Drawing2D.SmoothingMode smoothingMode_ = System.Drawing.Drawing2D.SmoothingMode.Default;
 
 		/// <summary>
 		/// Returns an x-axis that is suitable for drawing this plot.

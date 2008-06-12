@@ -43,8 +43,7 @@ namespace NPlot
 	/// the data.
 	/// </summary>
 	public class ArrowItem : IDrawable
-	{
-
+	{	
 		private void Init()
 		{
 			FontFamily fontFamily = new FontFamily("Arial");
@@ -91,6 +90,22 @@ namespace NPlot
 			text_ = text;
 			Init();
 		}
+
+		/// <summary>
+		/// Set smoothing mode for this drawable object
+		/// </summary>
+		public System.Drawing.Drawing2D.SmoothingMode SmoothingMode
+		{
+			get
+			{
+				return smoothingMode_;
+			}
+			set
+			{
+				smoothingMode_ = value;
+			}
+		}
+		private System.Drawing.Drawing2D.SmoothingMode smoothingMode_ = System.Drawing.Drawing2D.SmoothingMode.Default;
 
 
 		/// <summary>

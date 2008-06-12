@@ -40,7 +40,6 @@ namespace NPlot
 	/// </summary>
 	public class TextItem : IDrawable
 	{
-
 		private void Init()
 		{
 			FontFamily fontFamily = new FontFamily("Arial");
@@ -93,6 +92,22 @@ namespace NPlot
 			}
 		}
 		private PointD start_;
+
+		/// <summary>
+		/// Set smoothing mode for this drawable object
+		/// </summary>
+		public System.Drawing.Drawing2D.SmoothingMode SmoothingMode
+		{
+			get
+			{
+				return smoothingMode_;
+			}
+			set
+			{
+				smoothingMode_ = value;
+			}
+		}
+		private System.Drawing.Drawing2D.SmoothingMode smoothingMode_ = System.Drawing.Drawing2D.SmoothingMode.Default;
 
 
 		/// <summary>

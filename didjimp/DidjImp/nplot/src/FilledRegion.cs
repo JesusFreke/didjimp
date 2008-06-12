@@ -40,7 +40,6 @@ namespace NPlot
 	/// </summary>
 	public class FilledRegion : IDrawable
 	{
-
 		/// <summary>
 		/// Constructor
 		/// </summary>
@@ -163,6 +162,22 @@ namespace NPlot
 				areaBrush_ = value;
 			}
 		}
+
+		/// <summary>
+		/// Set smoothing mode for this drawable object
+		/// </summary>
+		public System.Drawing.Drawing2D.SmoothingMode SmoothingMode
+		{
+			get
+			{
+				return smoothingMode_;
+			}
+			set
+			{
+				smoothingMode_ = value;
+			}
+		}
+		private System.Drawing.Drawing2D.SmoothingMode smoothingMode_ = System.Drawing.Drawing2D.SmoothingMode.Default;
 
 
         private VerticalLine vl1_;

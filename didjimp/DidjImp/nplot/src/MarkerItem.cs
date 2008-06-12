@@ -40,7 +40,6 @@ namespace NPlot
 	/// </summary>
 	public class MarkerItem : IDrawable
 	{
-
 		private Marker marker_; 
 		private double x_;
 		private double y_; 
@@ -110,5 +109,21 @@ namespace NPlot
 
 			marker_.Draw( g, (int)point.X, (int)point.Y );
 		}
+
+		/// <summary>
+		/// Set smoothing mode for this drawable object
+		/// </summary>
+		public System.Drawing.Drawing2D.SmoothingMode SmoothingMode
+		{
+			get
+			{
+				return smoothingMode_;
+			}
+			set
+			{
+				smoothingMode_ = value;
+			}
+		}
+		private System.Drawing.Drawing2D.SmoothingMode smoothingMode_ = System.Drawing.Drawing2D.SmoothingMode.Default;
 	}
 }

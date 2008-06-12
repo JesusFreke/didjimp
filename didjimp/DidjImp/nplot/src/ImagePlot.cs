@@ -41,7 +41,6 @@ namespace NPlot
 	/// </summary>
 	public class ImagePlot : IPlot
 	{
-
 		private double[,] data_;
 		private double xStart_ = 0.0;
 		private double xStep_ = 1.0;
@@ -267,6 +266,22 @@ namespace NPlot
 			}
 		}
 		private string label_ = "";
+
+		/// <summary>
+		/// Set smoothing mode for this drawable object
+		/// </summary>
+		public System.Drawing.Drawing2D.SmoothingMode SmoothingMode
+		{
+			get
+			{
+				return smoothingMode_;
+			}
+			set
+			{
+				smoothingMode_ = value;
+			}
+		}
+		private System.Drawing.Drawing2D.SmoothingMode smoothingMode_ = System.Drawing.Drawing2D.SmoothingMode.Default;
 
 
 		/// <summary>

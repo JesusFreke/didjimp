@@ -1049,6 +1049,8 @@ namespace NPlot
 			// draw drawables..
 			System.Drawing.Drawing2D.SmoothingMode smoothSave = g.SmoothingMode;
 
+			System.Drawing.Drawing2D.SmoothingMode tempSmoothingMode_ = smoothingMode_;
+		
 			g.SmoothingMode = this.smoothingMode_;
 
 			bool legendDrawn = false;
@@ -1092,11 +1094,19 @@ namespace NPlot
 				{
 					drawYAxis = pYAxis2;
 				}
-	
+
+				tempSmoothingMode_ = g.SmoothingMode;
+				if (drawable.SmoothingMode != System.Drawing.Drawing2D.SmoothingMode.Default)
+				{
+					g.SmoothingMode = drawable.SmoothingMode;
+				}
+
 				// set the clipping region.. (necessary for zoom)
 				g.Clip = new Region((Rectangle)plotAreaBoundingBoxCache_);
-				// plot.
+
 				drawable.Draw(g, drawXAxis, drawYAxis);
+
+				g.SmoothingMode = tempSmoothingMode_;
 				// reset it..
 				g.ResetClip();
 			}
