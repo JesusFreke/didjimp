@@ -47,10 +47,12 @@ namespace DidjImp
 		{
 			this.components = new System.ComponentModel.Container();
 			System.Windows.Forms.Panel panel1;
+			System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 			System.Windows.Forms.Label label2;
 			System.Windows.Forms.Label label1;
 			System.Windows.Forms.Panel panel2;
 			System.Windows.Forms.TabPage tabPage1;
+			DidjImp.ImpedancePlot.ImpedancePlotContextMenu impedancePlotContextMenu1 = new DidjImp.ImpedancePlot.ImpedancePlotContextMenu();
 			System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 			System.Windows.Forms.Panel panel4;
 			System.Windows.Forms.Label label3;
@@ -59,32 +61,31 @@ namespace DidjImp
 			System.Windows.Forms.TabPage tabPage2;
 			System.Windows.Forms.Panel panel3;
 			System.Windows.Forms.MenuStrip menuStrip1;
-			System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-			DidjImp.ImpedancePlot.ImpedancePlotContextMenu impedancePlotContextMenu1 = new DidjImp.ImpedancePlot.ImpedancePlotContextMenu();
+			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.txtCurrentDimensions = new System.Windows.Forms.TextBox();
+			this.textBoxContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuResetText = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuInterpolate = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuScaleBoreByPercent = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuScaleToFundamental = new System.Windows.Forms.ToolStripMenuItem();
 			this.txtDimensions = new System.Windows.Forms.TextBox();
 			this.btnCalculate = new System.Windows.Forms.Button();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
+			this.impedancePlot = new DidjImp.ImpedancePlot();
+			this.comboHarmonics = new CustomComboBox.CustomComboBox();
 			this.comboImpedanceGraphType = new System.Windows.Forms.ComboBox();
+			this.borePlot = new DidjImp.BorePlot();
+			this.comboWaveformSelect = new CustomComboBox.CustomComboBox();
 			this.chkWaveform = new System.Windows.Forms.CheckBox();
+			this.waveformPlot = new NPlot.Windows.PlotSurface2D();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.saveDimensionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.loadDimensionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.txtCurrentDimensions = new System.Windows.Forms.TextBox();
-			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.textBoxContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.mnuResetText = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuInterpolate = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuScaleBoreByPercent = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuScaleToFundamental = new System.Windows.Forms.ToolStripMenuItem();
-			this.impedancePlot = new DidjImp.ImpedancePlot();
-			this.comboHarmonics = new CustomComboBox.CustomComboBox();
-			this.borePlot = new DidjImp.BorePlot();
-			this.comboWaveformSelect = new CustomComboBox.CustomComboBox();
-			this.waveformPlot = new NPlot.Windows.PlotSurface2D();
 			panel1 = new System.Windows.Forms.Panel();
+			toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			label2 = new System.Windows.Forms.Label();
 			label1 = new System.Windows.Forms.Label();
 			panel2 = new System.Windows.Forms.Panel();
@@ -97,8 +98,9 @@ namespace DidjImp
 			tabPage2 = new System.Windows.Forms.TabPage();
 			panel3 = new System.Windows.Forms.Panel();
 			menuStrip1 = new System.Windows.Forms.MenuStrip();
-			toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			panel1.SuspendLayout();
+			this.tableLayoutPanel1.SuspendLayout();
+			this.textBoxContextMenu.SuspendLayout();
 			panel2.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			tabPage1.SuspendLayout();
@@ -108,8 +110,6 @@ namespace DidjImp
 			tabPage2.SuspendLayout();
 			panel3.SuspendLayout();
 			menuStrip1.SuspendLayout();
-			this.tableLayoutPanel1.SuspendLayout();
-			this.textBoxContextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// panel1
@@ -124,6 +124,80 @@ namespace DidjImp
 			panel1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 0);
 			panel1.Size = new System.Drawing.Size(147, 517);
 			panel1.TabIndex = 0;
+			// 
+			// tableLayoutPanel1
+			// 
+			this.tableLayoutPanel1.ColumnCount = 1;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel1.Controls.Add(this.txtCurrentDimensions, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.txtDimensions, 0, 1);
+			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 39);
+			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+			this.tableLayoutPanel1.RowCount = 2;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(141, 455);
+			this.tableLayoutPanel1.TabIndex = 6;
+			// 
+			// txtCurrentDimensions
+			// 
+			this.txtCurrentDimensions.ContextMenuStrip = this.textBoxContextMenu;
+			this.txtCurrentDimensions.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtCurrentDimensions.Location = new System.Drawing.Point(3, 3);
+			this.txtCurrentDimensions.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
+			this.txtCurrentDimensions.Multiline = true;
+			this.txtCurrentDimensions.Name = "txtCurrentDimensions";
+			this.txtCurrentDimensions.ReadOnly = true;
+			this.txtCurrentDimensions.Size = new System.Drawing.Size(135, 223);
+			this.txtCurrentDimensions.TabIndex = 5;
+			// 
+			// textBoxContextMenu
+			// 
+			this.textBoxContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuResetText,
+            toolStripSeparator2,
+            this.mnuInterpolate,
+            this.mnuScaleBoreByPercent,
+            this.mnuScaleToFundamental});
+			this.textBoxContextMenu.Name = "textBoxContextMenu";
+			this.textBoxContextMenu.ShowImageMargin = false;
+			this.textBoxContextMenu.ShowItemToolTips = false;
+			this.textBoxContextMenu.Size = new System.Drawing.Size(320, 120);
+			// 
+			// mnuResetText
+			// 
+			this.mnuResetText.Name = "mnuResetText";
+			this.mnuResetText.Size = new System.Drawing.Size(319, 22);
+			this.mnuResetText.Text = "Set Bottom Dimensions to This";
+			this.mnuResetText.Click += new System.EventHandler(this.mnuResetText_Click);
+			// 
+			// toolStripSeparator2
+			// 
+			toolStripSeparator2.Name = "toolStripSeparator2";
+			toolStripSeparator2.Size = new System.Drawing.Size(316, 6);
+			// 
+			// mnuInterpolate
+			// 
+			this.mnuInterpolate.Name = "mnuInterpolate";
+			this.mnuInterpolate.Size = new System.Drawing.Size(319, 22);
+			this.mnuInterpolate.Text = "Interpolate Bore Radius at Arbitrary Position";
+			this.mnuInterpolate.Click += new System.EventHandler(this.mnuInterpolate_Click);
+			// 
+			// mnuScaleBoreByPercent
+			// 
+			this.mnuScaleBoreByPercent.Name = "mnuScaleBoreByPercent";
+			this.mnuScaleBoreByPercent.Size = new System.Drawing.Size(319, 22);
+			this.mnuScaleBoreByPercent.Text = "Scale Entire Bore";
+			this.mnuScaleBoreByPercent.Click += new System.EventHandler(this.mnuScaleBoreByPercent_Click);
+			// 
+			// mnuScaleToFundamental
+			// 
+			this.mnuScaleToFundamental.Name = "mnuScaleToFundamental";
+			this.mnuScaleToFundamental.Size = new System.Drawing.Size(319, 22);
+			this.mnuScaleToFundamental.Text = "Scale Entire Bore to Specified Fundamental Frequency";
+			this.mnuScaleToFundamental.Click += new System.EventHandler(this.mnuScaleToFundamental_Click);
 			// 
 			// txtDimensions
 			// 
@@ -207,6 +281,34 @@ namespace DidjImp
 			tabPage1.Text = "Impedance";
 			tabPage1.UseVisualStyleBackColor = true;
 			// 
+			// impedancePlot
+			// 
+			this.impedancePlot.AutoScaleAutoGeneratedAxes = false;
+			this.impedancePlot.AutoScaleTitle = false;
+			this.impedancePlot.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.impedancePlot.DateTimeToolTip = false;
+			this.impedancePlot.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.impedancePlot.ImpedanceData = null;
+			this.impedancePlot.ImpedancePlotType = DidjImp.ImpedancePlotType.Magnitude;
+			this.impedancePlot.Legend = null;
+			this.impedancePlot.LegendZOrder = -1;
+			this.impedancePlot.Location = new System.Drawing.Point(3, 29);
+			this.impedancePlot.Name = "impedancePlot";
+			this.impedancePlot.RightMenu = impedancePlotContextMenu1;
+			this.impedancePlot.SelectedFrequency = 0;
+			this.impedancePlot.ShowCoordinates = true;
+			this.impedancePlot.Size = new System.Drawing.Size(812, 457);
+			this.impedancePlot.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+			this.impedancePlot.SurfacePadding = 10;
+			this.impedancePlot.TabIndex = 8;
+			this.impedancePlot.Text = "impedancePlot";
+			this.impedancePlot.Title = "";
+			this.impedancePlot.TitleFont = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+			this.impedancePlot.XAxis1 = null;
+			this.impedancePlot.XAxis2 = null;
+			this.impedancePlot.YAxis1 = null;
+			this.impedancePlot.YAxis2 = null;
+			// 
 			// flowLayoutPanel1
 			// 
 			flowLayoutPanel1.AutoSize = true;
@@ -230,6 +332,21 @@ namespace DidjImp
 			panel4.Name = "panel4";
 			panel4.Size = new System.Drawing.Size(229, 26);
 			panel4.TabIndex = 4;
+			// 
+			// comboHarmonics
+			// 
+			this.comboHarmonics.AllowResizeDropDown = false;
+			this.comboHarmonics.ControlSize = new System.Drawing.Size(1, 1);
+			this.comboHarmonics.DropDownControl = null;
+			this.comboHarmonics.DropDownSizeMode = CustomComboBox.CustomComboBox.SizeMode.UseControlSize;
+			this.comboHarmonics.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboHarmonics.DropSize = new System.Drawing.Size(121, 106);
+			this.comboHarmonics.FormattingEnabled = true;
+			this.comboHarmonics.Location = new System.Drawing.Point(160, 2);
+			this.comboHarmonics.Name = "comboHarmonics";
+			this.comboHarmonics.Size = new System.Drawing.Size(66, 21);
+			this.comboHarmonics.TabIndex = 5;
+			this.comboHarmonics.SelectedIndexChanged += new System.EventHandler(this.comboHarmonics_SelectedIndexChanged);
 			// 
 			// label3
 			// 
@@ -289,6 +406,34 @@ namespace DidjImp
 			tabPage2.Text = "Bore";
 			tabPage2.UseVisualStyleBackColor = true;
 			// 
+			// borePlot
+			// 
+			this.borePlot.AutoScaleAutoGeneratedAxes = false;
+			this.borePlot.AutoScaleTitle = false;
+			this.borePlot.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.borePlot.Bore = null;
+			this.borePlot.DateTimeToolTip = false;
+			this.borePlot.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.borePlot.Legend = null;
+			this.borePlot.LegendZOrder = -1;
+			this.borePlot.Location = new System.Drawing.Point(3, 29);
+			this.borePlot.Name = "borePlot";
+			this.borePlot.RightMenu = null;
+			this.borePlot.SelectedFrequency = 0;
+			this.borePlot.ShowCoordinates = true;
+			this.borePlot.ShowWaveformPlot = false;
+			this.borePlot.Size = new System.Drawing.Size(812, 457);
+			this.borePlot.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+			this.borePlot.SurfacePadding = 10;
+			this.borePlot.TabIndex = 4;
+			this.borePlot.Text = "j";
+			this.borePlot.Title = "";
+			this.borePlot.TitleFont = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+			this.borePlot.XAxis1 = null;
+			this.borePlot.XAxis2 = null;
+			this.borePlot.YAxis1 = null;
+			this.borePlot.YAxis2 = null;
+			// 
 			// panel3
 			// 
 			panel3.AutoSize = true;
@@ -301,6 +446,22 @@ namespace DidjImp
 			panel3.Size = new System.Drawing.Size(812, 26);
 			panel3.TabIndex = 5;
 			// 
+			// comboWaveformSelect
+			// 
+			this.comboWaveformSelect.AllowResizeDropDown = true;
+			this.comboWaveformSelect.ControlSize = new System.Drawing.Size(1, 1);
+			this.comboWaveformSelect.DropDownControl = null;
+			this.comboWaveformSelect.DropDownSizeMode = CustomComboBox.CustomComboBox.SizeMode.UseControlSize;
+			this.comboWaveformSelect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboWaveformSelect.DropSize = new System.Drawing.Size(121, 106);
+			this.comboWaveformSelect.Enabled = false;
+			this.comboWaveformSelect.FormattingEnabled = true;
+			this.comboWaveformSelect.Location = new System.Drawing.Point(178, 1);
+			this.comboWaveformSelect.Name = "comboWaveformSelect";
+			this.comboWaveformSelect.Size = new System.Drawing.Size(117, 21);
+			this.comboWaveformSelect.TabIndex = 2;
+			this.comboWaveformSelect.SelectedIndexChanged += new System.EventHandler(this.comboWaveformSelect_SelectedIndexChanged);
+			// 
 			// chkWaveform
 			// 
 			this.chkWaveform.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -312,6 +473,30 @@ namespace DidjImp
 			this.chkWaveform.TextAlign = System.Drawing.ContentAlignment.TopLeft;
 			this.chkWaveform.UseVisualStyleBackColor = true;
 			this.chkWaveform.CheckedChanged += new System.EventHandler(this.chkWaveform_CheckedChanged);
+			// 
+			// waveformPlot
+			// 
+			this.waveformPlot.AutoScaleAutoGeneratedAxes = false;
+			this.waveformPlot.AutoScaleTitle = false;
+			this.waveformPlot.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.waveformPlot.DateTimeToolTip = false;
+			this.waveformPlot.Legend = null;
+			this.waveformPlot.LegendZOrder = -1;
+			this.waveformPlot.Location = new System.Drawing.Point(3, 353);
+			this.waveformPlot.Name = "waveformPlot";
+			this.waveformPlot.RightMenu = null;
+			this.waveformPlot.ShowCoordinates = true;
+			this.waveformPlot.Size = new System.Drawing.Size(812, 172);
+			this.waveformPlot.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+			this.waveformPlot.SurfacePadding = 10;
+			this.waveformPlot.TabIndex = 6;
+			this.waveformPlot.Text = "plotSurface2D1";
+			this.waveformPlot.Title = "";
+			this.waveformPlot.TitleFont = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+			this.waveformPlot.XAxis1 = null;
+			this.waveformPlot.XAxis2 = null;
+			this.waveformPlot.YAxis1 = null;
+			this.waveformPlot.YAxis2 = null;
 			// 
 			// menuStrip1
 			// 
@@ -368,190 +553,6 @@ namespace DidjImp
 			this.optionsToolStripMenuItem.Text = "&Options";
 			this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
 			// 
-			// txtCurrentDimensions
-			// 
-			this.txtCurrentDimensions.ContextMenuStrip = this.textBoxContextMenu;
-			this.txtCurrentDimensions.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.txtCurrentDimensions.Location = new System.Drawing.Point(3, 3);
-			this.txtCurrentDimensions.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
-			this.txtCurrentDimensions.Multiline = true;
-			this.txtCurrentDimensions.Name = "txtCurrentDimensions";
-			this.txtCurrentDimensions.ReadOnly = true;
-			this.txtCurrentDimensions.Size = new System.Drawing.Size(135, 223);
-			this.txtCurrentDimensions.TabIndex = 5;
-			// 
-			// tableLayoutPanel1
-			// 
-			this.tableLayoutPanel1.ColumnCount = 1;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Controls.Add(this.txtCurrentDimensions, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.txtDimensions, 0, 1);
-			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 39);
-			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 2;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(141, 455);
-			this.tableLayoutPanel1.TabIndex = 6;
-			// 
-			// textBoxContextMenu
-			// 
-			this.textBoxContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuResetText,
-            toolStripSeparator2,
-            this.mnuInterpolate,
-            this.mnuScaleBoreByPercent,
-            this.mnuScaleToFundamental});
-			this.textBoxContextMenu.Name = "textBoxContextMenu";
-			this.textBoxContextMenu.ShowImageMargin = false;
-			this.textBoxContextMenu.ShowItemToolTips = false;
-			this.textBoxContextMenu.Size = new System.Drawing.Size(320, 120);
-			// 
-			// mnuResetText
-			// 
-			this.mnuResetText.Name = "mnuResetText";
-			this.mnuResetText.Size = new System.Drawing.Size(319, 22);
-			this.mnuResetText.Text = "Set Bottom Dimensions to This";
-			this.mnuResetText.Click += new System.EventHandler(this.mnuResetText_Click);
-			// 
-			// mnuInterpolate
-			// 
-			this.mnuInterpolate.Name = "mnuInterpolate";
-			this.mnuInterpolate.Size = new System.Drawing.Size(319, 22);
-			this.mnuInterpolate.Text = "Interpolate Bore Radius at Arbitrary Position";
-			this.mnuInterpolate.Click += new System.EventHandler(this.mnuInterpolate_Click);
-			// 
-			// toolStripSeparator2
-			// 
-			toolStripSeparator2.Name = "toolStripSeparator2";
-			toolStripSeparator2.Size = new System.Drawing.Size(316, 6);
-			// 
-			// mnuScaleBoreByPercent
-			// 
-			this.mnuScaleBoreByPercent.Name = "mnuScaleBoreByPercent";
-			this.mnuScaleBoreByPercent.Size = new System.Drawing.Size(319, 22);
-			this.mnuScaleBoreByPercent.Text = "Scale Entire Bore";
-			this.mnuScaleBoreByPercent.Click += new System.EventHandler(this.mnuScaleBoreByPercent_Click);
-			// 
-			// mnuScaleToFundamental
-			// 
-			this.mnuScaleToFundamental.Name = "mnuScaleToFundamental";
-			this.mnuScaleToFundamental.Size = new System.Drawing.Size(319, 22);
-			this.mnuScaleToFundamental.Text = "Scale Entire Bore to Specified Fundamental Frequency";
-			// 
-			// impedancePlot
-			// 
-			this.impedancePlot.AutoScaleAutoGeneratedAxes = false;
-			this.impedancePlot.AutoScaleTitle = false;
-			this.impedancePlot.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.impedancePlot.DateTimeToolTip = false;
-			this.impedancePlot.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.impedancePlot.ImpedanceData = null;
-			this.impedancePlot.ImpedancePlotType = DidjImp.ImpedancePlotType.Magnitude;
-			this.impedancePlot.Legend = null;
-			this.impedancePlot.LegendZOrder = -1;
-			this.impedancePlot.Location = new System.Drawing.Point(3, 29);
-			this.impedancePlot.Name = "impedancePlot";
-			this.impedancePlot.RightMenu = impedancePlotContextMenu1;
-			this.impedancePlot.SelectedFrequency = 0;
-			this.impedancePlot.ShowCoordinates = true;
-			this.impedancePlot.Size = new System.Drawing.Size(812, 457);
-			this.impedancePlot.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-			this.impedancePlot.SurfacePadding = 10;
-			this.impedancePlot.TabIndex = 8;
-			this.impedancePlot.Text = "impedancePlot";
-			this.impedancePlot.Title = "";
-			this.impedancePlot.TitleFont = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-			this.impedancePlot.XAxis1 = null;
-			this.impedancePlot.XAxis2 = null;
-			this.impedancePlot.YAxis1 = null;
-			this.impedancePlot.YAxis2 = null;
-			// 
-			// comboHarmonics
-			// 
-			this.comboHarmonics.AllowResizeDropDown = false;
-			this.comboHarmonics.ControlSize = new System.Drawing.Size(1, 1);
-			this.comboHarmonics.DropDownControl = null;
-			this.comboHarmonics.DropDownSizeMode = CustomComboBox.CustomComboBox.SizeMode.UseControlSize;
-			this.comboHarmonics.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboHarmonics.DropSize = new System.Drawing.Size(121, 106);
-			this.comboHarmonics.FormattingEnabled = true;
-			this.comboHarmonics.Location = new System.Drawing.Point(160, 2);
-			this.comboHarmonics.Name = "comboHarmonics";
-			this.comboHarmonics.Size = new System.Drawing.Size(66, 21);
-			this.comboHarmonics.TabIndex = 5;
-			this.comboHarmonics.SelectedIndexChanged += new System.EventHandler(this.comboHarmonics_SelectedIndexChanged);
-			// 
-			// borePlot
-			// 
-			this.borePlot.AutoScaleAutoGeneratedAxes = false;
-			this.borePlot.AutoScaleTitle = false;
-			this.borePlot.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.borePlot.Bore = null;
-			this.borePlot.DateTimeToolTip = false;
-			this.borePlot.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.borePlot.Legend = null;
-			this.borePlot.LegendZOrder = -1;
-			this.borePlot.Location = new System.Drawing.Point(3, 29);
-			this.borePlot.Name = "borePlot";
-			this.borePlot.RightMenu = null;
-			this.borePlot.SelectedFrequency = 0;
-			this.borePlot.ShowCoordinates = true;
-			this.borePlot.ShowWaveformPlot = false;
-			this.borePlot.Size = new System.Drawing.Size(812, 457);
-			this.borePlot.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-			this.borePlot.SurfacePadding = 10;
-			this.borePlot.TabIndex = 4;
-			this.borePlot.Text = "j";
-			this.borePlot.Title = "";
-			this.borePlot.TitleFont = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-			this.borePlot.XAxis1 = null;
-			this.borePlot.XAxis2 = null;
-			this.borePlot.YAxis1 = null;
-			this.borePlot.YAxis2 = null;
-			// 
-			// comboWaveformSelect
-			// 
-			this.comboWaveformSelect.AllowResizeDropDown = true;
-			this.comboWaveformSelect.ControlSize = new System.Drawing.Size(1, 1);
-			this.comboWaveformSelect.DropDownControl = null;
-			this.comboWaveformSelect.DropDownSizeMode = CustomComboBox.CustomComboBox.SizeMode.UseControlSize;
-			this.comboWaveformSelect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboWaveformSelect.DropSize = new System.Drawing.Size(121, 106);
-			this.comboWaveformSelect.Enabled = false;
-			this.comboWaveformSelect.FormattingEnabled = true;
-			this.comboWaveformSelect.Location = new System.Drawing.Point(178, 1);
-			this.comboWaveformSelect.Name = "comboWaveformSelect";
-			this.comboWaveformSelect.Size = new System.Drawing.Size(117, 21);
-			this.comboWaveformSelect.TabIndex = 2;
-			this.comboWaveformSelect.SelectedIndexChanged += new System.EventHandler(this.comboWaveformSelect_SelectedIndexChanged);
-			// 
-			// waveformPlot
-			// 
-			this.waveformPlot.AutoScaleAutoGeneratedAxes = false;
-			this.waveformPlot.AutoScaleTitle = false;
-			this.waveformPlot.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.waveformPlot.DateTimeToolTip = false;
-			this.waveformPlot.Legend = null;
-			this.waveformPlot.LegendZOrder = -1;
-			this.waveformPlot.Location = new System.Drawing.Point(3, 353);
-			this.waveformPlot.Name = "waveformPlot";
-			this.waveformPlot.RightMenu = null;
-			this.waveformPlot.ShowCoordinates = true;
-			this.waveformPlot.Size = new System.Drawing.Size(812, 172);
-			this.waveformPlot.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-			this.waveformPlot.SurfacePadding = 10;
-			this.waveformPlot.TabIndex = 6;
-			this.waveformPlot.Text = "plotSurface2D1";
-			this.waveformPlot.Title = "";
-			this.waveformPlot.TitleFont = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-			this.waveformPlot.XAxis1 = null;
-			this.waveformPlot.XAxis2 = null;
-			this.waveformPlot.YAxis1 = null;
-			this.waveformPlot.YAxis2 = null;
-			// 
 			// DidjImpApp
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -566,6 +567,9 @@ namespace DidjImp
 			this.Load += new System.EventHandler(this.DidjImpApp_Load);
 			panel1.ResumeLayout(false);
 			panel1.PerformLayout();
+			this.tableLayoutPanel1.ResumeLayout(false);
+			this.tableLayoutPanel1.PerformLayout();
+			this.textBoxContextMenu.ResumeLayout(false);
 			panel2.ResumeLayout(false);
 			this.tabControl1.ResumeLayout(false);
 			tabPage1.ResumeLayout(false);
@@ -581,9 +585,6 @@ namespace DidjImp
 			panel3.ResumeLayout(false);
 			menuStrip1.ResumeLayout(false);
 			menuStrip1.PerformLayout();
-			this.tableLayoutPanel1.ResumeLayout(false);
-			this.tableLayoutPanel1.PerformLayout();
-			this.textBoxContextMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

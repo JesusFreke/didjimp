@@ -304,7 +304,7 @@ namespace DidjImp
 
 		private void mnuScaleBoreByPercent_Click(object sender, EventArgs e)
 		{
-			ScaleBoreByPercentDialog dlg = new ScaleBoreByPercentDialog();
+			ScaleBoreByFactorDialog dlg = new ScaleBoreByFactorDialog();
 			DialogResult dr = dlg.ShowDialog(this);
 			if (dr == DialogResult.OK)
 			{
@@ -314,6 +314,10 @@ namespace DidjImp
 					sb.AppendFormat("{0}\t{1}\r\n", (decimal)boreDimension.Position * scaleFactor, boreDimension.Radius);
 				txtDimensions.Text = sb.ToString();
 			}
+		}
+
+		private void mnuScaleToFundamental_Click(object sender, EventArgs e)
+		{
 		}
 	}
 }

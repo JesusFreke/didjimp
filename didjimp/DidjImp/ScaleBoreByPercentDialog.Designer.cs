@@ -17,7 +17,7 @@
 
 namespace DidjImp
 {
-	partial class ScaleBoreByPercentDialog
+	partial class ScaleBoreByFactorDialog
 	{
 		/// <summary>
 		/// Required designer variable.
