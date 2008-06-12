@@ -90,6 +90,12 @@
     <Compile Include="ImpedancePlot.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="InterpolateBoreRadius.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InterpolateBoreRadius.Designer.cs">
+      <DependentUpon>InterpolateBoreRadius.cs</DependentUpon>
+    </Compile>
     <Compile Include="InvokeUtil.cs" />
     <Compile Include="MouseDrag.cs" />
     <Compile Include="MouseWheelZoom.cs" />
@@ -177,12 +183,20 @@
       <DependentUpon>ImageSizeDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="InterpolateBoreRadius.resx">
+      <DependentUpon>InterpolateBoreRadius.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Options.resx">
       <DependentUpon>Options.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Progress.resx">
       <DependentUpon>Progress.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ScaleBoreByPercentDialog.resx">
+      <DependentUpon>ScaleBoreByPercentDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SelectFrequencyDropDown.resx">
@@ -193,6 +207,12 @@
       <DependentUpon>ViewDataDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Compile Include="ScaleBoreByPercentDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ScaleBoreByPercentDialog.Designer.cs">
+      <DependentUpon>ScaleBoreByPercentDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="SelectFrequencyDropDown.cs">
       <SubType>UserControl</SubType>
     </Compile>

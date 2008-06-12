@@ -45,6 +45,7 @@ namespace DidjImp
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.Windows.Forms.Panel panel1;
 			System.Windows.Forms.Label label2;
 			System.Windows.Forms.Label label1;
@@ -58,7 +59,8 @@ namespace DidjImp
 			System.Windows.Forms.TabPage tabPage2;
 			System.Windows.Forms.Panel panel3;
 			System.Windows.Forms.MenuStrip menuStrip1;
-			DidjImp.ImpedancePlot.ImpedancePlotContextMenu impedancePlotContextMenu2 = new DidjImp.ImpedancePlot.ImpedancePlotContextMenu();
+			System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+			DidjImp.ImpedancePlot.ImpedancePlotContextMenu impedancePlotContextMenu1 = new DidjImp.ImpedancePlot.ImpedancePlotContextMenu();
 			this.txtDimensions = new System.Windows.Forms.TextBox();
 			this.btnCalculate = new System.Windows.Forms.Button();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -72,6 +74,11 @@ namespace DidjImp
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.txtCurrentDimensions = new System.Windows.Forms.TextBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.textBoxContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuResetText = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuInterpolate = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuScaleBoreByPercent = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuScaleToFundamental = new System.Windows.Forms.ToolStripMenuItem();
 			this.impedancePlot = new DidjImp.ImpedancePlot();
 			this.comboHarmonics = new CustomComboBox.CustomComboBox();
 			this.borePlot = new DidjImp.BorePlot();
@@ -90,6 +97,7 @@ namespace DidjImp
 			tabPage2 = new System.Windows.Forms.TabPage();
 			panel3 = new System.Windows.Forms.Panel();
 			menuStrip1 = new System.Windows.Forms.MenuStrip();
+			toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			panel1.SuspendLayout();
 			panel2.SuspendLayout();
 			this.tabControl1.SuspendLayout();
@@ -101,6 +109,7 @@ namespace DidjImp
 			panel3.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
+			this.textBoxContextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// panel1
@@ -118,6 +127,8 @@ namespace DidjImp
 			// 
 			// txtDimensions
 			// 
+			this.txtDimensions.AcceptsReturn = true;
+			this.txtDimensions.AcceptsTab = true;
 			this.txtDimensions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.txtDimensions.Location = new System.Drawing.Point(3, 228);
 			this.txtDimensions.Margin = new System.Windows.Forms.Padding(3, 1, 3, 3);
@@ -359,6 +370,7 @@ namespace DidjImp
 			// 
 			// txtCurrentDimensions
 			// 
+			this.txtCurrentDimensions.ContextMenuStrip = this.textBoxContextMenu;
 			this.txtCurrentDimensions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.txtCurrentDimensions.Location = new System.Drawing.Point(3, 3);
 			this.txtCurrentDimensions.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
@@ -384,6 +396,51 @@ namespace DidjImp
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(141, 455);
 			this.tableLayoutPanel1.TabIndex = 6;
 			// 
+			// textBoxContextMenu
+			// 
+			this.textBoxContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuResetText,
+            toolStripSeparator2,
+            this.mnuInterpolate,
+            this.mnuScaleBoreByPercent,
+            this.mnuScaleToFundamental});
+			this.textBoxContextMenu.Name = "textBoxContextMenu";
+			this.textBoxContextMenu.ShowImageMargin = false;
+			this.textBoxContextMenu.ShowItemToolTips = false;
+			this.textBoxContextMenu.Size = new System.Drawing.Size(320, 120);
+			// 
+			// mnuResetText
+			// 
+			this.mnuResetText.Name = "mnuResetText";
+			this.mnuResetText.Size = new System.Drawing.Size(319, 22);
+			this.mnuResetText.Text = "Set Bottom Dimensions to This";
+			this.mnuResetText.Click += new System.EventHandler(this.mnuResetText_Click);
+			// 
+			// mnuInterpolate
+			// 
+			this.mnuInterpolate.Name = "mnuInterpolate";
+			this.mnuInterpolate.Size = new System.Drawing.Size(319, 22);
+			this.mnuInterpolate.Text = "Interpolate Bore Radius at Arbitrary Position";
+			this.mnuInterpolate.Click += new System.EventHandler(this.mnuInterpolate_Click);
+			// 
+			// toolStripSeparator2
+			// 
+			toolStripSeparator2.Name = "toolStripSeparator2";
+			toolStripSeparator2.Size = new System.Drawing.Size(316, 6);
+			// 
+			// mnuScaleBoreByPercent
+			// 
+			this.mnuScaleBoreByPercent.Name = "mnuScaleBoreByPercent";
+			this.mnuScaleBoreByPercent.Size = new System.Drawing.Size(319, 22);
+			this.mnuScaleBoreByPercent.Text = "Scale Entire Bore";
+			this.mnuScaleBoreByPercent.Click += new System.EventHandler(this.mnuScaleBoreByPercent_Click);
+			// 
+			// mnuScaleToFundamental
+			// 
+			this.mnuScaleToFundamental.Name = "mnuScaleToFundamental";
+			this.mnuScaleToFundamental.Size = new System.Drawing.Size(319, 22);
+			this.mnuScaleToFundamental.Text = "Scale Entire Bore to Specified Fundamental Frequency";
+			// 
 			// impedancePlot
 			// 
 			this.impedancePlot.AutoScaleAutoGeneratedAxes = false;
@@ -397,7 +454,7 @@ namespace DidjImp
 			this.impedancePlot.LegendZOrder = -1;
 			this.impedancePlot.Location = new System.Drawing.Point(3, 29);
 			this.impedancePlot.Name = "impedancePlot";
-			this.impedancePlot.RightMenu = impedancePlotContextMenu2;
+			this.impedancePlot.RightMenu = impedancePlotContextMenu1;
 			this.impedancePlot.SelectedFrequency = 0;
 			this.impedancePlot.ShowCoordinates = true;
 			this.impedancePlot.Size = new System.Drawing.Size(812, 457);
@@ -526,6 +583,7 @@ namespace DidjImp
 			menuStrip1.PerformLayout();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
+			this.textBoxContextMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -551,6 +609,11 @@ namespace DidjImp
 		private CustomComboBox.CustomComboBox comboHarmonics;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.TextBox txtCurrentDimensions;
+		private System.Windows.Forms.ContextMenuStrip textBoxContextMenu;
+		private System.Windows.Forms.ToolStripMenuItem mnuResetText;
+		private System.Windows.Forms.ToolStripMenuItem mnuInterpolate;
+		private System.Windows.Forms.ToolStripMenuItem mnuScaleBoreByPercent;
+		private System.Windows.Forms.ToolStripMenuItem mnuScaleToFundamental;
 	}
 }
 

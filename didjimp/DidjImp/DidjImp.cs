@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
@@ -47,6 +48,11 @@ namespace DidjImp
 			InitializeComponent();
 			impedancePlot.RightMenu = new ImpedancePlot.ImpedancePlotContextMenu();
 			borePlot.RightMenu = new BorePlot.BorePlotContextMenu();
+		}
+
+		public Bore Bore
+		{
+			get { return bore; }
 		}
 
 		private void ShowError(string message, params object[] values)
@@ -282,6 +288,31 @@ namespace DidjImp
 				comboWaveformSelect.Enabled = false;
 				comboWaveformSelect.Items.Clear();
 				borePlot.ShowWaveformPlot = false;
+			}
+		}
+
+		private void mnuResetText_Click(object sender, EventArgs e)
+		{
+			txtDimensions.Text = txtCurrentDimensions.Text;
+		}
+
+		private void mnuInterpolate_Click(object sender, EventArgs e)
+		{
+			InterpolateBoreRadius dialog = new InterpolateBoreRadius(this);
+			dialog.Show(this);
+		}
+
+		private void mnuScaleBoreByPercent_Click(object sender, EventArgs e)
+		{
+			ScaleBoreByPercentDialog dlg = new ScaleBoreByPercentDialog();
+			DialogResult dr = dlg.ShowDialog(this);
+			if (dr == DialogResult.OK)
+			{
+				decimal scaleFactor = dlg.ScaleFactor;
+				StringBuilder sb = new StringBuilder();
+				foreach (BoreDimension boreDimension in bore.BoreDimensions)
+					sb.AppendFormat("{0}\t{1}\r\n", (decimal)boreDimension.Position * scaleFactor, boreDimension.Radius);
+				txtDimensions.Text = sb.ToString();
 			}
 		}
 	}
