@@ -198,7 +198,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:DidjImp"
         "ProductCode" = "8:{BB80F384-B770-4D15-A420-DA1A6853A85B}"
-        "PackageCode" = "8:{2A0BA58B-2580-4490-AE96-C8B011947AFB}"
+        "PackageCode" = "8:{4DF95087-F330-4912-8D5C-0ED79325F076}"
         "UpgradeCode" = "8:{AA1906E0-3495-4DF2-861C-5E00E56A3ECE}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -319,7 +319,7 @@
         {
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_997A466A965D409DA7045B2BDC764507"
             {
-            "Name" = "8:DidjImp v0.1"
+            "Name" = "8:DidjImp v0.5"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -732,7 +732,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_AC79D458028042C59BEF35908632493E"
             {
-            "SourcePath" = "8:..\\DidjImp\\obj\\Debug\\DidjImp.exe"
+            "SourcePath" = "8:..\\DidjImp\\obj\\Release\\DidjImp.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_049841737EC147FE9DC89FBD4D1AB8F4"
