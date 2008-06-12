@@ -334,7 +334,7 @@ namespace DidjImp
 			return returnImpedances;
 		}*/
 
-		private Complex GetImpedance(double frequency)
+		public Complex GetImpedance(double frequency)
 		{
 			Complex impedance = null;
 			if (!impedances.TryGetValue(frequency, out impedance))

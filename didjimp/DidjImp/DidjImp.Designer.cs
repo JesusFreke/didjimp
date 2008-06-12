@@ -164,7 +164,7 @@ namespace DidjImp
 			this.textBoxContextMenu.Name = "textBoxContextMenu";
 			this.textBoxContextMenu.ShowImageMargin = false;
 			this.textBoxContextMenu.ShowItemToolTips = false;
-			this.textBoxContextMenu.Size = new System.Drawing.Size(320, 120);
+			this.textBoxContextMenu.Size = new System.Drawing.Size(320, 98);
 			// 
 			// mnuResetText
 			// 

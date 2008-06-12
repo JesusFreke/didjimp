@@ -318,6 +318,68 @@ namespace DidjImp
 
 		private void mnuScaleToFundamental_Click(object sender, EventArgs e)
 		{
+			ScaleBoreToFundamental dlg = new ScaleBoreToFundamental();
+			DialogResult dr = dlg.ShowDialog(this);
+			decimal targetFundamental = dlg.SelectedFundamental;
+
+			if (dr == DialogResult.OK)
+			{
+				Bore previousBore = bore;
+				decimal currentFundamental = (decimal)impedanceData.ImpedancePeakFrequencies[0];
+				while (currentFundamental != targetFundamental)
+				{
+					decimal scaleAmount = currentFundamental / targetFundamental;
+					List<BoreDimension> newBoreDimensions = new List<BoreDimension>();
+					foreach (BoreDimension boreDimension in previousBore.BoreDimensions)
+						newBoreDimensions.Add(new BoreDimension((double)((decimal)boreDimension.Position * scaleAmount), boreDimension.Radius));
+					Bore newBore = new Bore(newBoreDimensions, 1.0m/500);
+					if (targetFundamental > currentFundamental)
+					{
+						Complex lastImpedance = newBore.GetImpedance((double)currentFundamental);
+						for (decimal freq = currentFundamental + 1; true; freq++)
+						{
+							Complex currentImpedance = newBore.GetImpedance((double)freq);
+							if (currentImpedance.Magnitude < lastImpedance.Magnitude)
+							{
+								if (newBore.InputImpedance.Count == 2)
+								{
+									newBore.GetImpedance((double)currentFundamental - 1);
+								}
+								newBore.FindResonances(2);
+								ImpedanceData tempImpedanceData = new ImpedanceData(newBore.InputImpedance);
+								currentFundamental = (decimal)tempImpedanceData.ImpedancePeakFrequencies[0];
+								previousBore = newBore;
+								break;
+							}
+							lastImpedance = currentImpedance;
+						}
+					}
+					else
+					{
+						Complex lastImpedance = newBore.GetImpedance(1);
+						for (decimal freq = 2; true; freq++)
+						{
+							Complex currentImpedance = newBore.GetImpedance((double)freq);
+							if (currentImpedance.Magnitude < lastImpedance.Magnitude)
+							{
+								newBore.FindResonances(2);
+								ImpedanceData tempImpedanceData = new ImpedanceData(newBore.InputImpedance);
+								currentFundamental =(decimal)tempImpedanceData.ImpedancePeakFrequencies[0];
+								previousBore = newBore;
+								break;
+							}
+							lastImpedance = currentImpedance;
+						}
+					}
+				}
+
+				StringBuilder sb = new StringBuilder();
+				foreach (BoreDimension boreDimension in previousBore.BoreDimensions)
+					sb.AppendFormat("{0:0.00######}\t{1:0.00######}\r\n", boreDimension.Position, boreDimension.Radius);
+
+				txtDimensions.Text = sb.ToString();
+
+			}
 		}
 	}
 }
