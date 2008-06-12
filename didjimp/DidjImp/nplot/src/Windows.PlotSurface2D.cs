@@ -755,15 +755,14 @@ namespace NPlot.Windows
 		public void DoMouseDown( MouseEventArgs e )
 		{
 			bool dirty = false;
+			if (e.Button == MouseButtons.Right)
+				lastRightMouseDown_ = new Point(e.X, e.Y);
             foreach (Interactions.Interaction i in interactions_)
             {
                 bool interactionOccured = i.DoMouseDown(e, this, lastKeyEventArgs_);
                 dirty |= interactionOccured;
                 if (interactionOccured)
                     this.InteractionOccured(i);
-
-				if (e.Button == MouseButtons.Right)
-					lastRightMouseDown_ = new Point(e.X, e.Y);
             }
 			if (dirty)
 			{
