@@ -81,10 +81,10 @@ namespace DidjImp
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.saveDimensionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.loadDimensionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTools = new System.Windows.Forms.ToolStripMenuItem();
+			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			panel1 = new System.Windows.Forms.Panel();
 			toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			label2 = new System.Windows.Forms.Label();
@@ -165,14 +165,14 @@ namespace DidjImp
 			this.textBoxContextMenu.Name = "textBoxContextMenu";
 			this.textBoxContextMenu.ShowImageMargin = false;
 			this.textBoxContextMenu.ShowItemToolTips = false;
-			this.textBoxContextMenu.Size = new System.Drawing.Size(320, 120);
+			this.textBoxContextMenu.Size = new System.Drawing.Size(320, 98);
 			this.textBoxContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.textBoxContextMenu_Opening);
 			// 
 			// mnuResetText
 			// 
 			this.mnuResetText.Name = "mnuResetText";
 			this.mnuResetText.Size = new System.Drawing.Size(319, 22);
-			this.mnuResetText.Text = "Reset Dimensions";
+			this.mnuResetText.Text = "&Reset Dimensions";
 			this.mnuResetText.Click += new System.EventHandler(this.mnuResetText_Click);
 			// 
 			// toolStripSeparator2
@@ -191,14 +191,14 @@ namespace DidjImp
 			// 
 			this.mnuScaleBoreByFactor.Name = "mnuScaleBoreByFactor";
 			this.mnuScaleBoreByFactor.Size = new System.Drawing.Size(319, 22);
-			this.mnuScaleBoreByFactor.Text = "Scale Entire Bore";
+			this.mnuScaleBoreByFactor.Text = "&Scale Entire Bore";
 			this.mnuScaleBoreByFactor.Click += new System.EventHandler(this.mnuScaleBoreByPercent_Click);
 			// 
 			// mnuScaleToFundamental
 			// 
 			this.mnuScaleToFundamental.Name = "mnuScaleToFundamental";
 			this.mnuScaleToFundamental.Size = new System.Drawing.Size(319, 22);
-			this.mnuScaleToFundamental.Text = "Scale Entire Bore to Specified Fundamental Frequency";
+			this.mnuScaleToFundamental.Text = "Scale Entire Bore to Specified &Fundamental Frequency";
 			this.mnuScaleToFundamental.Click += new System.EventHandler(this.mnuScaleToFundamental_Click);
 			// 
 			// txtDimensions
@@ -505,7 +505,8 @@ namespace DidjImp
 			menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.optionsToolStripMenuItem,
-            this.mnuTools});
+            this.mnuTools,
+            this.helpToolStripMenuItem});
 			menuStrip1.Location = new System.Drawing.Point(0, 0);
 			menuStrip1.Name = "menuStrip1";
 			menuStrip1.Size = new System.Drawing.Size(975, 24);
@@ -516,9 +517,7 @@ namespace DidjImp
 			// 
 			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveDimensionsToolStripMenuItem,
-            this.loadDimensionsToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.aboutToolStripMenuItem});
+            this.loadDimensionsToolStripMenuItem});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
 			this.fileToolStripMenuItem.Text = "&File";
@@ -537,18 +536,6 @@ namespace DidjImp
 			this.loadDimensionsToolStripMenuItem.Text = "&Load Dimensions";
 			this.loadDimensionsToolStripMenuItem.Click += new System.EventHandler(this.loadDimensionsToolStripMenuItem_Click);
 			// 
-			// toolStripSeparator1
-			// 
-			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(162, 6);
-			// 
-			// aboutToolStripMenuItem
-			// 
-			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
-			this.aboutToolStripMenuItem.Text = "&About";
-			this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
-			// 
 			// optionsToolStripMenuItem
 			// 
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
@@ -561,6 +548,21 @@ namespace DidjImp
 			this.mnuTools.Name = "mnuTools";
 			this.mnuTools.Size = new System.Drawing.Size(44, 20);
 			this.mnuTools.Text = "&Tools";
+			// 
+			// helpToolStripMenuItem
+			// 
+			this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem});
+			this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+			this.helpToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+			this.helpToolStripMenuItem.Text = "&Help";
+			// 
+			// aboutToolStripMenuItem
+			// 
+			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.aboutToolStripMenuItem.Text = "&About";
+			this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
 			// 
 			// DidjImpApp
 			// 
@@ -606,8 +608,6 @@ namespace DidjImp
 		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem saveDimensionsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem loadDimensionsToolStripMenuItem;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-		private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
 		private CustomComboBox.CustomComboBox comboWaveformSelect;
 		private BorePlot borePlot;
@@ -625,6 +625,8 @@ namespace DidjImp
 		private System.Windows.Forms.ToolStripMenuItem mnuScaleBoreByFactor;
 		private System.Windows.Forms.ToolStripMenuItem mnuScaleToFundamental;
 		private System.Windows.Forms.ToolStripMenuItem mnuTools;
+		private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
 	}
 }
 

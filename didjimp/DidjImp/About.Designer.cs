@@ -48,16 +48,16 @@ namespace DidjImp
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(About));
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
-			this.tabPage2 = new System.Windows.Forms.TabPage();
-			this.tabPage3 = new System.Windows.Forms.TabPage();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
-			this.lblEmailLink = new System.Windows.Forms.LinkLabel();
 			this.lblWebsiteLink = new System.Windows.Forms.LinkLabel();
+			this.lblEmailLink = new System.Windows.Forms.LinkLabel();
+			this.label5 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
+			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.textBox2 = new System.Windows.Forms.TextBox();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
@@ -94,76 +94,16 @@ namespace DidjImp
 			this.tabPage1.Text = "About";
 			this.tabPage1.UseVisualStyleBackColor = true;
 			// 
-			// tabPage2
+			// lblWebsiteLink
 			// 
-			this.tabPage2.Controls.Add(this.textBox1);
-			this.tabPage2.Location = new System.Drawing.Point(4, 22);
-			this.tabPage2.Name = "tabPage2";
-			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(483, 247);
-			this.tabPage2.TabIndex = 1;
-			this.tabPage2.Text = "DidjImp License";
-			this.tabPage2.UseVisualStyleBackColor = true;
-			// 
-			// tabPage3
-			// 
-			this.tabPage3.Controls.Add(this.textBox2);
-			this.tabPage3.Location = new System.Drawing.Point(4, 22);
-			this.tabPage3.Name = "tabPage3";
-			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(483, 247);
-			this.tabPage3.TabIndex = 2;
-			this.tabPage3.Text = "NPlot License";
-			this.tabPage3.UseVisualStyleBackColor = true;
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label1.Location = new System.Drawing.Point(9, 7);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(102, 19);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "DidjImp v0.1";
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label2.Location = new System.Drawing.Point(10, 26);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(182, 14);
-			this.label2.TabIndex = 1;
-			this.label2.Text = "A Didgeridoo Impedance Calculator";
-			// 
-			// label3
-			// 
-			this.label3.AutoSize = true;
-			this.label3.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label3.Location = new System.Drawing.Point(10, 71);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(54, 16);
-			this.label3.TabIndex = 2;
-			this.label3.Text = "Author:";
-			// 
-			// label4
-			// 
-			this.label4.AutoSize = true;
-			this.label4.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label4.Location = new System.Drawing.Point(10, 98);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(63, 16);
-			this.label4.TabIndex = 2;
-			this.label4.Text = "Website:";
-			// 
-			// label5
-			// 
-			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(94, 73);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(61, 13);
-			this.label5.TabIndex = 3;
-			this.label5.Text = "Ben Gruver";
+			this.lblWebsiteLink.AutoSize = true;
+			this.lblWebsiteLink.Location = new System.Drawing.Point(94, 101);
+			this.lblWebsiteLink.Name = "lblWebsiteLink";
+			this.lblWebsiteLink.Size = new System.Drawing.Size(147, 13);
+			this.lblWebsiteLink.TabIndex = 5;
+			this.lblWebsiteLink.TabStop = true;
+			this.lblWebsiteLink.Text = "http://didjimp.sourceforge.net";
+			this.lblWebsiteLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblWebsiteLink_LinkClicked);
 			// 
 			// lblEmailLink
 			// 
@@ -178,16 +118,65 @@ namespace DidjImp
 			this.lblEmailLink.UseCompatibleTextRendering = true;
 			this.lblEmailLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblEmailLink_LinkClicked);
 			// 
-			// lblWebsiteLink
+			// label5
 			// 
-			this.lblWebsiteLink.AutoSize = true;
-			this.lblWebsiteLink.Location = new System.Drawing.Point(94, 101);
-			this.lblWebsiteLink.Name = "lblWebsiteLink";
-			this.lblWebsiteLink.Size = new System.Drawing.Size(147, 13);
-			this.lblWebsiteLink.TabIndex = 5;
-			this.lblWebsiteLink.TabStop = true;
-			this.lblWebsiteLink.Text = "http://didjimp.sourceforge.net";
-			this.lblWebsiteLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblWebsiteLink_LinkClicked);
+			this.label5.AutoSize = true;
+			this.label5.Location = new System.Drawing.Point(94, 73);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(61, 13);
+			this.label5.TabIndex = 3;
+			this.label5.Text = "Ben Gruver";
+			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label4.Location = new System.Drawing.Point(10, 98);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(63, 16);
+			this.label4.TabIndex = 2;
+			this.label4.Text = "Website:";
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label3.Location = new System.Drawing.Point(10, 71);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(54, 16);
+			this.label3.TabIndex = 2;
+			this.label3.Text = "Author:";
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label2.Location = new System.Drawing.Point(10, 26);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(182, 14);
+			this.label2.TabIndex = 1;
+			this.label2.Text = "A Didgeridoo Impedance Calculator";
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label1.Location = new System.Drawing.Point(9, 7);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(102, 19);
+			this.label1.TabIndex = 0;
+			this.label1.Text = "DidjImp v0.5";
+			// 
+			// tabPage2
+			// 
+			this.tabPage2.Controls.Add(this.textBox1);
+			this.tabPage2.Location = new System.Drawing.Point(4, 22);
+			this.tabPage2.Name = "tabPage2";
+			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage2.Size = new System.Drawing.Size(483, 247);
+			this.tabPage2.TabIndex = 1;
+			this.tabPage2.Text = "DidjImp License";
+			this.tabPage2.UseVisualStyleBackColor = true;
 			// 
 			// textBox1
 			// 
@@ -201,6 +190,17 @@ namespace DidjImp
 			this.textBox1.TabIndex = 0;
 			this.textBox1.Text = resources.GetString("textBox1.Text");
 			this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			// 
+			// tabPage3
+			// 
+			this.tabPage3.Controls.Add(this.textBox2);
+			this.tabPage3.Location = new System.Drawing.Point(4, 22);
+			this.tabPage3.Name = "tabPage3";
+			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage3.Size = new System.Drawing.Size(483, 247);
+			this.tabPage3.TabIndex = 2;
+			this.tabPage3.Text = "NPlot License";
+			this.tabPage3.UseVisualStyleBackColor = true;
 			// 
 			// textBox2
 			// 
@@ -222,7 +222,7 @@ namespace DidjImp
 			this.ClientSize = new System.Drawing.Size(491, 273);
 			this.Controls.Add(this.tabControl1);
 			this.Name = "About";
-			this.Text = "DidjImp v0.1";
+			this.Text = "DidjImp v0.5";
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
 			this.tabPage1.PerformLayout();
