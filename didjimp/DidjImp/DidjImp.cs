@@ -170,7 +170,9 @@ namespace DidjImp
 			{
 				bore.FindResonances(2);
 
-				progressDialog.Close();				
+				txtCurrentDimensions.Text = txtDimensions.Text;
+
+				progressDialog.Close();
 			
 				this.impedanceData = new ImpedanceData(bore.InputImpedance);
 				impedancePlot.ImpedanceData = this.impedanceData;
