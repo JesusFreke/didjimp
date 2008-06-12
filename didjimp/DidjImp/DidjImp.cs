@@ -17,24 +17,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
-using NPlot;
 
 namespace DidjImp
 {
 	public partial class DidjImpApp : Form
 	{
 		private ImpedanceData impedanceData = null;
-		private int calculatedFrequencyCount;
 		private Progress progressDialog;
 		private DidjImpSettings settings = new DidjImpSettings();
 		private Bore bore = null;
+		
+		private int calculatedFrequencyCount;
 		private int finishedThreads = 0;
-		private SortedList<double, Complex> tempImpedanceData = null;
 
 		[STAThread]
 		static void Main()
@@ -48,6 +46,7 @@ namespace DidjImp
 		{
 			InitializeComponent();
 			impedancePlot.RightMenu = new ImpedancePlot.ImpedancePlotContextMenu();
+			borePlot.RightMenu = new BorePlot.BorePlotContextMenu();
 		}
 
 		private void ShowError(string message, params object[] values)
@@ -124,19 +123,16 @@ namespace DidjImp
 			}
 			bore.CalculatedFrequency += new Bore.CalculatedFrequencyDelegate(bore_CalculatedFrequency);
 
-			tempImpedanceData = null;
 			finishedThreads = 0;
-
 			
-			progressDialog = new Progress();
 			ParameterizedThreadStart threadStart = (threadNum) =>
 			{
+				//split the work up among however many threads we have
 				int startFrequency = (int)Math.Round((2000.0 / settings.NumberOfThreads) * ((int)threadNum) + 1.0, 0);
 				int endFrequency = (int)Math.Round((2000.0 / settings.NumberOfThreads) * ((int)threadNum + 1.0), 0);
 
 				bore.CalculateInputImpedance(startFrequency, endFrequency, 1);
 				SetImpedanceData();
-				UpdateBorePlot();
 			};
 
 
@@ -146,13 +142,17 @@ namespace DidjImp
 				thread.Start(i);
 			}
 
+			progressDialog = new Progress();
 			progressDialog.ShowDialog(this);
 		}
 
 		private void bore_CalculatedFrequency(double frequency)
 		{
-			calculatedFrequencyCount++;
-			progressDialog.SetProgress(Math.Min(100, (int)((calculatedFrequencyCount / 2000.0) * 100)));
+			InvokeUtil.InvokeIfRequired(this, new InvokeUtil.VoidDelegate(delegate()
+			{
+				calculatedFrequencyCount++;
+				progressDialog.SetProgress(Math.Min(100, (int)((calculatedFrequencyCount / 2000.0) * 100)));
+			}));
 		}
 
 		private object SetImpedanceDataLock = new object();
@@ -166,21 +166,23 @@ namespace DidjImp
 					return;
 			}
 
-			bore.FindResonances(2);
-
-			progressDialog.Invoke(new VoidDelegate(delegate()
+			InvokeUtil.InvokeIfRequired(this, new InvokeUtil.VoidDelegate(delegate()
 			{
-				progressDialog.Close();
+				bore.FindResonances(2);
+
+				progressDialog.Close();				
+			
+				this.impedanceData = new ImpedanceData(bore.InputImpedance);
+				impedancePlot.ImpedanceData = this.impedanceData;
+
+				IList<double> resonances = this.impedanceData.ImpedancePeakFrequencies;
+
+				SelectFrequencyDropDown dropDown = new SelectFrequencyDropDown(comboHarmonics, resonances);
+				comboHarmonics.DropDownControl = dropDown;
+				dropDown.SelectFirstResonance();
+
+				borePlot.Bore = bore;
 			}));
-		
-			this.impedanceData = new ImpedanceData(bore.InputImpedance);
-			impedancePlot.ImpedanceData = this.impedanceData;
-
-			IList<double> resonances = this.impedanceData.ImpedancePeakFrequencies;
-
-			SelectFrequencyDropDown dropDown = new SelectFrequencyDropDown(comboHarmonics, resonances);
-			comboHarmonics.DropDownControl = dropDown;
-			dropDown.SelectFirstResonance();		
 		}
 
 		private void DidjImpApp_Load(object sender, EventArgs e)
@@ -254,104 +256,14 @@ namespace DidjImp
 			}
 		}
 
-		private void UpdateBorePlot()
-		{
-			if (borePlot.InvokeRequired)
-			{
-				borePlot.Invoke(new VoidDelegate(UpdateBorePlot));
-				return;
-			}
-
-			List<double> xValues = new List<double>();
-			List<double> yValues = new List<double>();
-			double maxRadius = 0;
-			double totalLength = bore.Length;
-
-			for (int i = 0; i < bore.BoreDimensions.Count; i++)
-			{
-				if (bore.BoreDimensions[i].Radius > maxRadius)
-					maxRadius = bore.BoreDimensions[i].Radius;
-
-				xValues.Add(bore.BoreDimensions[i].Position);
-				yValues.Add(bore.BoreDimensions[i].Radius);
-			}
-
-			for (int i = bore.BoreDimensions.Count - 1; i > -1; i--)
-			{
-				xValues.Add(bore.BoreDimensions[i].Position);
-				yValues.Add(bore.BoreDimensions[i].Radius * -1);
-			}
-
-			xValues.Add(bore.BoreDimensions[0].Position);
-			yValues.Add(bore.BoreDimensions[0].Radius);
-
-			borePlot.Clear();
-			borePlot.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-			Grid grid = new Grid();
-			grid.HorizontalGridType = Grid.GridType.Fine;
-			grid.VerticalGridType = Grid.GridType.None;
-			borePlot.Add(grid);
-
-			LinePlot boreLinePlot = new LinePlot(yValues, xValues);
-			borePlot.Add(boreLinePlot);
-
-			borePlot.XAxis2 = new LinearAxis(borePlot.XAxis1.WorldMin, borePlot.XAxis1.WorldMax);
-			borePlot.YAxis1.Hidden = true;
-			borePlot.YAxis1.Reversed = false;
-
-			if (chkWaveform.Checked)
-			{
-				LinePlot waveformPlot = AddWaveformPlot();
-				if (waveformPlot != null)
-				{
-					borePlot.AddAxesConstraint(new BoreAndWaveformStackedPlotAxesConstraint(boreLinePlot, waveformPlot));
-					borePlot.Refresh();
-					return;
-				}
-			}
-
-			borePlot.AddAxesConstraint(new BoreOnlyAxesConstraint(boreLinePlot));
-			borePlot.XAxis2.Hidden = true;
-			borePlot.Refresh();
-		}
-
-		private LinePlot AddWaveformPlot()
-		{
-			double frequency = -1;
-
-			if (!double.TryParse((string)comboWaveformSelect.SelectedItem, out frequency))
-				return null;
-
-			SortedList<double, Complex> pressures = bore.CalculateWaveform(frequency, .002m);
-
-			List<double> xValues = new List<double>();
-			List<double> yValues = new List<double>();
-			List<double> negYValues = new List<double>();
-
-			for (int i = 0; i < pressures.Count; i++)
-			{
-				xValues.Add(pressures.Keys[i]);
-				yValues.Add(pressures.Values[i].Real);
-				negYValues.Add(pressures.Values[i].Real * -1);
-			}
-
-			borePlot.YAxis2 = new LinearAxis();
-			borePlot.YAxis2.Hidden = true;
-
-			LinePlot waveformPlot = new LinePlot(yValues, xValues);
-			borePlot.Add(waveformPlot, PlotSurface2D.XAxisPosition.Bottom, PlotSurface2D.YAxisPosition.Right, 0);
-			LinePlot negWaveformPlot = new LinePlot(negYValues, xValues);
-			borePlot.Add(negWaveformPlot, PlotSurface2D.XAxisPosition.Bottom, PlotSurface2D.YAxisPosition.Right, 0);
-
-			borePlot.Add(new HorizontalLine(0), PlotSurface2D.XAxisPosition.Bottom, PlotSurface2D.YAxisPosition.Right, 0);
-
-			return waveformPlot;
-		}
-
 		private void comboWaveformSelect_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			UpdateBorePlot();
+			double selectedFrequency;
+
+			if (!double.TryParse((string)comboWaveformSelect.SelectedItem, out selectedFrequency))
+				return;
+
+			borePlot.SelectedFrequency = selectedFrequency;
 		}
 
 		private void chkWaveform_CheckedChanged(object sender, EventArgs e)
@@ -361,15 +273,14 @@ namespace DidjImp
 				comboWaveformSelect.DropDownControl = new SelectFrequencyDropDown(comboWaveformSelect, impedanceData.ImpedancePeakFrequencies);
 				comboWaveformSelect.Enabled = true;
 				((SelectFrequencyDropDown)comboWaveformSelect.DropDownControl).SelectFirstResonance();
+				borePlot.ShowWaveformPlot = true;
 			}
 			else
 			{
 				comboWaveformSelect.Enabled = false;
 				comboWaveformSelect.Items.Clear();
-				UpdateBorePlot();
+				borePlot.ShowWaveformPlot = false;
 			}
 		}
-
-		public delegate void VoidDelegate();
 	}
 }
