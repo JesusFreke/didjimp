@@ -78,7 +78,7 @@ namespace DidjImp
             0});
 			this.numScaleFactor.Name = "numScaleFactor";
 			this.numScaleFactor.Size = new System.Drawing.Size(71, 20);
-			this.numScaleFactor.TabIndex = 1;
+			this.numScaleFactor.TabIndex = 0;
 			this.numScaleFactor.Value = new decimal(new int[] {
             1,
             0,
@@ -88,24 +88,24 @@ namespace DidjImp
 			// btnOK
 			// 
 			this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btnOK.Location = new System.Drawing.Point(132, 55);
+			this.btnOK.Location = new System.Drawing.Point(51, 55);
 			this.btnOK.Name = "btnOK";
 			this.btnOK.Size = new System.Drawing.Size(75, 23);
-			this.btnOK.TabIndex = 2;
+			this.btnOK.TabIndex = 1;
 			this.btnOK.Text = "OK";
 			this.btnOK.UseVisualStyleBackColor = true;
 			// 
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Location = new System.Drawing.Point(51, 55);
+			this.btnCancel.Location = new System.Drawing.Point(132, 55);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(75, 23);
-			this.btnCancel.TabIndex = 3;
+			this.btnCancel.TabIndex = 2;
 			this.btnCancel.Text = "Cancel";
 			this.btnCancel.UseVisualStyleBackColor = true;
 			// 
-			// ScaleBoreByPercentDialog
+			// ScaleBoreByFactorDialog
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -115,7 +115,7 @@ namespace DidjImp
 			this.Controls.Add(this.numScaleFactor);
 			this.Controls.Add(label1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.Name = "ScaleBoreByPercentDialog";
+			this.Name = "ScaleBoreByFactorDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Scale Bore";
 			((System.ComponentModel.ISupportInitialize)(this.numScaleFactor)).EndInit();
