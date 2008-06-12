@@ -48,6 +48,7 @@ namespace DidjImp
 			InitializeComponent();
 			impedancePlot.RightMenu = new ImpedancePlot.ImpedancePlotContextMenu();
 			borePlot.RightMenu = new BorePlot.BorePlotContextMenu();
+			mnuTools.DropDown = textBoxContextMenu;
 		}
 
 		public Bore Bore
@@ -380,6 +381,20 @@ namespace DidjImp
 
 				txtDimensions.Text = sb.ToString();
 
+			}
+		}
+
+		private void textBoxContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			if (txtCurrentDimensions.Text.Length == 0)
+			{
+				foreach (ToolStripItem item in textBoxContextMenu.Items)
+					item.Enabled = false;
+			}
+			else
+			{
+				foreach (ToolStripItem item in textBoxContextMenu.Items)
+					item.Enabled = true;
 			}
 		}
 	}
