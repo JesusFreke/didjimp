@@ -61,6 +61,15 @@ namespace DidjImp
 			((System.ComponentModel.ISupportInitialize)(this.numThreads)).BeginInit();
 			this.SuspendLayout();
 			// 
+			// label1
+			// 
+			label1.AutoSize = true;
+			label1.Location = new System.Drawing.Point(10, 9);
+			label1.Name = "label1";
+			label1.Size = new System.Drawing.Size(101, 13);
+			label1.TabIndex = 2;
+			label1.Text = "Number of Threads:";
+			// 
 			// groupBox1
 			// 
 			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -83,7 +92,7 @@ namespace DidjImp
 			this.radio_m.Location = new System.Drawing.Point(5, 66);
 			this.radio_m.Name = "radio_m";
 			this.radio_m.Size = new System.Drawing.Size(33, 17);
-			this.radio_m.TabIndex = 1;
+			this.radio_m.TabIndex = 3;
 			this.radio_m.TabStop = true;
 			this.radio_m.Text = "m";
 			this.radio_m.UseVisualStyleBackColor = true;
@@ -94,7 +103,7 @@ namespace DidjImp
 			this.radio_cm.Location = new System.Drawing.Point(6, 43);
 			this.radio_cm.Name = "radio_cm";
 			this.radio_cm.Size = new System.Drawing.Size(39, 17);
-			this.radio_cm.TabIndex = 1;
+			this.radio_cm.TabIndex = 2;
 			this.radio_cm.TabStop = true;
 			this.radio_cm.Text = "cm";
 			this.radio_cm.UseVisualStyleBackColor = true;
@@ -105,7 +114,7 @@ namespace DidjImp
 			this.radio_yd.Location = new System.Drawing.Point(75, 66);
 			this.radio_yd.Name = "radio_yd";
 			this.radio_yd.Size = new System.Drawing.Size(36, 17);
-			this.radio_yd.TabIndex = 0;
+			this.radio_yd.TabIndex = 6;
 			this.radio_yd.TabStop = true;
 			this.radio_yd.Text = "yd";
 			this.radio_yd.UseVisualStyleBackColor = true;
@@ -116,7 +125,7 @@ namespace DidjImp
 			this.radio_ft.Location = new System.Drawing.Point(75, 43);
 			this.radio_ft.Name = "radio_ft";
 			this.radio_ft.Size = new System.Drawing.Size(31, 17);
-			this.radio_ft.TabIndex = 0;
+			this.radio_ft.TabIndex = 5;
 			this.radio_ft.TabStop = true;
 			this.radio_ft.Text = "ft";
 			this.radio_ft.UseVisualStyleBackColor = true;
@@ -127,7 +136,7 @@ namespace DidjImp
 			this.radio_in.Location = new System.Drawing.Point(75, 19);
 			this.radio_in.Name = "radio_in";
 			this.radio_in.Size = new System.Drawing.Size(33, 17);
-			this.radio_in.TabIndex = 0;
+			this.radio_in.TabIndex = 4;
 			this.radio_in.TabStop = true;
 			this.radio_in.Text = "in";
 			this.radio_in.UseVisualStyleBackColor = true;
@@ -138,7 +147,7 @@ namespace DidjImp
 			this.radio_mm.Location = new System.Drawing.Point(6, 19);
 			this.radio_mm.Name = "radio_mm";
 			this.radio_mm.Size = new System.Drawing.Size(41, 17);
-			this.radio_mm.TabIndex = 0;
+			this.radio_mm.TabIndex = 1;
 			this.radio_mm.TabStop = true;
 			this.radio_mm.Text = "mm";
 			this.radio_mm.UseVisualStyleBackColor = true;
@@ -150,7 +159,7 @@ namespace DidjImp
 			this.btnOK.Location = new System.Drawing.Point(145, 85);
 			this.btnOK.Name = "btnOK";
 			this.btnOK.Size = new System.Drawing.Size(75, 23);
-			this.btnOK.TabIndex = 1;
+			this.btnOK.TabIndex = 7;
 			this.btnOK.Text = "OK";
 			this.btnOK.UseVisualStyleBackColor = true;
 			this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
@@ -165,15 +174,6 @@ namespace DidjImp
 			this.btnCancel.TabIndex = 1;
 			this.btnCancel.Text = "Cancel";
 			this.btnCancel.UseVisualStyleBackColor = true;
-			// 
-			// label1
-			// 
-			label1.AutoSize = true;
-			label1.Location = new System.Drawing.Point(10, 9);
-			label1.Name = "label1";
-			label1.Size = new System.Drawing.Size(101, 13);
-			label1.TabIndex = 2;
-			label1.Text = "Number of Threads:";
 			// 
 			// numThreads
 			// 
@@ -190,7 +190,7 @@ namespace DidjImp
             0});
 			this.numThreads.Name = "numThreads";
 			this.numThreads.Size = new System.Drawing.Size(57, 20);
-			this.numThreads.TabIndex = 3;
+			this.numThreads.TabIndex = 0;
 			this.numThreads.Value = new decimal(new int[] {
             1,
             0,
