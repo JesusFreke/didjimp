@@ -35,14 +35,12 @@ namespace DidjImp
 		/// <param name="progress">And integer from 0 to 100</param>
 		public void SetProgress(int progress)
 		{
-			if (this.InvokeRequired)
+			InvokeUtil.InvokeIfRequired(this, new InvokeUtil.VoidDelegate(delegate()
 			{
-				this.Invoke(new SetProgressDelegate(SetProgress), progress);
-				return;
-			}
-			this.Text = String.Format("Calculating... {0}%", progress);
-			if (progressBar != null)
-				progressBar.Value = progress;
+				this.Text = String.Format("Calculating... {0}%", progress);
+				if (progressBar != null)
+					progressBar.Value = progress;
+			}));
 		}
 	}
 }

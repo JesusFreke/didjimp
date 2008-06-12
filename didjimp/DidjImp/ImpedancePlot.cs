@@ -188,6 +188,7 @@ namespace DidjImp
 			if (this.InvokeRequired)
 			{
 				this.Invoke(new VoidDelegate(UpdateHarmonicLines));
+				return;
 			}
 			double frequency = this.SelectedFrequency;
 

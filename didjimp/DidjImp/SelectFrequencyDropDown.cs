@@ -79,10 +79,9 @@ namespace DidjImp
 			}
 		}
 
-
 		public void SelectFirstResonance()
 		{
-			parent.Invoke(new DidjImpApp.VoidDelegate(delegate()
+			InvokeUtil.InvokeIfRequired(parent, new InvokeUtil.VoidDelegate(delegate()
 			{
 				ListBoxItem item = (ListBoxItem)lstResonances.Items[0];
 				parent.HideDropDown();
