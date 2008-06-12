@@ -1,1 +1,1 @@
-﻿automatically update bore/waveform data and plot when re-calculating a new bore
+﻿

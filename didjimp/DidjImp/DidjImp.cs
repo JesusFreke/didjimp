@@ -190,6 +190,7 @@ namespace DidjImp
 				dropDown.SelectFirstResonance();
 
 				borePlot.Bore = bore;
+				chkWaveform.Checked = false;
 			}));
 		}
 
