@@ -30,5 +30,22 @@ namespace DidjImp
 			this.txtData.SelectionStart = 0;
 			this.txtData.SelectionLength = 0;
 		}
+
+		/// <summary>
+		/// Workaround to allow ESC key to close the dialog
+		/// </summary>
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			const int WM_KEYDOWN = 0x100;
+			if (msg.Msg == WM_KEYDOWN)
+			{
+				if (keyData == Keys.Escape)
+				{
+					DialogResult = DialogResult.Cancel;
+					return true;
+				}
+			}
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
 	}
 }
