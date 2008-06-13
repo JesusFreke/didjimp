@@ -320,7 +320,7 @@ namespace DidjImp
 
 		private void mnuScaleToFundamental_Click(object sender, EventArgs e)
 		{
-			ScaleBoreToFundamental dlg = new ScaleBoreToFundamental();
+			ScaleBoreToFundamental dlg = new ScaleBoreToFundamental((decimal)impedanceData.ImpedancePeakFrequencies[0]);
 			DialogResult dr = dlg.ShowDialog(this);
 			decimal targetFundamental = dlg.SelectedFundamental;
 
