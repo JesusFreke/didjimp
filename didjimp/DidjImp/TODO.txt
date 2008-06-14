@@ -1,1 +1,5 @@
-﻿
+﻿make custom dropdown box look OK on mono
+
+add a history feature
+
+ability to switch from "position and radius" view of bore dimensions to "radius and length" view
