@@ -117,52 +117,120 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="textBoxContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>126, 17</value>
-  </metadata>
   <metadata name="toolStripSeparator2.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
-  <metadata name="panel2.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="tblTreeAndDimension.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
-  <metadata name="panel1.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="treeViewImageList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>281, 17</value>
+  </metadata>
+  <data name="treeViewImageList.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj0yLjAuMC4w
+        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
+        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAAu
+        BwAAAk1TRnQBSQFMAgEBAgEAAQQBAAEEAQABEAEAARABAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFA
+        AwABEAMAAQEBAAEgBgABEHoAAzMB/wMzAf8DMwH/kAABCgIBAQsBGgIBASMBIgIBAS8BIgIBAS8BIgIB
+        AS8BIgIBAS8BIgIBAS8BIgIBAS8BIgIBAS8BIgIBAS8BIgIBAS8BIgIBAS8BGgIBASMBCgIBAQssAAMz
+        Af8DMwH/AzMB/wMzAf+IAAEKAgEBCwEoAgEBOwFEAgEBdwFNAgIBjwFNAgIBjwFNAgIBjwFNAgIBjwFN
+        AgIBjwFNAgIBjwFNAgIBjwFNAgIBjwFNAgIBjwFNAgIBjwFEAgEBdwEoAgEBOwEKAgEBCyQAAzMB/wMz
+        Af8DMwH/AzMB/wMzAf8DMwH/hAABGgIBASMBQAGBAaUB/wFAAYEBpQH/AUABgQGlAf8BQAGBAaUB/wFA
+        AYEBpQH/AUABgQGlAf8BQAGBAaUB/wFAAYEBpQH/AUABgQGlAf8BQAGBAaUB/wFAAYEBpQH/AUABgQGl
+        Af8BUQICAZsBRAIBAXcBGgIBASMkAAMzAf8DMwH/AzMB/wMzAf8DMwH/AzMB/wMzAf+AAAFMAZoBxgH/
+        AU8BnAHHAf8BnAP/AYEB1wL/AYEB1wL/AYEB1wL/AYEB1wL/AYEB1wL/AYEB1wL/AYEB1wL/AYEB1wL/
+        AYEB1wL/AVwBmQG/Af8BQAGBAaUB/wFNAgIBjwEiAgEBLyAAAzMB/wMzAf8DMwH/AzMB/wMzAf8DMwH/
+        AzMB/wMzAf+AAAFMAZoBxgH/AU0BmgHGAf8BgQHkAfAB/wGcA/8BgQHjAv8BgQHjAv8BgQHjAv8BgQHj
+        Av8BgQHjAv8BgQHjAv8BgQHjAv8BgQHfAv8BdgGyAd4B/wFNAYEBnQH/AVECAgGbAS8CAQFHIAADMwH/
+        AzMB/wMzAf8DMwH/AzMB/wMzAf8DMwH/AzMB/4AAAUwBmgHGAf8BWQGiAc8B/wFzAbgB1wH/AZwD/wGE
+        AesC/wGEAesC/wGEAesC/wGEAesC/wGEAesC/wGEAesC/wGEAesC/wGEAecC/wF2AboB7wH/AUwBmgHG
+        Af8BUQICAZsBRAIBAXccAAMzAf8DMwH/AzMB/wMzAf8DMwH/AzMB/wMzAf+IAAFMAZoBxgH/AXYBswHi
+        Af8BVAGgAckB/wGlA/8BlAH3Av8BlAH3Av8BlAH3Av8BlAH3Av8BlAH3Av8BlAH3Av8BlAH3Av8BlAH3
+        Av8BgQG+AecB/wGBAbwBzgH/AUABgQGlAf8BTQICAY8YAAMzAf8DMwH/AzMB/wMzAf8DMwH/AzMB/5AA
+        AUwBmgHGAf8BgQHVAf0B/wFMAZoBxgH/AYkB8AH3Af8BnAP/AZwD/wGcA/8BnAP/AZwD/wGcA/8BnAP/
+        AZwD/wGBAccC/wGWAfkB+wH/AUwBgQGbAf8BTQICAY8UAAMzAf8DMwH/AzMB/wMzAf8DMwH/mAABTAGa
+        AcYB/wGEAdcC/wFMAZoBxgH/AYEBvwHaCf8B9wH7Fv8BhAHnBv8BTAGBAaEB/wFEAgEBdxAAAzMB/wMz
+        Af8DMwH/AzMB/wMzAf+cAAFMAZoBxgH/AYQB6wL/AYEBwQHiAf8BTAGaAcYB/wFMAZoBxgH/AUwBmgHG
+        Af8BTAGaAcYB/wFMAZoBxgH/AUwBmgHGAf8BTAGaAcYB/wFMAZoBxgH/AUwBmgHGAf8BTAGaAcYB/wFM
+        AZoBxgH/AUwBiQGxAf8BKAIBATsMAAMzAf8DMwH/AzMB/wMzAf8DMwH/oAABTAGaAcYB/wGcAfMC/wGM
+        AfMC/wGMAfMC/wGMAfMC/wGMAfMC/wGMAfMW/wFMAZoBxgH/AU0BgQGdAf8BKAIBATsBCgIBAQsIAAMz
+        Af8DMwH/AzMB/wMzAf8DMwH/pAABTAGaAcYF/wGcA/8BnAP/AZwD/wGcB/8BTAGaAcYB/wFMAZoBxgH/
+        AUwBmgHGAf8BTAGaAcYB/wFMAZoBxgH/AUwBmgHGAf8BGgIBASMBCgIBAQsIAAMzAf8DMwH/AzMB/wMz
+        Af8DMwH/rAABVQGiAc4R/wFMAZoBxgH/ASgCAQE7AQoCAQELHAADMwH/AzMB/wMzAf8DMwH/AzMB/7QA
+        AVUBogHOAf8BVQGiAc4B/wFVAaIBzgH/AVUBogHOAf8BGgIBASMBCgIBAQsgAAMzAf8DMwH/AzMB/wMz
+        Af/0AAMzAf8DMwH/tAABQgFNAT4HAAE+AwABKAMAAUADAAEQAwABAQEAAQEFAAGAFwAD/wEAA/8BxwQA
+        AYABAQH/AcMGAAH/AYEGAAH/AYAGAAH/BwAB/wcAAf4BAwYAAfwBDwYAAfgBPwYAAfABfwYAAeAB/wYA
+        AcEB/wUAAQEBgwH/BAABgAF/AQcB/wQAAcAB/wEPAf8EAAL/AZ8B/wQACw==
+</value>
+  </data>
+  <metadata name="tabPageImpedance.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
-  <metadata name="label2.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="pnlImpedancePlot.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
-  <metadata name="label1.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="pnlImpedanceTools.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
-  <metadata name="tabPage1.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="pnlImpedancePlot.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
-  <metadata name="flowLayoutPanel1.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="pnlImpedanceTools.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
-  <metadata name="panel4.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="pnlImpedanceShowHarmonics.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
-  <metadata name="label3.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="pnlImpedanceGraphType.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
-  <metadata name="panel5.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="pnlImpedanceShowHarmonics.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
-  <metadata name="label5.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="lblShowHarmonics.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
-  <metadata name="tabPage2.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="lblShowHarmonics.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
-  <metadata name="panel3.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="pnlImpedanceGraphType.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
-  <metadata name="menuStrip1.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="lblGraphType.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
-  <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="lblGraphType.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <metadata name="tabBore.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <metadata name="pnlBoreTools.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <metadata name="pnlBoreTools.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <metadata name="menuMain.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <metadata name="menuMain.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
+  </metadata>
+  <metadata name="mnuFile.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <metadata name="mnuHelp.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <metadata name="mnuFile.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <metadata name="mnuHelp.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <metadata name="textBoxContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>126, 17</value>
   </metadata>
 </root>

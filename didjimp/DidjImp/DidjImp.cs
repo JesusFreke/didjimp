@@ -22,6 +22,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace DidjImp
 {
@@ -64,7 +65,7 @@ namespace DidjImp
 		private Regex dimensionRegex = new Regex(@"^\s*([0-9.]+)(?:(?:\s+)|(?:\s*,\s*))([0-9.]+)\s*(?:;.*)?$");
 		private void btnCalculate_Click(object sender, EventArgs e)
 		{
-			tabControl1.Enabled = true;
+			tabPlots.Enabled = true;
 			verticalLines.Clear();
 
 			calculatedFrequencyCount = 0;
@@ -176,23 +177,35 @@ namespace DidjImp
 			InvokeUtil.InvokeIfRequired(this, new InvokeUtil.VoidDelegate(delegate()
 			{
 				bore.FindResonances(2);
-
-				txtCurrentDimensions.Text = txtDimensions.Text;
-
 				progressDialog.Close();
+				btnCalculate.Enabled = false;
 			
 				this.impedanceData = new ImpedanceData(bore.InputImpedance);
-				impedancePlot.ImpedanceData = this.impedanceData;
 
-				IList<double> resonances = this.impedanceData.ImpedancePeakFrequencies;
+				DidgeData data = new DidgeData();
+				data.bore = this.bore;
+				data.dimensions = txtDimensions.Text;
+				data.impedanceData = this.impedanceData;
+				treeDidgeHistory.SelectedNode.Tag = data;
 
-				SelectFrequencyDropDown dropDown = new SelectFrequencyDropDown(comboHarmonics, resonances);
-				comboHarmonics.DropDownControl = dropDown;
-				dropDown.SelectFirstResonance();
+				treeDidgeHistory.SelectedNode.Text = treeDidgeHistory.SelectedNode.Text.Substring(1);
 
-				borePlot.Bore = bore;
-				chkWaveform.Checked = false;
+				UpdateDisplayWithCurrentData();				
 			}));
+		}
+
+		private void UpdateDisplayWithCurrentData()
+		{
+			impedancePlot.ImpedanceData = this.impedanceData;
+
+			IList<double> resonances = this.impedanceData.ImpedancePeakFrequencies;
+
+			SelectFrequencyDropDown dropDown = new SelectFrequencyDropDown(comboHarmonics, resonances);
+			comboHarmonics.DropDownControl = dropDown;
+			dropDown.SelectFirstResonance();
+
+			borePlot.Bore = bore;
+			chkWaveform.Checked = false;
 		}
 
 		private void DidjImpApp_Load(object sender, EventArgs e)
@@ -200,39 +213,45 @@ namespace DidjImp
 			comboWaveformSelect.AllowResizeDropDown = false;
 			comboImpedanceGraphType.SelectedIndex = 0;
 			impedancePlot.ImpedanceData = this.impedanceData;
+
+			TreeNode node = new TreeNode("Untitled Workspace", 0, 0);
+			treeDidgeHistory.Nodes.Add(node);
+			treeDidgeHistory.SelectedNode = node;
+			node.Tag = new WorkspaceData();
+
 		}
 
 
 		private void saveDimensionsToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			SaveFileDialog dlg = new SaveFileDialog();
+			/*SaveFileDialog dlg = new SaveFileDialog();
 			dlg.Filter = "Text Files (*.txt;*.csv) | *.txt;*.csv";
 			DialogResult res = dlg.ShowDialog(this);
 			if (res == DialogResult.OK)
 			{
 				File.WriteAllText(dlg.FileName, txtDimensions.Text);
-			}
+			}*/
 		}
 
 		private void loadDimensionsToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			OpenFileDialog dlg = new OpenFileDialog();
+			/*OpenFileDialog dlg = new OpenFileDialog();
 			dlg.Filter = "Text File (*.txt)|*.txt";
 			dlg.CheckFileExists = true;
 			DialogResult res = dlg.ShowDialog(this);
 			if (res == DialogResult.OK)
 			{
 				txtDimensions.Text = File.ReadAllText(dlg.FileName);
-			}
+			}*/
 		}
 
-		private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+		private void mnuAbout_Click(object sender, EventArgs e)
 		{
 			About about = new About();
 			about.ShowDialog();
 		}
 
-		private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+		private void mnuOptions_Click(object sender, EventArgs e)
 		{
 			Options options = new Options(settings);
 			DialogResult dr = options.ShowDialog();
@@ -295,7 +314,6 @@ namespace DidjImp
 
 		private void mnuResetText_Click(object sender, EventArgs e)
 		{
-			txtDimensions.Text = txtCurrentDimensions.Text;
 		}
 
 		private void mnuInterpolate_Click(object sender, EventArgs e)
@@ -306,7 +324,7 @@ namespace DidjImp
 
 		private void mnuScaleBoreByPercent_Click(object sender, EventArgs e)
 		{
-			ScaleBoreByFactorDialog dlg = new ScaleBoreByFactorDialog();
+			/*ScaleBoreByFactorDialog dlg = new ScaleBoreByFactorDialog();
 			DialogResult dr = dlg.ShowDialog(this);
 			if (dr == DialogResult.OK)
 			{
@@ -315,12 +333,12 @@ namespace DidjImp
 				foreach (BoreDimension boreDimension in bore.BoreDimensions)
 					sb.AppendFormat("{0}\t{1}\r\n", (decimal)boreDimension.Position * scaleFactor, boreDimension.Radius);
 				txtDimensions.Text = sb.ToString();
-			}
+			}*/
 		}
 
 		private void mnuScaleToFundamental_Click(object sender, EventArgs e)
 		{
-			ScaleBoreToFundamental dlg = new ScaleBoreToFundamental((decimal)impedanceData.ImpedancePeakFrequencies[0]);
+			/*ScaleBoreToFundamental dlg = new ScaleBoreToFundamental((decimal)impedanceData.ImpedancePeakFrequencies[0]);
 			DialogResult dr = dlg.ShowDialog(this);
 			decimal targetFundamental = dlg.SelectedFundamental;
 
@@ -381,12 +399,12 @@ namespace DidjImp
 
 				txtDimensions.Text = sb.ToString();
 
-			}
+			}*/
 		}
 
 		private void textBoxContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			if (txtCurrentDimensions.Text.Length == 0)
+			/*if (txtCurrentDimensions.Text.Length == 0)
 			{
 				foreach (ToolStripItem item in textBoxContextMenu.Items)
 					item.Enabled = false;
@@ -395,7 +413,188 @@ namespace DidjImp
 			{
 				foreach (ToolStripItem item in textBoxContextMenu.Items)
 					item.Enabled = true;
+			}*/
+		}
+
+		private void treeDidgeHistory_ItemDrag(object sender, ItemDragEventArgs e)
+		{
+			treeDidgeHistory.DoDragDrop(e.Item, DragDropEffects.Move);
+		}
+
+		private void treeDidgeHistory_DragEnter(object sender, DragEventArgs e)
+		{
+			if (e.Data.GetDataPresent("System.Windows.Forms.TreeNode", true))
+				e.Effect = DragDropEffects.Move;
+			else
+				e.Effect = DragDropEffects.None;
+		}
+
+		private void treeDidgeHistory_DragOver(object sender, DragEventArgs e)
+		{
+			if (!e.Data.GetDataPresent("System.Windows.Forms.TreeNode", true))
+				return;
+
+			TreeNode dragNode = (TreeNode)e.Data.GetData("System.Windows.Forms.TreeNode", true);
+			TreeNode targetNode = treeDidgeHistory.GetNodeAt(treeDidgeHistory.PointToClient(new System.Drawing.Point(e.X, e.Y)));
+
+			if (treeDidgeHistory.SelectedNode != targetNode)
+			{
+				treeDidgeHistory.SelectedNode = targetNode;
+
+				//make sure the node we're dragging over isn't a child of the node that we're dragging
+				while (targetNode != null)
+				{
+					if (targetNode == dragNode)
+					{
+						e.Effect = DragDropEffects.None;
+						return;
+					}
+					targetNode = targetNode.Parent;
+				}
+
+				e.Effect = DragDropEffects.Move;
 			}
 		}
+
+		private void treeDidgeHistory_DragDrop(object sender, DragEventArgs e)
+		{
+			if (!e.Data.GetDataPresent("System.Windows.Forms.TreeNode", true))
+				return;
+
+			TreeNode dragNode = (TreeNode)e.Data.GetData("System.Windows.Forms.TreeNode", true);
+			TreeNode targetNode = treeDidgeHistory.SelectedNode;
+
+			dragNode.Remove();
+			if (targetNode == null)
+				treeDidgeHistory.Nodes.Add(dragNode);
+			else
+				targetNode.Nodes.Add(dragNode);
+
+			dragNode.EnsureVisible();
+			treeDidgeHistory.SelectedNode = dragNode;
+		}
+
+		private void txtDimensions_TextChanged(object sender, EventArgs e)
+		{
+			//do nothing if this is an "unsaved" didge
+			if (treeDidgeHistory.SelectedNode.Tag is DidgeData)
+			{
+				if (((DidgeData)treeDidgeHistory.SelectedNode.Tag).bore == null)
+					return;
+				if (((DidgeData)treeDidgeHistory.SelectedNode.Tag).dimensions == txtDimensions.Text)
+					return;
+			}
+
+			if (treeDidgeHistory.SelectedNode.Tag is WorkspaceData)
+			{
+				if (txtDimensions.Text.Length == 0)
+					return;
+			}
+
+
+			//otherwise, we need to create a new child node of the currently selected node
+			TreeNode node = new TreeNode(GetNextDidgeNodeName(), 1, 1);
+			treeDidgeHistory.SelectedNode.Nodes.Add(node);
+			treeDidgeHistory.SelectedNode = node;
+			node.Tag = new DidgeData();
+			btnCalculate.Enabled = true;
+		}
+
+		private string GetNextDidgeNodeName()
+		{
+			int didgeI = 1;
+			do
+			{
+				string name = String.Format("Didge{0}", didgeI);
+				string starredName = "*" + name;
+
+				bool found = false;
+				foreach (TreeNode node in treeDidgeHistory.Nodes)
+				{
+					if (FindNode(node, name, starredName))
+					{
+						found = true;
+						break;
+					}
+				}
+				if (!found)
+					return starredName;
+				didgeI++;
+			}while (true);
+		}
+
+		private bool FindNode(TreeNode root, string name, string starredName)
+		{
+			if (root.Text == name || root.Text == starredName)
+				return true;
+
+			foreach (TreeNode node in root.Nodes)
+			{
+				if (FindNode(node, name, starredName))
+					return true;
+			}
+			return false;
+		}
+
+		private void treeDidgeHistory_AfterSelect(object sender, TreeViewEventArgs e)
+		{
+			if (treeDidgeHistory.SelectedNode == null)
+				return;
+
+			treeDidgeHistory.SelectedNode.EnsureVisible();
+
+			if (treeDidgeHistory.SelectedNode.Tag == null)
+				return;
+			
+			if (treeDidgeHistory.SelectedNode.Tag is WorkspaceData)
+			{
+				txtDimensions.Text = "";
+				btnCalculate.Enabled = false;
+				impedancePlot.Clear();
+				borePlot.Clear();
+				tabPlots.Enabled = false;
+				return;
+			}
+
+			DidgeData data = (DidgeData)treeDidgeHistory.SelectedNode.Tag;
+
+			if (data.bore != null)
+			{
+				txtDimensions.Text = data.dimensions;
+				bore = data.bore;
+				impedanceData = data.impedanceData;
+				UpdateDisplayWithCurrentData();
+				btnCalculate.Enabled = false;
+				tabPlots.Enabled = true;
+			}
+			else
+			{
+				txtDimensions.Text = data.dimensions;
+				btnCalculate.Enabled = true;
+				impedancePlot.Clear();
+				borePlot.Clear();
+				tabPlots.Enabled = false;
+			}
+		}
+
+		private void treeDidgeHistory_BeforeSelect(object sender, TreeViewCancelEventArgs e)
+		{
+			if (treeDidgeHistory.SelectedNode == null || treeDidgeHistory.SelectedNode.Tag is WorkspaceData || ((DidgeData)treeDidgeHistory.SelectedNode.Tag).bore != null)
+				return;
+			else
+				((DidgeData)treeDidgeHistory.SelectedNode.Tag).dimensions = txtDimensions.Text;
+		}		
+	}
+
+	public class WorkspaceData
+	{
+		public string WorkspaceXMLPath;
+	}
+
+	public class DidgeData
+	{
+		public Bore bore = null;
+		public ImpedanceData impedanceData = null;
+		public string dimensions = null;
 	}
 }
