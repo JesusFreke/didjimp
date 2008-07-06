@@ -92,5 +92,20 @@ namespace DidjImp
 
 			CalculateRadiusAtPosition(position);
 		}
+
+		private void InterpolateBoreRadius_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (e.KeyChar == '\r')
+			{
+				e.Handled = true;
+				this.ActiveControl = null;
+			}
+
+			if (e.KeyChar == (char)27)
+			{
+				e.Handled = true;
+				this.Close();				
+			}
+		}
 	}
 }

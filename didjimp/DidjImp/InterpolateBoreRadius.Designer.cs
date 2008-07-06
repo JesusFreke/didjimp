@@ -80,7 +80,6 @@ namespace DidjImp
 			// 
 			// txtPosition
 			// 
-			this.txtPosition.AcceptsReturn = true;
 			this.txtPosition.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtPosition.Location = new System.Drawing.Point(81, 5);
 			this.txtPosition.Name = "txtPosition";
@@ -112,7 +111,7 @@ namespace DidjImp
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 3;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 49.99999F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.00001F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -137,12 +136,15 @@ namespace DidjImp
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
+			this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
+			this.CausesValidation = false;
 			this.ClientSize = new System.Drawing.Size(217, 91);
 			this.Controls.Add(this.tableLayoutPanel1);
+			this.KeyPreview = true;
 			this.Name = "InterpolateBoreRadius";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Interpolate Bore Radius";
+			this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.InterpolateBoreRadius_KeyPress);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			this.ResumeLayout(false);
