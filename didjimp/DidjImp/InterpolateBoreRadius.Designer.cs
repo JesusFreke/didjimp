@@ -86,8 +86,8 @@ namespace DidjImp
 			this.txtPosition.Name = "txtPosition";
 			this.txtPosition.Size = new System.Drawing.Size(133, 20);
 			this.txtPosition.TabIndex = 0;
+			this.txtPosition.Leave += new System.EventHandler(this.txtPosition_Leave);
 			this.txtPosition.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPosition_KeyPress);
-			this.txtPosition.Validating += new System.ComponentModel.CancelEventHandler(this.txtPosition_Validating);
 			// 
 			// txtRadius
 			// 
@@ -137,6 +137,7 @@ namespace DidjImp
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
 			this.ClientSize = new System.Drawing.Size(217, 91);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Name = "InterpolateBoreRadius";

@@ -42,22 +42,6 @@ namespace DidjImp
 			this.app = app;
 		}
 
-		private void txtPosition_Validating(object sender, CancelEventArgs e)
-		{
-			decimal position;
-			if (!Decimal.TryParse(txtPosition.Text, out position))
-			{
-				e.Cancel = true;
-				return;
-			}
-
-			if (!CalculateRadiusAtPosition(position))
-			{
-				e.Cancel = true;
-				return;
-			}
-		}
-
 		private bool CalculateRadiusAtPosition(decimal position)
 		{
 			if (app == null || app.Bore == null || position < 0 || position > (decimal)app.Bore.Length)
@@ -92,12 +76,22 @@ namespace DidjImp
 		private void txtPosition_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			if (e.KeyChar == '\r')
-				this.Validate();
+				this.ActiveControl = null;
 		}
 
 		private void btnCopy_Click(object sender, EventArgs e)
 		{
 			Clipboard.SetDataObject(txtRadius.Text);
+		}
+
+		private void txtPosition_Leave(object sender, EventArgs e)
+		{
+			decimal position;
+			if (!Decimal.TryParse(txtPosition.Text, out position))
+				return;
+
+			if (!CalculateRadiusAtPosition(position))
+				return;
 		}
 	}
 }
