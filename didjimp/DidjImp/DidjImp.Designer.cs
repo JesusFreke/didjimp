@@ -84,7 +84,6 @@ namespace DidjImp
 			this.splitMain = new System.Windows.Forms.SplitContainer();
 			this.tabPlots = new System.Windows.Forms.TabControl();
 			this.textBoxContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.mnuResetText = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuInterpolate = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScaleBoreByFactor = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScaleToFundamental = new System.Windows.Forms.ToolStripMenuItem();
@@ -599,7 +598,6 @@ namespace DidjImp
 			// textBoxContextMenu
 			// 
 			this.textBoxContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuResetText,
             toolStripSeparator2,
             this.mnuInterpolate,
             this.mnuScaleBoreByFactor,
@@ -608,13 +606,6 @@ namespace DidjImp
 			this.textBoxContextMenu.ShowImageMargin = false;
 			this.textBoxContextMenu.ShowItemToolTips = false;
 			this.textBoxContextMenu.Size = new System.Drawing.Size(320, 98);
-			// 
-			// mnuResetText
-			// 
-			this.mnuResetText.Name = "mnuResetText";
-			this.mnuResetText.Size = new System.Drawing.Size(319, 22);
-			this.mnuResetText.Text = "&Reset Dimensions";
-			this.mnuResetText.Click += new System.EventHandler(this.mnuResetText_Click);
 			// 
 			// mnuInterpolate
 			// 
@@ -743,7 +734,6 @@ namespace DidjImp
 		private System.Windows.Forms.CheckBox chkWaveform;
 		private CustomComboBox.CustomComboBox comboHarmonics;
 		private System.Windows.Forms.ContextMenuStrip textBoxContextMenu;
-		private System.Windows.Forms.ToolStripMenuItem mnuResetText;
 		private System.Windows.Forms.ToolStripMenuItem mnuInterpolate;
 		private System.Windows.Forms.ToolStripMenuItem mnuScaleBoreByFactor;
 		private System.Windows.Forms.ToolStripMenuItem mnuScaleToFundamental;

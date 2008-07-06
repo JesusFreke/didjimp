@@ -282,10 +282,6 @@ namespace DidjImp
 			}
 		}
 
-		private void mnuResetText_Click(object sender, EventArgs e)
-		{
-		}
-
 		private void mnuInterpolate_Click(object sender, EventArgs e)
 		{
 			InterpolateBoreRadius dialog = new InterpolateBoreRadius(this);
@@ -306,13 +302,15 @@ namespace DidjImp
 			DialogResult dr = dlg.ShowDialog(this);
 			if (dr == DialogResult.OK)
 			{
+				didgePropertyEditor_DimensionsChanged();
+
 				decimal scaleFactor = dlg.ScaleFactor;
 				StringBuilder sb = new StringBuilder();
 				List<BoreSection> newBore = new List<BoreSection>();
 				foreach (BoreSection boreSection in didgePropertyEditor.BoreSections)
 					newBore.Add(new BoreSection(boreSection.OpeningRadius, boreSection.ClosingRadius, boreSection.Length * scaleFactor));
 				didgePropertyEditor.BoreSections = newBore;
-				didgePropertyEditor_DimensionsChanged();
+				
 			}
 		}
 
@@ -379,26 +377,14 @@ namespace DidjImp
 					}
 				}
 
+				didgePropertyEditor_DimensionsChanged();
+
 				List<BoreSection> boreSections = new List<BoreSection>();
 				foreach (BoreSection section in previousBore.BoreSections)
 					boreSections.Add(new BoreSection(section.OpeningRadius, section.ClosingRadius, Math.Round(section.Length, 4)));
 				didgePropertyEditor.BoreSections = boreSections;
 			}
 		}
-
-		/*private void textBoxContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
-		{
-			if (txtDimensions.Text.Length == 0)
-			{
-				foreach (ToolStripItem item in textBoxContextMenu.Items)
-					item.Enabled = false;
-			}
-			else
-			{
-				foreach (ToolStripItem item in textBoxContextMenu.Items)
-					item.Enabled = true;
-			}
-		}*/
 
 		private void treeDidgeHistory_ItemDrag(object sender, ItemDragEventArgs e)
 		{
