@@ -46,7 +46,6 @@ namespace DidjImp
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 			System.Windows.Forms.TableLayoutPanel tblTreeAndDimension;
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DidjImpApp));
 			System.Windows.Forms.TabPage tabPageImpedance;
@@ -80,18 +79,16 @@ namespace DidjImp
 			this.loadDimensionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuOptions = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTools = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-			this.splitMain = new System.Windows.Forms.SplitContainer();
-			this.tabPlots = new System.Windows.Forms.TabControl();
-			this.textBoxContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuInterpolate = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScaleBoreByFactor = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScaleToFundamental = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
+			this.splitMain = new System.Windows.Forms.SplitContainer();
+			this.tabPlots = new System.Windows.Forms.TabControl();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.tblDidgeComments = new System.Windows.Forms.TableLayoutPanel();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-			toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			tblTreeAndDimension = new System.Windows.Forms.TableLayoutPanel();
 			tabPageImpedance = new System.Windows.Forms.TabPage();
 			pnlImpedancePlot = new System.Windows.Forms.Panel();
@@ -123,16 +120,10 @@ namespace DidjImp
 			this.splitMain.Panel2.SuspendLayout();
 			this.splitMain.SuspendLayout();
 			this.tabPlots.SuspendLayout();
-			this.textBoxContextMenu.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tblDidgeComments.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// toolStripSeparator2
-			// 
-			toolStripSeparator2.Name = "toolStripSeparator2";
-			toolStripSeparator2.Size = new System.Drawing.Size(316, 6);
 			// 
 			// tblTreeAndDimension
 			// 
@@ -518,9 +509,34 @@ namespace DidjImp
 			// 
 			// mnuTools
 			// 
+			this.mnuTools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuInterpolate,
+            this.mnuScaleBoreByFactor,
+            this.mnuScaleToFundamental});
 			this.mnuTools.Name = "mnuTools";
 			this.mnuTools.Size = new System.Drawing.Size(44, 20);
 			this.mnuTools.Text = "&Tools";
+			// 
+			// mnuInterpolate
+			// 
+			this.mnuInterpolate.Name = "mnuInterpolate";
+			this.mnuInterpolate.Size = new System.Drawing.Size(344, 22);
+			this.mnuInterpolate.Text = "Interpolate Bore Radius at Arbitrary Position";
+			this.mnuInterpolate.Click += new System.EventHandler(this.mnuInterpolate_Click);
+			// 
+			// mnuScaleBoreByFactor
+			// 
+			this.mnuScaleBoreByFactor.Name = "mnuScaleBoreByFactor";
+			this.mnuScaleBoreByFactor.Size = new System.Drawing.Size(344, 22);
+			this.mnuScaleBoreByFactor.Text = "&Scale Entire Bore";
+			this.mnuScaleBoreByFactor.Click += new System.EventHandler(this.mnuScaleBoreByPercent_Click);
+			// 
+			// mnuScaleToFundamental
+			// 
+			this.mnuScaleToFundamental.Name = "mnuScaleToFundamental";
+			this.mnuScaleToFundamental.Size = new System.Drawing.Size(344, 22);
+			this.mnuScaleToFundamental.Text = "Scale Entire Bore to Specified &Fundamental Frequency";
+			this.mnuScaleToFundamental.Click += new System.EventHandler(this.mnuScaleToFundamental_Click);
 			// 
 			// mnuHelp
 			// 
@@ -594,39 +610,6 @@ namespace DidjImp
 			this.tabPlots.SelectedIndex = 0;
 			this.tabPlots.Size = new System.Drawing.Size(804, 517);
 			this.tabPlots.TabIndex = 1;
-			// 
-			// textBoxContextMenu
-			// 
-			this.textBoxContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            toolStripSeparator2,
-            this.mnuInterpolate,
-            this.mnuScaleBoreByFactor,
-            this.mnuScaleToFundamental});
-			this.textBoxContextMenu.Name = "textBoxContextMenu";
-			this.textBoxContextMenu.ShowImageMargin = false;
-			this.textBoxContextMenu.ShowItemToolTips = false;
-			this.textBoxContextMenu.Size = new System.Drawing.Size(320, 98);
-			// 
-			// mnuInterpolate
-			// 
-			this.mnuInterpolate.Name = "mnuInterpolate";
-			this.mnuInterpolate.Size = new System.Drawing.Size(319, 22);
-			this.mnuInterpolate.Text = "Interpolate Bore Radius at Arbitrary Position";
-			this.mnuInterpolate.Click += new System.EventHandler(this.mnuInterpolate_Click);
-			// 
-			// mnuScaleBoreByFactor
-			// 
-			this.mnuScaleBoreByFactor.Name = "mnuScaleBoreByFactor";
-			this.mnuScaleBoreByFactor.Size = new System.Drawing.Size(319, 22);
-			this.mnuScaleBoreByFactor.Text = "&Scale Entire Bore";
-			this.mnuScaleBoreByFactor.Click += new System.EventHandler(this.mnuScaleBoreByPercent_Click);
-			// 
-			// mnuScaleToFundamental
-			// 
-			this.mnuScaleToFundamental.Name = "mnuScaleToFundamental";
-			this.mnuScaleToFundamental.Size = new System.Drawing.Size(319, 22);
-			this.mnuScaleToFundamental.Text = "Scale Entire Bore to Specified &Fundamental Frequency";
-			this.mnuScaleToFundamental.Click += new System.EventHandler(this.mnuScaleToFundamental_Click);
 			// 
 			// tableLayoutPanel2
 			// 
@@ -709,7 +692,6 @@ namespace DidjImp
 			this.splitMain.Panel2.ResumeLayout(false);
 			this.splitMain.ResumeLayout(false);
 			this.tabPlots.ResumeLayout(false);
-			this.textBoxContextMenu.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
 			this.tableLayoutPanel1.ResumeLayout(false);
@@ -733,10 +715,6 @@ namespace DidjImp
 		private ImpedancePlot impedancePlot;
 		private System.Windows.Forms.CheckBox chkWaveform;
 		private CustomComboBox.CustomComboBox comboHarmonics;
-		private System.Windows.Forms.ContextMenuStrip textBoxContextMenu;
-		private System.Windows.Forms.ToolStripMenuItem mnuInterpolate;
-		private System.Windows.Forms.ToolStripMenuItem mnuScaleBoreByFactor;
-		private System.Windows.Forms.ToolStripMenuItem mnuScaleToFundamental;
 		private System.Windows.Forms.ToolStripMenuItem mnuTools;
 		private System.Windows.Forms.ToolStripMenuItem mnuAbout;
 		private System.Windows.Forms.SplitContainer splitMain;
@@ -750,6 +728,9 @@ namespace DidjImp
 		private System.Windows.Forms.ToolTip toolTip1;
 		private System.Windows.Forms.SplitContainer splitContainer1;
 		private DidgePropertyEditor didgePropertyEditor;
+		private System.Windows.Forms.ToolStripMenuItem mnuInterpolate;
+		private System.Windows.Forms.ToolStripMenuItem mnuScaleBoreByFactor;
+		private System.Windows.Forms.ToolStripMenuItem mnuScaleToFundamental;
 	}
 }
 

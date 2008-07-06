@@ -48,7 +48,6 @@ namespace DidjImp
 			InitializeComponent();
 			impedancePlot.RightMenu = new ImpedancePlot.ImpedancePlotContextMenu();
 			borePlot.RightMenu = new BorePlot.BorePlotContextMenu();
-			mnuTools.DropDown = textBoxContextMenu;
 		}
 
 		public Bore Bore
