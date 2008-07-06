@@ -60,6 +60,12 @@
     <Compile Include="CustomComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DidgePropertyEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DidgePropertyEditor.Designer.cs">
+      <DependentUpon>DidgePropertyEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="DidjImp.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -73,6 +79,12 @@
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
     <Compile Include="DidjImpSettings.cs" />
+    <Compile Include="ExpandControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExpandControl.Designer.cs">
+      <DependentUpon>ExpandControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="ImageSizeDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -175,6 +187,10 @@
       <DependentUpon>About.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="DidgePropertyEditor.resx">
+      <DependentUpon>DidgePropertyEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="DidjImp.resx">
       <DependentUpon>DidjImp.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -195,6 +211,11 @@
       <DependentUpon>Progress.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="ScaleBoreByFactorDialog.resx">
       <DependentUpon>ScaleBoreByFactorDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -211,6 +232,11 @@
       <DependentUpon>ViewDataDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ScaleBoreByFactorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -230,6 +256,7 @@
       <DependentUpon>SelectFrequencyDropDown.cs</DependentUpon>
     </Compile>
     <Compile Include="BoreAndWaveformStackedPlotAxesConstraint.cs" />
+    <Compile Include="ValidationException.cs" />
     <Compile Include="VerticalLine.cs" />
     <Compile Include="ViewDataDialog.cs">
       <SubType>Form</SubType>

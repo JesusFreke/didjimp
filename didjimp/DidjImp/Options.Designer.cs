@@ -56,6 +56,7 @@ namespace DidjImp
 			this.btnOK = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.numThreads = new System.Windows.Forms.NumericUpDown();
+			this.chkCopyOnModify = new System.Windows.Forms.CheckBox();
 			label1 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numThreads)).BeginInit();
@@ -79,7 +80,7 @@ namespace DidjImp
 			this.groupBox1.Controls.Add(this.radio_ft);
 			this.groupBox1.Controls.Add(this.radio_in);
 			this.groupBox1.Controls.Add(this.radio_mm);
-			this.groupBox1.Location = new System.Drawing.Point(13, 45);
+			this.groupBox1.Location = new System.Drawing.Point(13, 66);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(115, 91);
 			this.groupBox1.TabIndex = 0;
@@ -156,7 +157,7 @@ namespace DidjImp
 			// 
 			this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btnOK.Location = new System.Drawing.Point(145, 85);
+			this.btnOK.Location = new System.Drawing.Point(145, 106);
 			this.btnOK.Name = "btnOK";
 			this.btnOK.Size = new System.Drawing.Size(75, 23);
 			this.btnOK.TabIndex = 7;
@@ -168,7 +169,7 @@ namespace DidjImp
 			// 
 			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Location = new System.Drawing.Point(145, 113);
+			this.btnCancel.Location = new System.Drawing.Point(145, 134);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(75, 23);
 			this.btnCancel.TabIndex = 1;
@@ -197,13 +198,24 @@ namespace DidjImp
             0,
             0});
 			// 
+			// chkCopyOnModify
+			// 
+			this.chkCopyOnModify.AutoSize = true;
+			this.chkCopyOnModify.Location = new System.Drawing.Point(13, 35);
+			this.chkCopyOnModify.Name = "chkCopyOnModify";
+			this.chkCopyOnModify.Size = new System.Drawing.Size(130, 17);
+			this.chkCopyOnModify.TabIndex = 8;
+			this.chkCopyOnModify.Text = "Copy Didge on Modify";
+			this.chkCopyOnModify.UseVisualStyleBackColor = true;
+			// 
 			// Options
 			// 
 			this.AcceptButton = this.btnOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(229, 145);
+			this.ClientSize = new System.Drawing.Size(229, 166);
+			this.Controls.Add(this.chkCopyOnModify);
 			this.Controls.Add(this.numThreads);
 			this.Controls.Add(label1);
 			this.Controls.Add(this.btnCancel);
@@ -232,5 +244,6 @@ namespace DidjImp
 		private System.Windows.Forms.Button btnOK;
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.NumericUpDown numThreads;
+		private System.Windows.Forms.CheckBox chkCopyOnModify;
 	}
 }

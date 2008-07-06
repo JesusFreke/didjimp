@@ -28,11 +28,10 @@ namespace DidjImp
 {
 	public partial class DidjImpApp : Form
 	{
-		private ImpedanceData impedanceData = null;
 		private Progress progressDialog;
 		private DidjImpSettings settings = new DidjImpSettings();
-		private Bore bore = null;
-		
+
+		private bool didgeValid = false;
 		private int calculatedFrequencyCount;
 		private int finishedThreads = 0;
 
@@ -54,7 +53,22 @@ namespace DidjImp
 
 		public Bore Bore
 		{
-			get { return bore; }
+			get
+			{
+				if (treeDidgeHistory.SelectedNode == null)
+					return null;
+				if (!(treeDidgeHistory.SelectedNode.Tag is DidgeData))
+					return null;
+				return ((DidgeData)treeDidgeHistory.SelectedNode.Tag).bore;
+			}
+		}
+
+		public ImpedanceData ImpedanceData
+		{
+			get
+			{
+				return ((DidgeData)treeDidgeHistory.SelectedNode.Tag).impedanceData;
+			}
 		}
 
 		private void ShowError(string message, params object[] values)
@@ -65,65 +79,20 @@ namespace DidjImp
 		private Regex dimensionRegex = new Regex(@"^\s*([0-9.]+)(?:(?:\s+)|(?:\s*,\s*))([0-9.]+)\s*(?:;.*)?$");
 		private void btnCalculate_Click(object sender, EventArgs e)
 		{
+			if (!didgeValid)
+			{
+				ShowError("There is an error with the entered dimensions.");
+				return;
+			}
+
 			tabPlots.Enabled = true;
 			verticalLines.Clear();
 
 			calculatedFrequencyCount = 0;
-			List<BoreDimension> dimensions = new List<BoreDimension>();
-			int lineNumber = 0;
-			double previousPosition = 0;
-			foreach (string dimensionLine in txtDimensions.Text.Replace('\r', '\n').Replace("\n\n", "\n").Split('\n'))
-			{
-				string line = dimensionLine.Trim();
-				//ignore blank lines and lines with only a comment
-				if (line.Length == 0 || line[0] == ';')
-					continue;
 
-				Match match = dimensionRegex.Match(line);
-				if (!match.Success)
-				{
-					ShowError("Line {0}: \"{1}\" - The line is not in a valid format. Expecting 2 positive numbers.", lineNumber, dimensionLine);
-					return;
-				}
+			DidgeDesignProperties didgeProperties = didgePropertyEditor.DidgeDesignProperties;
 
-				double position;
-				if (!Double.TryParse(match.Groups[1].Captures[0].Value, out position))
-				{
-					ShowError("Line {0}: \"{1}\" - The position \"{2}\" is not a valid number.", lineNumber, dimensionLine, match.Groups[1].Captures[0].Value);
-					return;
-				}
-
-				if (position < previousPosition)
-				{
-					ShowError("Line {0}: \"{1}\" - The position \"{2}\" must be greater than or equal to the previous position \"{3}\"", lineNumber, dimensionLine, position, previousPosition);
-					return;
-				}
-				previousPosition = position;
-
-				double radius;
-				if (!Double.TryParse(match.Groups[2].Captures[0].Value, out radius))
-				{
-					ShowError("Line {0}: \"{1}\" - The radius \"{2}\" is not a valid number.", lineNumber, dimensionLine, match.Groups[2].Captures[0].Value);
-					return;
-				}
-
-				if (radius == 0)
-				{
-					ShowError("Line {0}: \"{1}\" - The radius cannot be 0", lineNumber, dimensionLine);
-					return;
-				}
-				dimensions.Add(new BoreDimension(position * settings.UnitConversionFactor, radius * settings.UnitConversionFactor));
-
-				lineNumber++;
-			}
-
-			if (dimensions.Count == 1)
-			{
-				ShowError("There must be at least 2 dimensions entered");
-				return;
-			}
-
-			bore = new Bore(dimensions, 1.0m / 500);
+			Bore bore = new Bore(didgeProperties.BoreSections);
 			if (bore.Length == 0)
 			{
 				ShowError("The bore has a length of 0.");
@@ -131,7 +100,14 @@ namespace DidjImp
 			}
 			bore.CalculatedFrequency += new Bore.CalculatedFrequencyDelegate(bore_CalculatedFrequency);
 
+			DidgeData data = (DidgeData)treeDidgeHistory.SelectedNode.Tag;
+			data.didge = didgePropertyEditor.DidgeDesignProperties;
+			data.bore = bore;
+
+
 			finishedThreads = 0;
+
+
 			
 			ParameterizedThreadStart threadStart = (threadNum) =>
 			{
@@ -176,35 +152,32 @@ namespace DidjImp
 
 			InvokeUtil.InvokeIfRequired(this, new InvokeUtil.VoidDelegate(delegate()
 			{
-				bore.FindResonances(2);
+				Bore.FindResonances(2);
 				progressDialog.Close();
 				btnCalculate.Enabled = false;
-			
-				this.impedanceData = new ImpedanceData(bore.InputImpedance);
 
-				DidgeData data = new DidgeData();
-				data.bore = this.bore;
-				data.dimensions = txtDimensions.Text;
-				data.impedanceData = this.impedanceData;
+				DidgeData data = (DidgeData)treeDidgeHistory.SelectedNode.Tag;
+				data.impedanceData = new ImpedanceData(Bore.InputImpedance);
 				treeDidgeHistory.SelectedNode.Tag = data;
 
 				treeDidgeHistory.SelectedNode.Text = treeDidgeHistory.SelectedNode.Text.Substring(1);
 
-				UpdateDisplayWithCurrentData();				
+				UpdateDisplayWithCurrentData();
+				data.Calculated = true;
 			}));
 		}
 
 		private void UpdateDisplayWithCurrentData()
 		{
-			impedancePlot.ImpedanceData = this.impedanceData;
+			impedancePlot.ImpedanceData = this.ImpedanceData;
 
-			IList<double> resonances = this.impedanceData.ImpedancePeakFrequencies;
+			IList<double> resonances = this.ImpedanceData.ImpedancePeakFrequencies;
 
 			SelectFrequencyDropDown dropDown = new SelectFrequencyDropDown(comboHarmonics, resonances);
 			comboHarmonics.DropDownControl = dropDown;
 			dropDown.SelectFirstResonance();
 
-			borePlot.Bore = bore;
+			borePlot.Bore = Bore;
 			chkWaveform.Checked = false;
 		}
 
@@ -212,13 +185,10 @@ namespace DidjImp
 		{		
 			comboWaveformSelect.AllowResizeDropDown = false;
 			comboImpedanceGraphType.SelectedIndex = 0;
-			impedancePlot.ImpedanceData = this.impedanceData;
 
 			TreeNode node = new TreeNode("Untitled Workspace", 0, 0);
 			treeDidgeHistory.Nodes.Add(node);
-			treeDidgeHistory.SelectedNode = node;
 			node.Tag = new WorkspaceData();
-
 		}
 
 
@@ -299,7 +269,7 @@ namespace DidjImp
 		{
 			if (chkWaveform.Checked)
 			{
-				comboWaveformSelect.DropDownControl = new SelectFrequencyDropDown(comboWaveformSelect, impedanceData.ImpedancePeakFrequencies);
+				comboWaveformSelect.DropDownControl = new SelectFrequencyDropDown(comboWaveformSelect, ImpedanceData.ImpedancePeakFrequencies);
 				comboWaveformSelect.Enabled = true;
 				((SelectFrequencyDropDown)comboWaveformSelect.DropDownControl).SelectFirstResonance();
 				borePlot.ShowWaveformPlot = true;
@@ -324,22 +294,38 @@ namespace DidjImp
 
 		private void mnuScaleBoreByPercent_Click(object sender, EventArgs e)
 		{
-			/*ScaleBoreByFactorDialog dlg = new ScaleBoreByFactorDialog();
+			ScaleBoreByFactorDialog dlg = new ScaleBoreByFactorDialog();
+			//ensure that the didgePropertyEditor loses focus first, so
+			//that it will perform it's validation
+			this.ActiveControl = null;
+			//if the didgePropertyEditor couldn't validate the entered didge,
+			//then DidgeValid will be false
+			if (!didgeValid)
+				return;
+
 			DialogResult dr = dlg.ShowDialog(this);
 			if (dr == DialogResult.OK)
 			{
 				decimal scaleFactor = dlg.ScaleFactor;
 				StringBuilder sb = new StringBuilder();
-				foreach (BoreDimension boreDimension in bore.BoreDimensions)
-					sb.AppendFormat("{0}\t{1}\r\n", (decimal)boreDimension.Position * scaleFactor, boreDimension.Radius);
-				txtDimensions.Text = sb.ToString();
-			}*/
+				List<BoreSection> newBore = new List<BoreSection>();
+				foreach (BoreSection boreSection in didgePropertyEditor.BoreSections)
+					newBore.Add(new BoreSection(boreSection.OpeningRadius, boreSection.ClosingRadius, boreSection.Length * scaleFactor));
+				didgePropertyEditor.BoreSections = newBore;
+				didgePropertyEditor_DimensionsChanged();
+			}
 		}
 
 		private void mnuScaleToFundamental_Click(object sender, EventArgs e)
 		{
-			/*ScaleBoreToFundamental dlg = new ScaleBoreToFundamental((decimal)impedanceData.ImpedancePeakFrequencies[0]);
-			DialogResult dr = dlg.ShowDialog(this);
+			if (Bore == null)
+			{
+				ShowError("You must calculate the impedance first.");
+				return;
+			}
+
+			//ScaleBoreToFundamental dlg = new ScaleBoreToFundamentalImpedanceData.ImpedancePeakFrequencies);
+			/*DialogResult dr = dlg.ShowDialog(this);
 			decimal targetFundamental = dlg.SelectedFundamental;
 
 			if (dr == DialogResult.OK)
@@ -352,7 +338,7 @@ namespace DidjImp
 					List<BoreDimension> newBoreDimensions = new List<BoreDimension>();
 					foreach (BoreDimension boreDimension in previousBore.BoreDimensions)
 						newBoreDimensions.Add(new BoreDimension((double)((decimal)boreDimension.Position * scaleAmount), boreDimension.Radius));
-					Bore newBore = new Bore(newBoreDimensions, 1.0m/500);
+					Bore newBore = new Bore(newBoreDimensions);
 					if (targetFundamental > currentFundamental)
 					{
 						Complex lastImpedance = newBore.GetImpedance((double)currentFundamental);
@@ -402,9 +388,9 @@ namespace DidjImp
 			}*/
 		}
 
-		private void textBoxContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+		/*private void textBoxContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			/*if (txtCurrentDimensions.Text.Length == 0)
+			if (txtDimensions.Text.Length == 0)
 			{
 				foreach (ToolStripItem item in textBoxContextMenu.Items)
 					item.Enabled = false;
@@ -413,8 +399,8 @@ namespace DidjImp
 			{
 				foreach (ToolStripItem item in textBoxContextMenu.Items)
 					item.Enabled = true;
-			}*/
-		}
+			}
+		}*/
 
 		private void treeDidgeHistory_ItemDrag(object sender, ItemDragEventArgs e)
 		{
@@ -474,32 +460,6 @@ namespace DidjImp
 			treeDidgeHistory.SelectedNode = dragNode;
 		}
 
-		private void txtDimensions_TextChanged(object sender, EventArgs e)
-		{
-			//do nothing if this is an "unsaved" didge
-			if (treeDidgeHistory.SelectedNode.Tag is DidgeData)
-			{
-				if (((DidgeData)treeDidgeHistory.SelectedNode.Tag).bore == null)
-					return;
-				if (((DidgeData)treeDidgeHistory.SelectedNode.Tag).dimensions == txtDimensions.Text)
-					return;
-			}
-
-			if (treeDidgeHistory.SelectedNode.Tag is WorkspaceData)
-			{
-				if (txtDimensions.Text.Length == 0)
-					return;
-			}
-
-
-			//otherwise, we need to create a new child node of the currently selected node
-			TreeNode node = new TreeNode(GetNextDidgeNodeName(), 1, 1);
-			treeDidgeHistory.SelectedNode.Nodes.Add(node);
-			treeDidgeHistory.SelectedNode = node;
-			node.Tag = new DidgeData();
-			btnCalculate.Enabled = true;
-		}
-
 		private string GetNextDidgeNodeName()
 		{
 			int didgeI = 1;
@@ -518,7 +478,7 @@ namespace DidjImp
 					}
 				}
 				if (!found)
-					return starredName;
+					return name;
 				didgeI++;
 			}while (true);
 		}
@@ -548,7 +508,6 @@ namespace DidjImp
 			
 			if (treeDidgeHistory.SelectedNode.Tag is WorkspaceData)
 			{
-				txtDimensions.Text = "";
 				btnCalculate.Enabled = false;
 				impedancePlot.Clear();
 				borePlot.Clear();
@@ -558,32 +517,76 @@ namespace DidjImp
 
 			DidgeData data = (DidgeData)treeDidgeHistory.SelectedNode.Tag;
 
-			if (data.bore != null)
+			if (data.didge != null)
 			{
-				txtDimensions.Text = data.dimensions;
-				bore = data.bore;
-				impedanceData = data.impedanceData;
-				UpdateDisplayWithCurrentData();
-				btnCalculate.Enabled = false;
-				tabPlots.Enabled = true;
+				didgePropertyEditor.DidgeDesignProperties = data.didge;
+				if (data.Calculated)
+				{
+					UpdateDisplayWithCurrentData();
+					btnCalculate.Enabled = false;
+					tabPlots.Enabled = true;
+				}
+				else
+				{
+					btnCalculate.Enabled = true;
+					impedancePlot.Clear();
+					borePlot.Clear();
+					tabPlots.Enabled = false;
+
+				}
 			}
+
+		}
+
+		private void didgePropertyEditor_DimensionsChanged()
+		{
+			//do nothing if this is an "unsaved" didge
+			if (treeDidgeHistory.SelectedNode.Tag is DidgeData)
+			{
+				DidgeData didgeData = (DidgeData)treeDidgeHistory.SelectedNode.Tag;
+
+				if (!didgeData.Calculated)
+					return;
+			}
+
+			//otherwise, we need to create a new child node of the currently selected node
+			string didgeName = GetNextDidgeNodeName();
+			TreeNode node = new TreeNode("*" + didgeName, 1, 1);
+			treeDidgeHistory.SelectedNode.Nodes.Add(node);
+			treeDidgeHistory.SelectedNode = node;
+			DidgeData data = new DidgeData();
+			data.didge.DidgeName = didgeName;
+			node.Tag = data;
+			didgePropertyEditor.DidgeName = didgeName;
+			btnCalculate.Enabled = true;
+		}
+
+		private void didgePropertyEditor_Unvalid()
+		{
+			didgeValid = false;
+		}
+
+		private void didgePropertyEditor_Valid()
+		{
+			didgeValid = true;
+		}
+
+		private void didgePropertyEditor_DidgeNameChanged()
+		{
+			if (((DidgeData)treeDidgeHistory.SelectedNode.Tag).Calculated)
+				treeDidgeHistory.SelectedNode.Text = didgePropertyEditor.DidgeName;
 			else
-			{
-				txtDimensions.Text = data.dimensions;
-				btnCalculate.Enabled = true;
-				impedancePlot.Clear();
-				borePlot.Clear();
-				tabPlots.Enabled = false;
-			}
+				treeDidgeHistory.SelectedNode.Text = "*" + didgePropertyEditor.DidgeName;
 		}
 
 		private void treeDidgeHistory_BeforeSelect(object sender, TreeViewCancelEventArgs e)
 		{
-			if (treeDidgeHistory.SelectedNode == null || treeDidgeHistory.SelectedNode.Tag is WorkspaceData || ((DidgeData)treeDidgeHistory.SelectedNode.Tag).bore != null)
-				return;
-			else
-				((DidgeData)treeDidgeHistory.SelectedNode.Tag).dimensions = txtDimensions.Text;
-		}		
+			if (treeDidgeHistory.SelectedNode != null && treeDidgeHistory.SelectedNode.Tag is DidgeData)
+			{
+				DidgeData data = (DidgeData)treeDidgeHistory.SelectedNode.Tag;
+				data.didge = didgePropertyEditor.DidgeDesignProperties;
+			}
+		}
 	}
 
 	public class WorkspaceData
@@ -593,8 +596,39 @@ namespace DidjImp
 
 	public class DidgeData
 	{
-		public Bore bore = null;
+		public DidgeDesignProperties didge = new DidgeDesignProperties();
 		public ImpedanceData impedanceData = null;
-		public string dimensions = null;
+		public Bore bore = null;
+
+		private bool calculated = false;
+		public bool Calculated
+		{
+			get { return calculated; }
+			set { calculated = value; }
+		}
+	}
+
+	public class DidgeDesignProperties
+	{
+		private string didgeName;
+		public string DidgeName
+		{
+			get { return didgeName; }
+			set { didgeName = value; }
+		}
+
+		private string didgeComments;
+		public string DidgeComments
+		{
+			get { return didgeComments; }
+			set { didgeComments = value; }
+		}
+
+		private List<BoreSection> boreSections = new List<BoreSection>();
+		public List<BoreSection> BoreSections
+		{
+			get { return boreSections; }
+			set { boreSections = value; }
+		}
 	}
 }

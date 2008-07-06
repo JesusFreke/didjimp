@@ -28,7 +28,7 @@ namespace DidjImp
 {
 	public class BorePlot : NPlot.Windows.PlotSurface2D
 	{
-		private SortedList<double, Complex> pressureData = null;
+		private SortedList<decimal, Complex> pressureData = null;
 
 		private Bore bore;
 		public Bore Bore
@@ -78,10 +78,10 @@ namespace DidjImp
 				return;
 			}
 
-			List<double> xValues = new List<double>();
-			List<double> yValues = new List<double>();
-			double maxRadius = 0;
-			double totalLength = bore.Length;
+			List<decimal> xValues = new List<decimal>();
+			List<decimal> yValues = new List<decimal>();
+			decimal maxRadius = 0;
+			decimal totalLength = bore.Length;
 
 
 			for (int i = 0; i < bore.BoreDimensions.Count; i++)
@@ -141,7 +141,7 @@ namespace DidjImp
 		{
 			pressureData = bore.CalculateWaveform(SelectedFrequency, .002m);
 
-			List<double> xValues = new List<double>();
+			List<decimal> xValues = new List<decimal>();
 			List<double> yValues = new List<double>();
 			List<double> negYValues = new List<double>();
 
@@ -232,13 +232,13 @@ namespace DidjImp
 
 			private void mnuViewNodes_Click(object sender, EventArgs e)
 			{
-				List<double> nodes = new List<double>();
-				List<double> antiNodes = new List<double>();
+				List<decimal> nodes = new List<decimal>();
+				List<decimal> antiNodes = new List<decimal>();
 
 				antiNodes.Add(0);
 				nodes.Add(((BorePlot)plotSurface2D_).Bore.Length);
 
-				SortedList<double, Complex> pressureData = ((BorePlot)plotSurface2D_).pressureData;
+				SortedList<decimal, Complex> pressureData = ((BorePlot)plotSurface2D_).pressureData;
 
 				for (int i = 1; i < pressureData.Count - 1; i++)
 				{

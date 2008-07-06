@@ -24,14 +24,14 @@ namespace DidjImp
 	/// </summary>
 	public class BoreDimension : IComparable<BoreDimension>
 	{
-		private double position;
-		private double radius;
+		private decimal position;
+		private decimal radius;
 
 		/// <summary>
 		/// The position in the bore that this dimension is for. A position of
 		/// 0 represents the bore at the mouthpiece.
 		/// </summary>
-		public double Position
+		public decimal Position
 		{
 			get { return position; }
 		}
@@ -39,7 +39,7 @@ namespace DidjImp
 		/// <summary>
 		/// The radius at this position in the bore
 		/// </summary>
-		public double Radius
+		public decimal Radius
 		{
 			get { return radius; }
 		}
@@ -47,7 +47,7 @@ namespace DidjImp
 		/// <summary>
 		/// Constructs a new BoreDimension
 		/// </summary>
-		public BoreDimension(double position, double radius)
+		public BoreDimension(decimal position, decimal radius)
 		{
 			this.position = position;
 			this.radius = radius;

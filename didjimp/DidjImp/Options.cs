@@ -56,6 +56,8 @@ namespace DidjImp
 				numThreads.Value = 2;
 			else
 				numThreads.Value = settings.NumberOfThreads;
+
+			chkCopyOnModify.Checked = settings.CopyOnModify;
 		}
 
 

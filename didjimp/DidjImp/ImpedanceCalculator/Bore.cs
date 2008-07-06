@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace DidjImp
 {
@@ -39,8 +40,8 @@ namespace DidjImp
 		}
 
 		private Object boreSectionsSplitForInputImpedanceLock = new Object();
-		private List<BoreSection> boreSectionsSplitForInputImpedance;
-		private List<BoreSection> BoreSectionsSplitForInputImpedance
+		private List<ImpedanceCalculator.BoreSectionCalculations> boreSectionsSplitForInputImpedance;
+		private List<ImpedanceCalculator.BoreSectionCalculations> BoreSectionsSplitForInputImpedance
 		{
 			get
 			{
@@ -48,13 +49,16 @@ namespace DidjImp
 				{
 					if (boreSectionsSplitForInputImpedance == null)
 					{
-						boreSectionsSplitForInputImpedance = new List<BoreSection>();
+						boreSectionsSplitForInputImpedance = new List<ImpedanceCalculator.BoreSectionCalculations>();
 						foreach (BoreSection boreSection in boreSections)
 						{
 							if (boreSection.IsCylindrical)
-								boreSectionsSplitForInputImpedance.Add(boreSection);
+								boreSectionsSplitForInputImpedance.Add(new ImpedanceCalculator.BoreSectionCalculations(boreSection));
 							else
-								boreSectionsSplitForInputImpedance.AddRange(BoreSection.Split(boreSection, .002m));
+							{
+								foreach (BoreSection splitSection in BoreSection.Split(boreSection, .002m))
+									boreSectionsSplitForInputImpedance.Add(new ImpedanceCalculator.BoreSectionCalculations(splitSection));
+							}
 						}
 					}
 					return boreSectionsSplitForInputImpedance;
@@ -64,8 +68,8 @@ namespace DidjImp
 
 
 		private Object boreSectionsSplitForPressureWaveformLock = new Object();
-		private List<BoreSection> boreSectionsSplitForPressureWaveform;
-		private List<BoreSection> BoreSectionsSplitForPressureWaveform
+		private List<ImpedanceCalculator.BoreSectionCalculations> boreSectionsSplitForPressureWaveform;
+		private List<ImpedanceCalculator.BoreSectionCalculations> BoreSectionsSplitForPressureWaveform
 		{
 			get
 			{
@@ -73,9 +77,12 @@ namespace DidjImp
 				{
 					if (boreSectionsSplitForPressureWaveform == null)
 					{
-						boreSectionsSplitForPressureWaveform = new List<BoreSection>();
+						boreSectionsSplitForPressureWaveform = new List<ImpedanceCalculator.BoreSectionCalculations>();
 						foreach (BoreSection boreSection in boreSections)
-							boreSectionsSplitForPressureWaveform.AddRange(BoreSection.Split(boreSection, .002m));
+						{
+							foreach (BoreSection splitSection in BoreSection.Split(boreSection, .002m))
+								boreSectionsSplitForPressureWaveform.Add(new ImpedanceCalculator.BoreSectionCalculations(splitSection));
+						}
 					}
 					return boreSectionsSplitForPressureWaveform;
 				}
@@ -105,27 +112,22 @@ namespace DidjImp
 		/// If maxSectionLength is 0, then the sections are used as given, they are not split up into smaller sections
 		/// </summary>
 		/// <param name="dimensions">The dimensions of the bore</param>
-		/// <param name="maxSectionLength">The maximum length of each internal section</param>
-		public Bore(List<BoreDimension> dimensions, decimal maxSectionLength)
+		public Bore(List<BoreSection> boreSections)
 		{
-			this.boreDimensions = new List<BoreDimension>(dimensions);
-			if (boreDimensions.Count < 2)
-				throw new ValidationException("There was only 1 bore dimension given. There must be at least 2.");
+			if (boreSections == null || boreSections.Count == 0)
+				throw new ValidationException("There were no dimensions passed for this bore.");
 
-			if (boreDimensions[0].Position != 0)
-				throw new ValidationException("The first dimension must be at position 0.");
-
-			//create sections from the dimensions
-			boreSections = new List<BoreSection>();
-			for (int i = 0; i < boreDimensions.Count - 1; i++)
+			this.boreSections = boreSections;
+			this.boreDimensions = new List<BoreDimension>();
+			decimal position = 0;
+			for (int i=0; i<boreSections.Count; i++)
 			{
-				if (boreDimensions[i + 1].Position - boreDimensions[i].Position > 0)
-				{
-					BoreSection boreSection = new BoreSection(boreDimensions[i], boreDimensions[i + 1]);
-					length += boreSection.Length;
-					boreSections.Add(boreSection);					
-				}
+				boreDimensions.Add(new BoreDimension(position, boreSections[i].OpeningRadius));
+				position += boreSections[i].Length;
+				if (i == boreSections.Count - 1 || boreSections[i].ClosingRadius != boreSections[i+1].OpeningRadius)
+					boreDimensions.Add(new BoreDimension(position, boreSections[i].ClosingRadius));
 			}
+			length = position;
 		}
 
 		/// <summary>
@@ -339,29 +341,17 @@ namespace DidjImp
 			Complex impedance = null;
 			if (!impedances.TryGetValue(frequency, out impedance))
 			{
-				List<BoreSection> splitSections = new List<BoreSection>();
-				foreach (BoreSection boreSection in boreSections)
-				{
-					if (boreSection.IsCylindrical)
-						splitSections.Add(boreSection);
-					else
-						splitSections.AddRange(BoreSection.Split(boreSection, .002m));
-				}
-
-				impedance = ImpedanceCalculator.InputImpedance(splitSections, frequency);
+				impedance = ImpedanceCalculator.InputImpedance(BoreSectionsSplitForInputImpedance, frequency);
 				impedances[frequency] = impedance;
 			}
 			return impedance;
 		}
 
-		public SortedList<double, Complex> CalculateWaveform(double frequency, decimal maxSectionLength)
+		public SortedList<decimal, Complex> CalculateWaveform(double frequency, decimal maxSectionLength)
 		{
-			SortedList<double, Complex> pressures = new SortedList<double, Complex>();
-			List<BoreSection> splitSections = new List<BoreSection>();
-			foreach (BoreSection boreSection in boreSections)
-				splitSections.AddRange(BoreSection.Split(boreSection, maxSectionLength));
+			SortedList<decimal, Complex> pressures = new SortedList<decimal, Complex>();
 
-			return ImpedanceCalculator.CalculatePressure(frequency, splitSections, GetImpedance(frequency));
+			return ImpedanceCalculator.CalculatePressure(frequency, BoreSectionsSplitForPressureWaveform, GetImpedance(frequency));
 		}
 
 
@@ -373,19 +363,8 @@ namespace DidjImp
 		public delegate void CalculatedFrequencyDelegate(double frequency);
 
 
-		/// <summary>
-		/// An exception that arises from some problem with the dimensions supplied by the user.
-		/// </summary>
-		public class ValidationException : Exception
-		{
-			public ValidationException(string message, params object[] args)
-				: base(String.Format(message, args))
-			{
-			}
-		}
-
-		private double length = 0;
-		public double Length
+		private decimal length = 0;
+		public decimal Length
 		{
 			get { return length; }
 		}

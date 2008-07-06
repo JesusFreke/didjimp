@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace DidjImp
 {
@@ -24,16 +25,17 @@ namespace DidjImp
 	/// This class represents a single conical section of a bore. A cylindrical section
 	/// is a special case when the opening and closing radius are equal.
 	/// </summary>
-	public class BoreSection
+	[Serializable()]
+	public class BoreSection : IEquatable<BoreSection>
 	{
-		private double openingRadius;
-		private double closingRadius;
-		private double length;
+		protected decimal openingRadius;
+		protected decimal closingRadius;
+		protected decimal length;
 
 		/// <summary>
 		/// The radius of the end that is nearest the mouthpiece
 		/// </summary>
-		public double OpeningRadius
+		public decimal OpeningRadius
 		{
 			get { return openingRadius; }
 		}
@@ -41,7 +43,7 @@ namespace DidjImp
 		/// <summary>
 		/// The radius of the end that is nearest the bell
 		/// </summary>
-		public double ClosingRadius
+		public decimal ClosingRadius
 		{
 			get { return closingRadius; }
 		}
@@ -49,7 +51,7 @@ namespace DidjImp
 		/// <summary>
 		/// The length of the section, in rectangular coordinates
 		/// </summary>
-		public double Length
+		public decimal Length
 		{
 			get { return length; }
 		}
@@ -57,17 +59,19 @@ namespace DidjImp
 		/// <summary>
 		/// Constructs a new BoreSection
 		/// </summary>
-		public BoreSection(double openingRadius, double closingRadius, double length)
+		public BoreSection(decimal openingRadius, decimal closingRadius, decimal length)
 		{
+			if (openingRadius <= 0)
+				throw new Exception("The opening radius must be greater than 0");
 			this.openingRadius = openingRadius;
+			
+			if (closingRadius <= 0)
+				throw new Exception("The closing radius must be greater than 0");
 			this.closingRadius = closingRadius;
+			
+			if (length < 0)
+				throw new Exception("The length cannot be less than 0");
 			this.length = length;
-			DoCalcs();
-		}
-
-		public BoreSection(BoreDimension openingDimension, BoreDimension closingDimension)
-			: this(openingDimension.Radius, closingDimension.Radius, closingDimension.Position - openingDimension.Position)
-		{
 		}
 
 		public bool IsCylindrical
@@ -96,107 +100,23 @@ namespace DidjImp
 			while (remainingLength > maxSectionLength)
 			{
 				decimal currentClosingRadius = (decimal)boreSection.openingRadius + (slope * maxSectionLength * (currentSectionNumber + 1));
-				sections.Add(new BoreSection((double)currentOpeningRadius, (double)currentClosingRadius, (double)maxSectionLength));
+				sections.Add(new BoreSection(currentOpeningRadius, currentClosingRadius, maxSectionLength));
 				remainingLength -= maxSectionLength;
 				currentOpeningRadius = currentClosingRadius;
 				currentSectionNumber++;
 			}
 			if (remainingLength > 0)
-				sections.Add(new BoreSection((double)currentOpeningRadius, (double)boreSection.closingRadius, (double)remainingLength));
+				sections.Add(new BoreSection(currentOpeningRadius, boreSection.closingRadius, remainingLength));
 			return sections.AsReadOnly();
 		}
 
-
-
-
-		#region Impedance Calculations
-
-		private double inputXi;
-		/// <summary>
-		/// The distance from the apex of the cone to the input side of the truncated cone,
-		/// in spherical coordinates
-		/// </summary>
-		public double InputXi
+		public bool Equals(BoreSection other)
 		{
-			get { return inputXi; }
+			if (this.OpeningRadius == other.OpeningRadius &&
+				this.ClosingRadius == other.ClosingRadius &&
+				this.Length == other.Length)
+				return true;
+			else return false;
 		}
-
-		private double outputXi;
-		/// <summary>
-		/// The distance from the apex of the cone to the output side of the truncated cone,
-		/// in spherical coordinates
-		/// </summary>
-		public double OutputXi
-		{
-			get { return outputXi; }
-		}
-
-		private double averageRadius;
-		/// <summary>
-		/// The average radius of the conical/cylindrical section
-		/// </summary>
-		public double AverageRadius
-		{
-			get { return averageRadius; }
-		}
-
-		private double sphericalAreaTimesAverageRadius;
-		/// <summary>
-		/// An intermediate value used in impedance calculations
-		/// </summary>
-		public double SphericalAreaTimesAverageRadius
-		{
-			get { return sphericalAreaTimesAverageRadius; }
-		}
-
-
-		//the distance between the spherical "end caps" on each side of the section
-		//sqrt((LinearLength^2 + (closingRadius - openingRadius)^2)
-		private double sphericalLength;
-		/// <summary>
-		/// The spherical length of the section -- the distance between the
-		/// spherical "end caps" on each end of the truncated conical section.
-		/// In the case of a cylindrical section, this is the length of the section
-		/// </summary>
-		public double SphericalLength
-		{
-			get { return sphericalLength; }
-		}
-
-		
-		private double sphericalArea;
-		/// <summary>
-		/// The area of the spherical "end cap" at the opening end of the section.
-		/// In the case of a cylindrical section, the planar area of the opening
-		/// </summary>
-		public double SphericalArea
-		{
-			get { return sphericalArea; }
-		}
-
-
-		//pre-calculate everything that doesn't depend on frequency
-		private void DoCalcs()
-		{
-			if (!IsCylindrical)
-			{
-				double temp = Math.Sqrt(Math.Pow(length / (closingRadius - openingRadius), 2) + 1);
-
-				inputXi = openingRadius * temp;
-				outputXi = closingRadius * temp;
-
-				sphericalLength = outputXi - inputXi;
-				sphericalArea = Math.PI * Math.Pow(inputXi, 2) * 2 * (1 - (Math.Sqrt(1 - Math.Pow(openingRadius / inputXi, 2))));
-			}
-			else
-			{
-				sphericalLength = this.length;
-				sphericalArea = Math.PI * Math.Pow(openingRadius, 2);
-			}
-
-			averageRadius = (openingRadius + closingRadius) / 2.0;
-			sphericalAreaTimesAverageRadius = sphericalArea * averageRadius;
-		}
-		#endregion
 	}
 }

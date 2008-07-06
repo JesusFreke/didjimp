@@ -51,7 +51,7 @@ namespace DidjImp
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DidjImpApp));
 			System.Windows.Forms.TabPage tabPageImpedance;
 			System.Windows.Forms.Panel pnlImpedancePlot;
-			DidjImp.ImpedancePlot.ImpedancePlotContextMenu impedancePlotContextMenu2 = new DidjImp.ImpedancePlot.ImpedancePlotContextMenu();
+			DidjImp.ImpedancePlot.ImpedancePlotContextMenu impedancePlotContextMenu1 = new DidjImp.ImpedancePlot.ImpedancePlotContextMenu();
 			System.Windows.Forms.FlowLayoutPanel pnlImpedanceTools;
 			System.Windows.Forms.Panel pnlImpedanceShowHarmonics;
 			System.Windows.Forms.Label lblShowHarmonics;
@@ -62,10 +62,13 @@ namespace DidjImp
 			System.Windows.Forms.MenuStrip menuMain;
 			System.Windows.Forms.ToolStripMenuItem mnuFile;
 			System.Windows.Forms.ToolStripMenuItem mnuHelp;
+			System.Windows.Forms.Label lblName;
+			System.Windows.Forms.Label lblComments;
+			this.btnCalculate = new System.Windows.Forms.Button();
+			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.treeDidgeHistory = new System.Windows.Forms.TreeView();
 			this.treeViewImageList = new System.Windows.Forms.ImageList(this.components);
-			this.btnCalculate = new System.Windows.Forms.Button();
-			this.txtDimensions = new System.Windows.Forms.TextBox();
+			this.didgePropertyEditor = new DidjImp.DidgePropertyEditor();
 			this.impedancePlot = new DidjImp.ImpedancePlot();
 			this.comboHarmonics = new CustomComboBox.CustomComboBox();
 			this.comboImpedanceGraphType = new System.Windows.Forms.ComboBox();
@@ -85,6 +88,10 @@ namespace DidjImp
 			this.mnuInterpolate = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScaleBoreByFactor = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScaleToFundamental = new System.Windows.Forms.ToolStripMenuItem();
+			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.tblDidgeComments = new System.Windows.Forms.TableLayoutPanel();
+			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			tblTreeAndDimension = new System.Windows.Forms.TableLayoutPanel();
 			tabPageImpedance = new System.Windows.Forms.TabPage();
@@ -99,7 +106,12 @@ namespace DidjImp
 			menuMain = new System.Windows.Forms.MenuStrip();
 			mnuFile = new System.Windows.Forms.ToolStripMenuItem();
 			mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
+			lblName = new System.Windows.Forms.Label();
+			lblComments = new System.Windows.Forms.Label();
 			tblTreeAndDimension.SuspendLayout();
+			this.splitContainer1.Panel1.SuspendLayout();
+			this.splitContainer1.Panel2.SuspendLayout();
+			this.splitContainer1.SuspendLayout();
 			tabPageImpedance.SuspendLayout();
 			pnlImpedancePlot.SuspendLayout();
 			pnlImpedanceTools.SuspendLayout();
@@ -113,6 +125,9 @@ namespace DidjImp
 			this.splitMain.SuspendLayout();
 			this.tabPlots.SuspendLayout();
 			this.textBoxContextMenu.SuspendLayout();
+			this.tableLayoutPanel2.SuspendLayout();
+			this.tableLayoutPanel1.SuspendLayout();
+			this.tblDidgeComments.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// toolStripSeparator2
@@ -122,22 +137,54 @@ namespace DidjImp
 			// 
 			// tblTreeAndDimension
 			// 
+			tblTreeAndDimension.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			tblTreeAndDimension.ColumnCount = 1;
 			tblTreeAndDimension.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			tblTreeAndDimension.Controls.Add(this.treeDidgeHistory, 0, 0);
-			tblTreeAndDimension.Controls.Add(this.btnCalculate, 0, 3);
-			tblTreeAndDimension.Controls.Add(this.txtDimensions, 0, 2);
+			tblTreeAndDimension.Controls.Add(this.btnCalculate, 0, 1);
+			tblTreeAndDimension.Controls.Add(this.splitContainer1, 0, 0);
 			tblTreeAndDimension.Dock = System.Windows.Forms.DockStyle.Fill;
 			tblTreeAndDimension.Location = new System.Drawing.Point(0, 0);
 			tblTreeAndDimension.Margin = new System.Windows.Forms.Padding(0);
 			tblTreeAndDimension.Name = "tblTreeAndDimension";
-			tblTreeAndDimension.RowCount = 4;
-			tblTreeAndDimension.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			tblTreeAndDimension.RowCount = 2;
+			tblTreeAndDimension.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			tblTreeAndDimension.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			tblTreeAndDimension.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			tblTreeAndDimension.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			tblTreeAndDimension.Size = new System.Drawing.Size(186, 517);
+			tblTreeAndDimension.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			tblTreeAndDimension.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			tblTreeAndDimension.Size = new System.Drawing.Size(167, 517);
 			tblTreeAndDimension.TabIndex = 6;
+			// 
+			// btnCalculate
+			// 
+			this.btnCalculate.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.btnCalculate.Enabled = false;
+			this.btnCalculate.Location = new System.Drawing.Point(0, 496);
+			this.btnCalculate.Margin = new System.Windows.Forms.Padding(0);
+			this.btnCalculate.Name = "btnCalculate";
+			this.btnCalculate.Size = new System.Drawing.Size(167, 21);
+			this.btnCalculate.TabIndex = 8;
+			this.btnCalculate.Text = "Calculate";
+			this.btnCalculate.UseVisualStyleBackColor = true;
+			this.btnCalculate.Click += new System.EventHandler(this.btnCalculate_Click);
+			// 
+			// splitContainer1
+			// 
+			this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+			this.splitContainer1.Margin = new System.Windows.Forms.Padding(0);
+			this.splitContainer1.Name = "splitContainer1";
+			this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			// 
+			// splitContainer1.Panel1
+			// 
+			this.splitContainer1.Panel1.Controls.Add(this.treeDidgeHistory);
+			// 
+			// splitContainer1.Panel2
+			// 
+			this.splitContainer1.Panel2.Controls.Add(this.didgePropertyEditor);
+			this.splitContainer1.Size = new System.Drawing.Size(167, 496);
+			this.splitContainer1.SplitterDistance = 234;
+			this.splitContainer1.TabIndex = 10;
 			// 
 			// treeDidgeHistory
 			// 
@@ -146,12 +193,12 @@ namespace DidjImp
 			this.treeDidgeHistory.HideSelection = false;
 			this.treeDidgeHistory.ImageIndex = 0;
 			this.treeDidgeHistory.ImageList = this.treeViewImageList;
-			this.treeDidgeHistory.Location = new System.Drawing.Point(1, 3);
-			this.treeDidgeHistory.Margin = new System.Windows.Forms.Padding(1, 3, 0, 1);
+			this.treeDidgeHistory.Location = new System.Drawing.Point(0, 0);
+			this.treeDidgeHistory.Margin = new System.Windows.Forms.Padding(0);
 			this.treeDidgeHistory.Name = "treeDidgeHistory";
 			this.treeDidgeHistory.SelectedImageIndex = 0;
-			this.treeDidgeHistory.ShowRootLines = false;
-			this.treeDidgeHistory.Size = new System.Drawing.Size(185, 243);
+			this.treeDidgeHistory.ShowLines = false;
+			this.treeDidgeHistory.Size = new System.Drawing.Size(167, 234);
 			this.treeDidgeHistory.TabIndex = 6;
 			this.treeDidgeHistory.DragDrop += new System.Windows.Forms.DragEventHandler(this.treeDidgeHistory_DragDrop);
 			this.treeDidgeHistory.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeDidgeHistory_AfterSelect);
@@ -164,43 +211,36 @@ namespace DidjImp
 			// 
 			this.treeViewImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("treeViewImageList.ImageStream")));
 			this.treeViewImageList.TransparentColor = System.Drawing.Color.Transparent;
-			this.treeViewImageList.Images.SetKeyName(0, "Untitled.ico");
+			this.treeViewImageList.Images.SetKeyName(0, "folderopen.ico");
 			this.treeViewImageList.Images.SetKeyName(1, "didge.ico");
 			// 
-			// btnCalculate
+			// didgePropertyEditor
 			// 
-			this.btnCalculate.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.btnCalculate.Enabled = false;
-			this.btnCalculate.Location = new System.Drawing.Point(0, 494);
-			this.btnCalculate.Margin = new System.Windows.Forms.Padding(0);
-			this.btnCalculate.Name = "btnCalculate";
-			this.btnCalculate.Size = new System.Drawing.Size(186, 23);
-			this.btnCalculate.TabIndex = 8;
-			this.btnCalculate.Text = "Calculate";
-			this.btnCalculate.UseVisualStyleBackColor = true;
-			this.btnCalculate.Click += new System.EventHandler(this.btnCalculate_Click);
-			// 
-			// txtDimensions
-			// 
-			this.txtDimensions.AcceptsReturn = true;
-			this.txtDimensions.AcceptsTab = true;
-			this.txtDimensions.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.txtDimensions.Location = new System.Drawing.Point(0, 248);
-			this.txtDimensions.Margin = new System.Windows.Forms.Padding(0, 1, 0, 2);
-			this.txtDimensions.Multiline = true;
-			this.txtDimensions.Name = "txtDimensions";
-			this.txtDimensions.Size = new System.Drawing.Size(186, 244);
-			this.txtDimensions.TabIndex = 9;
-			this.txtDimensions.TextChanged += new System.EventHandler(this.txtDimensions_TextChanged);
+			this.didgePropertyEditor.AutoSize = true;
+			this.didgePropertyEditor.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.didgePropertyEditor.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
+			this.didgePropertyEditor.DidgeComments = "";
+			this.didgePropertyEditor.DidgeName = "";
+			this.didgePropertyEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.didgePropertyEditor.Location = new System.Drawing.Point(0, 0);
+			this.didgePropertyEditor.Name = "didgePropertyEditor";
+			this.didgePropertyEditor.PositionAndRadiusDimensions = "";
+			this.didgePropertyEditor.RadiusAndLengthDimensions = "";
+			this.didgePropertyEditor.Size = new System.Drawing.Size(167, 258);
+			this.didgePropertyEditor.TabIndex = 0;
+			this.didgePropertyEditor.Valid += new DidjImp.DidgePropertyEditor.ValidDelegate(this.didgePropertyEditor_Valid);
+			this.didgePropertyEditor.DidgeNameChanged += new DidjImp.DidgePropertyEditor.DidgeNameChangedDelegate(this.didgePropertyEditor_DidgeNameChanged);
+			this.didgePropertyEditor.DimensionsChanged += new DidjImp.DidgePropertyEditor.DimensionsChangedDelegate(this.didgePropertyEditor_DimensionsChanged);
+			this.didgePropertyEditor.Unvalid += new DidjImp.DidgePropertyEditor.UnvalidDelegate(this.didgePropertyEditor_Unvalid);
 			// 
 			// tabPageImpedance
 			// 
 			tabPageImpedance.Controls.Add(pnlImpedancePlot);
 			tabPageImpedance.Controls.Add(pnlImpedanceTools);
-			tabPageImpedance.Location = new System.Drawing.Point(4, 20);
+			tabPageImpedance.Location = new System.Drawing.Point(4, 22);
 			tabPageImpedance.Margin = new System.Windows.Forms.Padding(0);
 			tabPageImpedance.Name = "tabPageImpedance";
-			tabPageImpedance.Size = new System.Drawing.Size(779, 493);
+			tabPageImpedance.Size = new System.Drawing.Size(796, 491);
 			tabPageImpedance.TabIndex = 0;
 			tabPageImpedance.Text = "Impedance";
 			tabPageImpedance.UseVisualStyleBackColor = true;
@@ -213,7 +253,7 @@ namespace DidjImp
 			pnlImpedancePlot.Location = new System.Drawing.Point(0, 26);
 			pnlImpedancePlot.Margin = new System.Windows.Forms.Padding(0);
 			pnlImpedancePlot.Name = "pnlImpedancePlot";
-			pnlImpedancePlot.Size = new System.Drawing.Size(779, 467);
+			pnlImpedancePlot.Size = new System.Drawing.Size(796, 465);
 			pnlImpedancePlot.TabIndex = 9;
 			// 
 			// impedancePlot
@@ -228,11 +268,12 @@ namespace DidjImp
 			this.impedancePlot.Legend = null;
 			this.impedancePlot.LegendZOrder = -1;
 			this.impedancePlot.Location = new System.Drawing.Point(0, 0);
+			this.impedancePlot.Margin = new System.Windows.Forms.Padding(0);
 			this.impedancePlot.Name = "impedancePlot";
-			this.impedancePlot.RightMenu = impedancePlotContextMenu2;
+			this.impedancePlot.RightMenu = impedancePlotContextMenu1;
 			this.impedancePlot.SelectedFrequency = 0;
 			this.impedancePlot.ShowCoordinates = true;
-			this.impedancePlot.Size = new System.Drawing.Size(775, 463);
+			this.impedancePlot.Size = new System.Drawing.Size(792, 461);
 			this.impedancePlot.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 			this.impedancePlot.SurfacePadding = 10;
 			this.impedancePlot.TabIndex = 8;
@@ -253,7 +294,7 @@ namespace DidjImp
 			pnlImpedanceTools.Dock = System.Windows.Forms.DockStyle.Top;
 			pnlImpedanceTools.Location = new System.Drawing.Point(0, 0);
 			pnlImpedanceTools.Name = "pnlImpedanceTools";
-			pnlImpedanceTools.Size = new System.Drawing.Size(779, 26);
+			pnlImpedanceTools.Size = new System.Drawing.Size(796, 26);
 			pnlImpedanceTools.TabIndex = 7;
 			// 
 			// pnlImpedanceShowHarmonics
@@ -333,10 +374,10 @@ namespace DidjImp
 			tabBore.Controls.Add(this.borePlot);
 			tabBore.Controls.Add(pnlBoreTools);
 			tabBore.Controls.Add(this.waveformPlot);
-			tabBore.Location = new System.Drawing.Point(4, 20);
+			tabBore.Location = new System.Drawing.Point(4, 22);
 			tabBore.Name = "tabBore";
 			tabBore.Padding = new System.Windows.Forms.Padding(3);
-			tabBore.Size = new System.Drawing.Size(779, 493);
+			tabBore.Size = new System.Drawing.Size(796, 491);
 			tabBore.TabIndex = 1;
 			tabBore.Text = "Bore";
 			tabBore.UseVisualStyleBackColor = true;
@@ -357,7 +398,7 @@ namespace DidjImp
 			this.borePlot.SelectedFrequency = 0;
 			this.borePlot.ShowCoordinates = true;
 			this.borePlot.ShowWaveformPlot = false;
-			this.borePlot.Size = new System.Drawing.Size(773, 461);
+			this.borePlot.Size = new System.Drawing.Size(790, 459);
 			this.borePlot.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 			this.borePlot.SurfacePadding = 10;
 			this.borePlot.TabIndex = 4;
@@ -378,7 +419,7 @@ namespace DidjImp
 			pnlBoreTools.Dock = System.Windows.Forms.DockStyle.Top;
 			pnlBoreTools.Location = new System.Drawing.Point(3, 3);
 			pnlBoreTools.Name = "pnlBoreTools";
-			pnlBoreTools.Size = new System.Drawing.Size(773, 26);
+			pnlBoreTools.Size = new System.Drawing.Size(790, 26);
 			pnlBoreTools.TabIndex = 5;
 			// 
 			// comboWaveformSelect
@@ -440,9 +481,9 @@ namespace DidjImp
             this.mnuOptions,
             this.mnuTools,
             mnuHelp});
-			menuMain.Location = new System.Drawing.Point(0, 0);
+			menuMain.Location = new System.Drawing.Point(2, 0);
 			menuMain.Name = "menuMain";
-			menuMain.Size = new System.Drawing.Size(975, 24);
+			menuMain.Size = new System.Drawing.Size(974, 24);
 			menuMain.TabIndex = 1;
 			menuMain.Text = "menuStrip1";
 			// 
@@ -497,10 +538,32 @@ namespace DidjImp
 			this.mnuAbout.Text = "&About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
 			// 
+			// lblName
+			// 
+			lblName.AutoSize = true;
+			lblName.Dock = System.Windows.Forms.DockStyle.Fill;
+			lblName.Location = new System.Drawing.Point(0, 0);
+			lblName.Margin = new System.Windows.Forms.Padding(0);
+			lblName.Name = "lblName";
+			lblName.Size = new System.Drawing.Size(38, 20);
+			lblName.TabIndex = 0;
+			lblName.Text = "Name:";
+			lblName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// lblComments
+			// 
+			lblComments.AutoSize = true;
+			lblComments.Location = new System.Drawing.Point(0, 0);
+			lblComments.Margin = new System.Windows.Forms.Padding(0);
+			lblComments.Name = "lblComments";
+			lblComments.Size = new System.Drawing.Size(59, 13);
+			lblComments.TabIndex = 2;
+			lblComments.Text = "Comments:";
+			// 
 			// splitMain
 			// 
 			this.splitMain.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitMain.Location = new System.Drawing.Point(0, 24);
+			this.splitMain.Location = new System.Drawing.Point(2, 24);
 			this.splitMain.Margin = new System.Windows.Forms.Padding(0);
 			this.splitMain.Name = "splitMain";
 			// 
@@ -512,9 +575,10 @@ namespace DidjImp
 			// splitMain.Panel2
 			// 
 			this.splitMain.Panel2.Controls.Add(this.tabPlots);
+			this.splitMain.Panel2.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
 			this.splitMain.Panel2MinSize = 120;
-			this.splitMain.Size = new System.Drawing.Size(975, 517);
-			this.splitMain.SplitterDistance = 186;
+			this.splitMain.Size = new System.Drawing.Size(974, 517);
+			this.splitMain.SplitterDistance = 167;
 			this.splitMain.SplitterWidth = 2;
 			this.splitMain.TabIndex = 2;
 			// 
@@ -524,12 +588,12 @@ namespace DidjImp
 			this.tabPlots.Controls.Add(tabBore);
 			this.tabPlots.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabPlots.Enabled = false;
-			this.tabPlots.Location = new System.Drawing.Point(0, 0);
-			this.tabPlots.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+			this.tabPlots.Location = new System.Drawing.Point(1, 0);
+			this.tabPlots.Margin = new System.Windows.Forms.Padding(0);
 			this.tabPlots.Name = "tabPlots";
-			this.tabPlots.Padding = new System.Drawing.Point(6, 0);
+			this.tabPlots.Padding = new System.Drawing.Point(0, 0);
 			this.tabPlots.SelectedIndex = 0;
-			this.tabPlots.Size = new System.Drawing.Size(787, 517);
+			this.tabPlots.Size = new System.Drawing.Size(804, 517);
 			this.tabPlots.TabIndex = 1;
 			// 
 			// textBoxContextMenu
@@ -544,7 +608,6 @@ namespace DidjImp
 			this.textBoxContextMenu.ShowImageMargin = false;
 			this.textBoxContextMenu.ShowItemToolTips = false;
 			this.textBoxContextMenu.Size = new System.Drawing.Size(320, 98);
-			this.textBoxContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.textBoxContextMenu_Opening);
 			// 
 			// mnuResetText
 			// 
@@ -574,6 +637,53 @@ namespace DidjImp
 			this.mnuScaleToFundamental.Text = "Scale Entire Bore to Specified &Fundamental Frequency";
 			this.mnuScaleToFundamental.Click += new System.EventHandler(this.mnuScaleToFundamental_Click);
 			// 
+			// tableLayoutPanel2
+			// 
+			this.tableLayoutPanel2.ColumnCount = 1;
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel1, 0, 0);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+			this.tableLayoutPanel2.RowCount = 2;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(200, 100);
+			this.tableLayoutPanel2.TabIndex = 0;
+			// 
+			// tableLayoutPanel1
+			// 
+			this.tableLayoutPanel1.AutoSize = true;
+			this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.tableLayoutPanel1.ColumnCount = 2;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel1.Controls.Add(lblName, 0, 0);
+			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+			this.tableLayoutPanel1.RowCount = 1;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(200, 20);
+			this.tableLayoutPanel1.TabIndex = 5;
+			// 
+			// tblDidgeComments
+			// 
+			this.tblDidgeComments.ColumnCount = 2;
+			this.tblDidgeComments.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tblDidgeComments.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tblDidgeComments.Controls.Add(lblComments, 1, 0);
+			this.tblDidgeComments.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tblDidgeComments.Location = new System.Drawing.Point(0, 23);
+			this.tblDidgeComments.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+			this.tblDidgeComments.Name = "tblDidgeComments";
+			this.tblDidgeComments.RowCount = 2;
+			this.tblDidgeComments.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tblDidgeComments.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tblDidgeComments.Size = new System.Drawing.Size(200, 77);
+			this.tblDidgeComments.TabIndex = 6;
+			// 
 			// DidjImpApp
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -582,11 +692,14 @@ namespace DidjImp
 			this.Controls.Add(this.splitMain);
 			this.Controls.Add(menuMain);
 			this.Name = "DidjImpApp";
-			this.Padding = new System.Windows.Forms.Padding(0, 0, 1, 1);
+			this.Padding = new System.Windows.Forms.Padding(2, 0, 0, 1);
 			this.Text = "DidjImp";
 			this.Load += new System.EventHandler(this.DidjImpApp_Load);
 			tblTreeAndDimension.ResumeLayout(false);
-			tblTreeAndDimension.PerformLayout();
+			this.splitContainer1.Panel1.ResumeLayout(false);
+			this.splitContainer1.Panel2.ResumeLayout(false);
+			this.splitContainer1.Panel2.PerformLayout();
+			this.splitContainer1.ResumeLayout(false);
 			tabPageImpedance.ResumeLayout(false);
 			tabPageImpedance.PerformLayout();
 			pnlImpedancePlot.ResumeLayout(false);
@@ -606,6 +719,12 @@ namespace DidjImp
 			this.splitMain.ResumeLayout(false);
 			this.tabPlots.ResumeLayout(false);
 			this.textBoxContextMenu.ResumeLayout(false);
+			this.tableLayoutPanel2.ResumeLayout(false);
+			this.tableLayoutPanel2.PerformLayout();
+			this.tableLayoutPanel1.ResumeLayout(false);
+			this.tableLayoutPanel1.PerformLayout();
+			this.tblDidgeComments.ResumeLayout(false);
+			this.tblDidgeComments.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -635,7 +754,12 @@ namespace DidjImp
 		private System.Windows.Forms.ToolStripMenuItem mnuOptions;
 		private System.Windows.Forms.ImageList treeViewImageList;
 		private System.Windows.Forms.Button btnCalculate;
-		private System.Windows.Forms.TextBox txtDimensions;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.TableLayoutPanel tblDidgeComments;
+		private System.Windows.Forms.ToolTip toolTip1;
+		private System.Windows.Forms.SplitContainer splitContainer1;
+		private DidgePropertyEditor didgePropertyEditor;
 	}
 }
 

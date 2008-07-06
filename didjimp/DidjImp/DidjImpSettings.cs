@@ -62,6 +62,14 @@ namespace DidjImp
 			set { this["NumberOfThreads"] = value; }
 		}
 
+		[UserScopedSetting()]
+		[DefaultSettingValueAttribute("true")]
+		public bool CopyOnModify
+		{
+			get { return (bool)this["CopyOnModify"]; }
+			set { this["CopyOnModify"] = value; }
+		}
+
 		public enum UnitType
 		{
 			millimeter=0,
