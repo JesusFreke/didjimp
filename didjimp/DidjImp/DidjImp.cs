@@ -381,7 +381,7 @@ namespace DidjImp
 
 				List<BoreSection> boreSections = new List<BoreSection>();
 				foreach (BoreSection section in previousBore.BoreSections)
-					boreSections.Add(new BoreSection(section.OpeningRadius, section.ClosingRadius, Math.Round(section.Length, 4)));
+					boreSections.Add(new BoreSection(section.OpeningRadius, section.ClosingRadius, Math.Round(section.Length, 5)));
 				didgePropertyEditor.BoreSections = boreSections;
 			}
 		}

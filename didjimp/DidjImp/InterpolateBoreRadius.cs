@@ -69,7 +69,7 @@ namespace DidjImp
 			if (radius == -1)
 				return false;
 
-			txtRadius.Text = radius.ToString("0.00###########");
+			txtRadius.Text = radius.ToString("0.00###");
 			return true;
 		}
 
@@ -90,8 +90,7 @@ namespace DidjImp
 			if (!Decimal.TryParse(txtPosition.Text, out position))
 				return;
 
-			if (!CalculateRadiusAtPosition(position))
-				return;
+			CalculateRadiusAtPosition(position);
 		}
 	}
 }
