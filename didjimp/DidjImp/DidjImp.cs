@@ -324,21 +324,21 @@ namespace DidjImp
 				return;
 			}
 
-			//ScaleBoreToFundamental dlg = new ScaleBoreToFundamentalImpedanceData.ImpedancePeakFrequencies);
-			/*DialogResult dr = dlg.ShowDialog(this);
+			ScaleBoreToFundamental dlg = new ScaleBoreToFundamental((decimal)ImpedanceData.ImpedancePeakFrequencies[0]);
+			DialogResult dr = dlg.ShowDialog(this);
 			decimal targetFundamental = dlg.SelectedFundamental;
 
 			if (dr == DialogResult.OK)
 			{
-				Bore previousBore = bore;
-				decimal currentFundamental = (decimal)impedanceData.ImpedancePeakFrequencies[0];
+				Bore previousBore = Bore;
+				decimal currentFundamental = (decimal)ImpedanceData.ImpedancePeakFrequencies[0];
 				while (currentFundamental != targetFundamental)
 				{
 					decimal scaleAmount = currentFundamental / targetFundamental;
-					List<BoreDimension> newBoreDimensions = new List<BoreDimension>();
-					foreach (BoreDimension boreDimension in previousBore.BoreDimensions)
-						newBoreDimensions.Add(new BoreDimension((double)((decimal)boreDimension.Position * scaleAmount), boreDimension.Radius));
-					Bore newBore = new Bore(newBoreDimensions);
+					List<BoreSection> newBoreSections = new List<BoreSection>();
+					foreach (BoreSection boreSection in previousBore.BoreSections)
+						newBoreSections.Add(new BoreSection(boreSection.OpeningRadius, boreSection.ClosingRadius, boreSection.Length * scaleAmount));
+					Bore newBore = new Bore(newBoreSections);
 					if (targetFundamental > currentFundamental)
 					{
 						Complex lastImpedance = newBore.GetImpedance((double)currentFundamental);
@@ -379,13 +379,11 @@ namespace DidjImp
 					}
 				}
 
-				StringBuilder sb = new StringBuilder();
-				foreach (BoreDimension boreDimension in previousBore.BoreDimensions)
-					sb.AppendFormat("{0:0.00######}\t{1:0.00######}\r\n", boreDimension.Position, boreDimension.Radius);
-
-				txtDimensions.Text = sb.ToString();
-
-			}*/
+				List<BoreSection> boreSections = new List<BoreSection>();
+				foreach (BoreSection section in previousBore.BoreSections)
+					boreSections.Add(new BoreSection(section.OpeningRadius, section.ClosingRadius, Math.Round(section.Length, 4)));
+				didgePropertyEditor.BoreSections = boreSections;
+			}
 		}
 
 		/*private void textBoxContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
