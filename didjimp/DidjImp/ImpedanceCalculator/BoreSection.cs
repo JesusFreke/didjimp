@@ -118,5 +118,36 @@ namespace DidjImp
 				return true;
 			else return false;
 		}
+
+		public double SurfaceArea(double wallThickness)
+		{
+			if (closingRadius == openingRadius)
+				return 2 * (double)openingRadius * Math.PI * (double)Length;
+
+			double radius1, radius2;
+			if (closingRadius > openingRadius)
+			{
+				radius1 = (double)openingRadius + wallThickness;
+				radius2 = (double)closingRadius + wallThickness;
+			}else
+			{
+				radius1 = (double)closingRadius + wallThickness;
+				radius2 = (double)openingRadius + wallThickness;
+			}
+
+			//first, we need to find the length of the "extended" cone,
+			//that is, the length of the cone if was extended to the vertex
+			double slope = ((radius2-radius1)/(double)length);
+			double extendedLength = radius2 / slope;
+
+			//calculate the surface area of the extended cone
+			double extendedSurfaceArea = Math.PI*radius2*Math.Sqrt(extendedLength*extendedLength + radius2*radius2);
+
+			//calculate the surface area of just the "missing part" of the cone
+			double missingLength = extendedLength-(double)length;
+			double missingSurfaceArea = Math.PI*radius1*Math.Sqrt(missingLength*missingLength + radius1*radius1);
+
+			return extendedSurfaceArea - missingSurfaceArea;
+		}
 	}
 }

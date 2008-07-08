@@ -62,6 +62,14 @@ namespace DidjImp
 			}
 		}
 
+		public DidgeDesignProperties CurrentDidgeDesignProperties
+		{
+			get
+			{
+				return didgePropertyEditor.DidgeDesignProperties;
+			}
+		}
+
 		public ImpedanceData ImpedanceData
 		{
 			get
@@ -569,6 +577,12 @@ namespace DidjImp
 				DidgeData data = (DidgeData)treeDidgeHistory.SelectedNode.Tag;
 				data.didge = didgePropertyEditor.DidgeDesignProperties;
 			}
+		}
+
+		private void mnuCalculateSurfaceAreaToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			SurfaceAreaDialog dlg = new SurfaceAreaDialog(this);
+			dlg.ShowDialog(this);
 		}
 	}
 

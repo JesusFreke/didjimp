@@ -82,6 +82,7 @@ namespace DidjImp
 			this.mnuInterpolate = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScaleBoreByFactor = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScaleToFundamental = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuCalculateSurfaceAreaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
 			this.splitMain = new System.Windows.Forms.SplitContainer();
 			this.tabPlots = new System.Windows.Forms.TabControl();
@@ -512,7 +513,8 @@ namespace DidjImp
 			this.mnuTools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuInterpolate,
             this.mnuScaleBoreByFactor,
-            this.mnuScaleToFundamental});
+            this.mnuScaleToFundamental,
+            this.mnuCalculateSurfaceAreaToolStripMenuItem});
 			this.mnuTools.Name = "mnuTools";
 			this.mnuTools.Size = new System.Drawing.Size(44, 20);
 			this.mnuTools.Text = "&Tools";
@@ -537,6 +539,13 @@ namespace DidjImp
 			this.mnuScaleToFundamental.Size = new System.Drawing.Size(344, 22);
 			this.mnuScaleToFundamental.Text = "Scale Entire Bore to Specified &Fundamental Frequency";
 			this.mnuScaleToFundamental.Click += new System.EventHandler(this.mnuScaleToFundamental_Click);
+			// 
+			// mnuCalculateSurfaceAreaToolStripMenuItem
+			// 
+			this.mnuCalculateSurfaceAreaToolStripMenuItem.Name = "mnuCalculateSurfaceAreaToolStripMenuItem";
+			this.mnuCalculateSurfaceAreaToolStripMenuItem.Size = new System.Drawing.Size(344, 22);
+			this.mnuCalculateSurfaceAreaToolStripMenuItem.Text = "&Calculate Surface Area";
+			this.mnuCalculateSurfaceAreaToolStripMenuItem.Click += new System.EventHandler(this.mnuCalculateSurfaceAreaToolStripMenuItem_Click);
 			// 
 			// mnuHelp
 			// 
@@ -731,6 +740,7 @@ namespace DidjImp
 		private System.Windows.Forms.ToolStripMenuItem mnuInterpolate;
 		private System.Windows.Forms.ToolStripMenuItem mnuScaleBoreByFactor;
 		private System.Windows.Forms.ToolStripMenuItem mnuScaleToFundamental;
+		private System.Windows.Forms.ToolStripMenuItem mnuCalculateSurfaceAreaToolStripMenuItem;
 	}
 }
 
