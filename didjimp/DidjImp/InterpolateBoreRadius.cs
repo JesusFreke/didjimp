@@ -25,12 +25,6 @@ namespace DidjImp
 	{
 		private DidjImpApp app;
 
-		public DidjImpApp App
-		{
-			get { return app; }
-			set { app = value; }
-		}
-
 		public InterpolateBoreRadius()
 		{
 			InitializeComponent();
@@ -101,6 +95,7 @@ namespace DidjImp
 				this.ActiveControl = null;
 			}
 
+			//escape
 			if (e.KeyChar == (char)27)
 			{
 				e.Handled = true;
